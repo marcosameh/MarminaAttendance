@@ -1,0 +1,63 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = null;
+}
+<link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css" />
+<link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css" />
+<link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css" />
+<link rel="stylesheet" href="/assets/vendors/select2/select2.min.css" />
+<link rel="stylesheet" href="/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
+<link rel="stylesheet" href="/assets/css/style.css" />
+<link rel="stylesheet" href="/assets/css/custom-css.css" />
+<link rel="shortcut icon" href="/assets/images/favicon.png" />
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <form method="post">
+                            <div class="mb-md-5 mt-md-4 pb-5">
+
+                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <p class="text-white-50 mb-5">Please enter your login and password!</p>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" asp-for="Input.UserName" placeholder="UserName" class="form-control form-control-lg" />
+
+                                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="password" asp-for="Input.Password" placeholder="Password" class="form-control form-control-lg" />
+
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </div>
+
+                                @* <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
+                                *@
+                                <div class="form-outline form-white mb-4">
+                                    
+                                        <input type="checkbox" asp-for="Input.RememberMe"> Remember me <i class="input-helper"></i>
+                                    
+                                </div>
+                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+                            
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
