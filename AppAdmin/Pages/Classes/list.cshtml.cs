@@ -1,10 +1,13 @@
 using App.Core.Managers;
 using App.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.UI.Pages.Classes
 {
+    [Authorize]    
+    
     public class listModel : PageModel
     {
         private readonly ClassManager classManager;

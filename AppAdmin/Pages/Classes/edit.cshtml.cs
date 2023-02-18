@@ -1,10 +1,12 @@
 using App.Core.Entities;
 using App.Core.Managers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.UI.Pages.Classes
 {
+    [Authorize]
     public class editModel : PageModel       
     {
         private readonly ClassManager classManager;

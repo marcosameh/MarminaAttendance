@@ -1,4 +1,4 @@
-using App.Core.Entities;
+﻿using App.Core.Entities;
 using App.Core.Managers;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -50,6 +50,17 @@ app.UseAuthentication(); ;
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.UseEndpoints(endpoints =>
+{
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapRazorPages();
+
+        endpoints.MapGet("/", async context =>
+        {
+            context.Response.Redirect("/classes/list");
+        });
+    });
+});
 
 app.Run();
