@@ -1,3 +1,5 @@
+using App.Core.Entities;
+using App.Core.Managers;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<MarminaAttendanceContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -21,6 +25,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 }).AddEntityFrameworkStores<IdentityContext>().AddDefaultUI().AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
+
+builder.Services.AddScoped<ClassManager>();
+builder.Services.AddScoped<WeekManager>();
+builder.Services.AddScoped<ServantManager>();
+builder.Services.AddScoped<TimeManager>();
 
 
 var app = builder.Build();
