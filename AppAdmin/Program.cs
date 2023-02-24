@@ -30,7 +30,7 @@ builder.Services.AddScoped<ClassManager>();
 builder.Services.AddScoped<WeekManager>();
 builder.Services.AddScoped<ServantManager>();
 builder.Services.AddScoped<TimeManager>();
-
+builder.Services.AddScoped(typeof(ILookup<,>), typeof(Lookup<,>));
 
 var app = builder.Build();
 

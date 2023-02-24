@@ -20,6 +20,8 @@ namespace App.UI.Pages.Classes
 
         public List<Weeks> Weeks { get; set; }
         public List<Time> TimeList { get; set; }
+        [BindProperty]
+        public Dictionary<int, List<int>> ServantWeeks { get; set; }
         public editModel(ClassManager classManager,WeekManager  weekManager,TimeManager timeManager)
         {
             this.classManager = classManager;
@@ -32,6 +34,10 @@ namespace App.UI.Pages.Classes
             CurrentClass=classManager.GetClass(Id);
             Weeks = weekManager.GetWeeks();
             TimeList=timeManager.GetTimeList();
+        }
+        public void OnPost()
+        {
+
         }
     }
 }
