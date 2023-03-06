@@ -3,15 +3,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace App.Core.Entities
-{
-    public partial class ServantWeek
-    {
-        public int ServentId { get; set; }
-        public int WeekId { get; set; }
-        public string Notes { get; set; }
+namespace App.Core.Entities;
 
-        public virtual Servants Servent { get; set; }
-        public virtual Weeks Week { get; set; }
-    }
+public partial class ServantWeek
+{
+    public int ServantId { get; set; }
+
+    public int WeekId { get; set; }
+
+    public string Notes { get; set; }
+
+    public virtual Servants Servant { get; set; }
+
+    public virtual Weeks Week { get; set; }
 }

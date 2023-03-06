@@ -29,7 +29,7 @@ namespace App.Core.Managers
         {
             return _dbContext.Classes.Where(x => x.Id == id).Include(x => x.Servants).ThenInclude(x => x.ServantWeek).FirstOrDefault();
         }
-        public Result EditClass(Classes ClassData, Dictionary<int, List<int>> SelectedServantWeeks)
+        public Result UpdateClass(Classes ClassData, Dictionary<int, List<int>> SelectedServantWeeks)
         {
             // Retrieve the existing class and update its properties
             var existingClass = _dbContext.Classes
@@ -59,7 +59,7 @@ namespace App.Core.Managers
                 {
                     foreach (var weekId in selectedWeeks)
                     {
-                        servant.ServantWeek.Add(new ServantWeek { ServentId = servant.Id, WeekId = weekId });
+                        servant.ServantWeek.Add(new ServantWeek { ServantId = servant.Id, WeekId = weekId });
                     }
                     return Result.Ok("Class updated successfully");
                 }

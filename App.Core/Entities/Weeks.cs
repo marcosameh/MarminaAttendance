@@ -3,19 +3,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace App.Core.Entities
+namespace App.Core.Entities;
+
+public partial class Weeks
 {
-    public partial class Weeks
-    {
-        public Weeks()
-        {
-            ServantWeek = new HashSet<ServantWeek>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime Date { get; set; }
+    public string Name { get; set; }
 
-        public virtual ICollection<ServantWeek> ServantWeek { get; set; }
-    }
+    public DateTime Date { get; set; }
+
+    public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();
 }

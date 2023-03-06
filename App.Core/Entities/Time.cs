@@ -3,18 +3,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace App.Core.Entities
+namespace App.Core.Entities;
+
+public partial class Time
 {
-    public partial class Time
-    {
-        public Time()
-        {
-            Classes = new HashSet<Classes>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Time1 { get; set; }
+    public string Time1 { get; set; }
 
-        public virtual ICollection<Classes> Classes { get; set; }
-    }
+    public virtual ICollection<Classes> Classes { get; } = new List<Classes>();
 }

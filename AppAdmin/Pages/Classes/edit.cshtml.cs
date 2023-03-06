@@ -1,4 +1,4 @@
-using App.Core.Entities;
+﻿using App.Core.Entities;
 using App.Core.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,7 @@ namespace App.UI.Pages.Classes
         public List<Weeks> Weeks { get; set; }
         public List<Time> TimeList { get; set; }
         [BindProperty]
-        public Dictionary<int, List<int>> ServantWeeks { get; set; }
+        public Dictionary<int, List<int>> CheckedServantWeeks { get; set; }
         public editModel(ClassManager classManager,WeekManager  weekManager,TimeManager timeManager)
         {
             this.classManager = classManager;
@@ -31,13 +31,22 @@ namespace App.UI.Pages.Classes
       
         public void OnGet()
         {
-            CurrentClass=classManager.GetClass(Id);
-            Weeks = weekManager.GetWeeks();
-            TimeList=timeManager.GetTimeList();
+            FillData();
         }
         public void OnPost()
         {
+            var Result = classManager.UpdateClass(CurrentClass, CheckedServantWeeks);
 
+            TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
+            TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
+            FillData();
+
+        }
+        public void FillData()
+        {
+            CurrentClass = classManager.GetClass(Id);
+            Weeks = weekManager.GetWeeks();
+            TimeList = timeManager.GetTimeList();
         }
     }
 }

@@ -3,21 +3,19 @@
 using System;
 using System.Collections.Generic;
 
-namespace App.Core.Entities
+namespace App.Core.Entities;
+
+public partial class Classes
 {
-    public partial class Classes
-    {
-        public Classes()
-        {
-            Servants = new HashSet<Servants>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Intercessor { get; set; }
-        public int TimeId { get; set; }
+    public string Name { get; set; }
 
-        public virtual Time Time { get; set; }
-        public virtual ICollection<Servants> Servants { get; set; }
-    }
+    public string Intercessor { get; set; }
+
+    public int TimeId { get; set; }
+
+    public virtual ICollection<Servants> Servants { get; } = new List<Servants>();
+
+    public virtual Time Time { get; set; }
 }

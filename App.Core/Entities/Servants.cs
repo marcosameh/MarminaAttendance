@@ -3,23 +3,23 @@
 using System;
 using System.Collections.Generic;
 
-namespace App.Core.Entities
+namespace App.Core.Entities;
+
+public partial class Servants
 {
-    public partial class Servants
-    {
-        public Servants()
-        {
-            ServantWeek = new HashSet<ServantWeek>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public int ClassId { get; set; }
-        public string Name { get; set; }
-        public string Photo { get; set; }
-        public string Phone { get; set; }
-        public string Address { get; set; }
+    public int ClassId { get; set; }
 
-        public virtual Classes Class { get; set; }
-        public virtual ICollection<ServantWeek> ServantWeek { get; set; }
-    }
+    public string Name { get; set; }
+
+    public string Photo { get; set; }
+
+    public string Phone { get; set; }
+
+    public string Address { get; set; }
+
+    public virtual Classes Class { get; set; }
+
+    public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();
 }
