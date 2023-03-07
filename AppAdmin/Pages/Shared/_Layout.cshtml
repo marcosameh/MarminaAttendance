@@ -19,13 +19,14 @@
     <link rel="stylesheet" href="/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/style.css" />
     <link rel="stylesheet" href="/assets/css/custom-css.css" />
+    <link rel="stylesheet" href="/lib/toastr.js/toastr.min.css" />
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
 </head>
 <body>
     <div class="container-scroller">
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
-               @* <a class="sidebar-brand brand-logo" href="/index.html"><img src="/assets/images/logo.svg" alt="logo" /></a>
+                @* <a class="sidebar-brand brand-logo" href="/index.html"><img src="/assets/images/logo.svg" alt="logo" /></a>
                 <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="/index.html"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>*@
             </div>
             <ul class="nav">
@@ -38,7 +39,7 @@
                         </div>
                         <div class="nav-profile-text d-flex flex-column pr-3">
                             <span class="font-weight-medium mb-2">@user.UserName</span>
-                          
+
                         </div>
                     </a>
                 </li>
@@ -50,29 +51,29 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/الفصول">
-                        <i class="mdi mdi-home menu-icon"></i> 
+                        <i class="mdi mdi-home menu-icon"></i>
                         <span class="menu-title">الفصول</span>
                     </a>
                 </li>
-             @*   <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                        <i class="mdi mdi-crosshairs-gps menu-icon"></i>
-                        <span class="menu-title">Basic UI Elements</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                    <div class="collapse" id="ui-basic">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/pages/ui-features/buttons.html">Buttons</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a>
-                            </li>
-                        </ul>
-                    </div>
+                @*   <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                <span class="menu-title">Basic UI Elements</span>
+                <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                <a class="nav-link" href="/pages/ui-features/buttons.html">Buttons</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a>
+                </li>
+                </ul>
+                </div>
                 </li>*@
                 <li class="nav-item">
                     <a class="nav-link" href="/pages/icons/mdi.html">
@@ -86,11 +87,11 @@
                         <span class="menu-title">الاسابيع</span>
                     </a>
                 </li>
-              
+
                 <li class="nav-item sidebar-actions">
                     <div class="nav-link">
                         <div class="mt-4">
-                            
+
                             <ul class="mt-4 pl-0">
                                 <li><a asp-page="/Account/Logout" asp-route-returnUrl="/Account/Login"></a>Sign Out</li>
                             </ul>
@@ -121,8 +122,8 @@
                     <button class="navbar-toggler navbar-toggler align-self-center mr-2" type="button" data-toggle="minimize">
                         <i class="mdi mdi-menu"></i>
                     </button>
-                
-                   
+
+
                     <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
                         <span class="mdi mdi-menu"></span>
                     </button>
@@ -130,7 +131,7 @@
             </nav>
             <div class="main-panel">
                 @RenderBody()
-              
+
             </div>
             <!-- main-panel ends -->
         </div>
@@ -148,7 +149,22 @@
     <script src="/assets/js/select2.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/lib/toastr.js/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            var message = '@TempData["Message"]';
+            var notificationType = '@TempData["NotificationType"]';
+            if (message) {
+                if (notificationType === "success") {
+                    toastr.success(message);
+                } else {
+                    toastr.error(message);
+                }
+            }
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -8,16 +8,16 @@ namespace App.Core.Managers
 {
     public class ClassManager
     {
-        private readonly MarminaAttendanceContext _dbContext;
-
+        private readonly MarminaAttendanceContext _context;
+        private int NumberOfWeeksAppearInMarkup = 5;
         public ClassManager(MarminaAttendanceContext context)
         {
-            _dbContext = context;
+            _context = context;
         }
         public List<ClassVM> GetClasses()
         {
 
-            return _dbContext.Classes.Include(x => x.Time).Select(x => new ClassVM
+            return _context.Classes.Include(x => x.Time).Select(x => new ClassVM
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -27,12 +27,12 @@ namespace App.Core.Managers
         }
         public Classes GetClass(int id)
         {
-            return _dbContext.Classes.Where(x => x.Id == id).Include(x => x.Servants).ThenInclude(x => x.ServantWeek).FirstOrDefault();
+            return _context.Classes.Where(x => x.Id == id).Include(x => x.Servants).ThenInclude(x => x.ServantWeek).FirstOrDefault();
         }
-        public Result UpdateClass(Classes ClassData, Dictionary<int, List<int>> SelectedServantWeeks)
+        public Result UpdateClass(Classes ClassData, Dictionary<int, List<int>> checkedServantWeeks)
         {
             // Retrieve the existing class and update its properties
-            var existingClass = _dbContext.Classes
+            var existingClass = _context.Classes
                 .Include(c => c.Servants).ThenInclude(x => x.ServantWeek)
                 .SingleOrDefault(c => c.Id == ClassData.Id);
 
@@ -47,43 +47,38 @@ namespace App.Core.Managers
             existingClass.TimeId = ClassData.TimeId;
 
             // Update the ServantWeek records for each servant
+            var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
             foreach (var servant in existingClass.Servants)
             {
-                var ExistServantWeeks = servant.ServantWeek.ToList();
-
-                var selectedWeeks = SelectedServantWeeks[servant.Id];
-
-
-                //if firsttime to add ServantWeek
-                if (ExistServantWeeks.Any() == false && selectedWeeks.Any())
+                // Get the list of checked week ids for the current servant
+                var checkedWeekIds = checkedServantWeeks.GetValueOrDefault(servant.Id, new List<int>());
+                // Loop through all weeks, including those not displayed on the form
+                foreach (var week in allWeeks)
                 {
-                    foreach (var weekId in selectedWeeks)
+                    // Check if the checkbox for this week was checked
+                    var weekChecked = checkedWeekIds.Contains(week.Id);
+
+                    // Check if the current servant already has a ServantWeek object for this week
+                    var existingServantWeek = servant.ServantWeek.FirstOrDefault(x => x.WeekId == week.Id);
+
+                    if (weekChecked && existingServantWeek == null)
                     {
-                        servant.ServantWeek.Add(new ServantWeek { ServantId = servant.Id, WeekId = weekId });
+                        // Checkbox was checked and there is no existing ServantWeek object, so create a new one
+                        var newServantWeek = new ServantWeek { ServantId = servant.Id, WeekId = week.Id };
+                        _context.ServantWeek.Add(newServantWeek);
                     }
-                    return Result.Ok("Class updated successfully");
-                }
-                if (ExistServantWeeks.Any() && selectedWeeks.Any() == false)
-                {
-                    foreach (var ServantWeeks in ExistServantWeeks)
+                    else if (!weekChecked && existingServantWeek != null)
                     {
-                        servant.ServantWeek.Remove(ServantWeeks);
-
+                        // Checkbox was unchecked and there is an existing ServantWeek object, so delete it
+                        _context.ServantWeek.Remove(existingServantWeek);
                     }
-
-                    return Result.Ok("Class updated successfully");
                 }
-                //if (ExistServantWeeks.Any() && selectedWeeks.Any())
-                //{
-                //    foreach (var W in collection)
-                //    {
-
-                //    }
-                //}
-
 
             }
-            _dbContext.SaveChanges();
+
+
+            // Save changes to the database
+            _context.SaveChanges();
             return Result.Ok("Class updated successfully");
 
 

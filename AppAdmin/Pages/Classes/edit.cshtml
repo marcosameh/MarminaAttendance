@@ -43,6 +43,7 @@
 <div class="container">
     <h1>تعديل بيانات الفصل</h1>
     <form method="post">
+        <input type="hidden" asp-for="CurrentClass.Id" />
         <div class="form-group">
             <label for="className">اسم الفصل</label>
             <input type="text" class="form-control" asp-for="CurrentClass.Name">
@@ -100,7 +101,7 @@
                         <ul class="week-list">
                             @foreach (var week in Model.Weeks)
                             {
-                                <li><label><input class="form-check-input" type="checkbox" name="ServantWeeks[@servant.Id]" @(servant.ServantWeek.Where(x=>x.WeekId==week.Id).Any()?"checked":"") value="@week.Id"> @week.Name</label></li>
+                                <li><label><input class="form-check-input" type="checkbox" name="CheckedServantWeeks[@servant.Id]" @(servant.ServantWeek.Where(x=>x.WeekId==week.Id).Any()?"checked":"") value="@week.Id"> @week.Name</label></li>
 
                             }
                         </ul>
