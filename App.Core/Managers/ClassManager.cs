@@ -25,6 +25,19 @@ namespace App.Core.Managers
                 Time = x.Time.Time1
             }).ToList();
         }
+        public Result AddClass(Classes classData)
+        {
+            try
+            {
+                _context.Classes.Add(classData);
+                _context.SaveChanges();
+                return Result.Ok(string.Format(classData.Name,"{0}: بنجاح تم اضافة فصل"));
+            }catch(Exception ex)
+            {
+                return Result.Fail(ex.InnerException.Message);
+            }
+
+        }
         public Classes GetClass(int id)
         {
             return _context.Classes.Where(x => x.Id == id).Include(x => x.Servants).ThenInclude(x => x.ServantWeek).FirstOrDefault();

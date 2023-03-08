@@ -6,8 +6,51 @@
 <link href="~/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
 
 <link href="~/datatables/css/jquery.dataTables.css" rel="stylesheet" />
-<div class="container">
-    <br />
+<style>
+    body {
+        background-color: #F2F2F2;
+    }
+
+    .container {
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="border mb-4">
+        <div class="d-flex justify-content-between align-items-center bg-light p-3">
+            <h5 class="text-right m-0">أضافة فصل حديد</h5>
+        </div>
+        <form method="post">
+        <div class="p-3">
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="chapterName">اسم الفصل:</label>
+                    <input type="text" class="form-control" asp-for="classData.Name" id="chapterName" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="patron">شفيع الفصل:</label>
+                    <input type="text" class="form-control" asp-for="classData.Intercessor" id="patron" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="serviceTime">وقت الخدمة:</label>
+                    <select class="form-control" id="serviceTime" asp-for="classData.TimeId" required>
+                        @foreach (var time in Model.TimeList)
+                        {
+                            <option value="@time.Id">@time.Time1</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-primary">اضافة</button>
+            </div>
+        </div>
+        </form>
+    </div>
     <div>
         <table id="AuthorsDatatable" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
             <thead>
@@ -19,11 +62,18 @@
                     <th>مسح</th>
                 </tr>
             </thead>
-
-
         </table>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
 @section scripts{
 
     <script src="~/datatables/js/jquery.dataTables.js"></script>
@@ -37,11 +87,11 @@
                 /*pageLength:2,*/
                 "ajax": {
                     url: "?handler=displayClasses",
-                    dataSrc:""
+                    dataSrc: ""
                 },
-               
-                
-                columns: [                 
+
+
+                columns: [
                     {
                         title: 'الفصل',
                         data: 'name'
@@ -49,10 +99,10 @@
                     {
                         title: 'شفيع الفصل',
                         data: 'intercessor',
-                        
+
                     },
 
-                  
+
                     {
                         title: 'وقت الخدمة',
                         data: 'time'
