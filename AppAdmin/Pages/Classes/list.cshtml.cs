@@ -43,6 +43,14 @@ namespace App.UI.Pages.Classes
             FillData();
 
         }
+        public void Delete(int id)
+        {
+            var Result = classManager.DeleteClass(id);
+
+            TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
+            TempData["Message"] = Result.IsSuccess ? "تم مسح الفصل بنجاح" : Result.Error;
+            FillData();
+        }
         private void FillData()
         {
             TimeList = timeManager.GetTimeList();

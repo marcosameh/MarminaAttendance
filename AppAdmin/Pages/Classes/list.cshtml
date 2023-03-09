@@ -25,30 +25,30 @@
             <h5 class="text-right m-0">أضافة فصل حديد</h5>
         </div>
         <form method="post">
-        <div class="p-3">
-            <div class="form-row">
-                <div class="col-md-4 mb-3">
-                    <label for="chapterName">اسم الفصل:</label>
-                    <input type="text" class="form-control" asp-for="classData.Name" id="chapterName" required>
+            <div class="p-3">
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="chapterName">اسم الفصل:</label>
+                        <input type="text" class="form-control" asp-for="classData.Name" id="chapterName" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="patron">شفيع الفصل:</label>
+                        <input type="text" class="form-control" asp-for="classData.Intercessor" id="patron" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="serviceTime">وقت الخدمة:</label>
+                        <select class="form-control" id="serviceTime" asp-for="classData.TimeId" required>
+                            @foreach (var time in Model.TimeList)
+                            {
+                                <option value="@time.Id">@time.Time1</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label for="patron">شفيع الفصل:</label>
-                    <input type="text" class="form-control" asp-for="classData.Intercessor" id="patron" required>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="serviceTime">وقت الخدمة:</label>
-                    <select class="form-control" id="serviceTime" asp-for="classData.TimeId" required>
-                        @foreach (var time in Model.TimeList)
-                        {
-                            <option value="@time.Id">@time.Time1</option>
-                        }
-                    </select>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">اضافة</button>
                 </div>
             </div>
-            <div class="d-flex justify-content-end mt-3">
-                <button type="submit" class="btn btn-primary">اضافة</button>
-            </div>
-        </div>
         </form>
     </div>
     <div>
@@ -112,15 +112,23 @@
                         data: 'id',
                         "render": function (data) { return '<a href="/class/edit/' + data + '" class="btn btn-success" >Edit</a>'; }
                     },
-
                     {
-                        title: 'Delete',
-                        data: 'id',
-                        "render": function (data) { return '<a href="/author/Delete/' + data + '" class="btn btn-danger" >Delete</a>'; }
-                    },
+                    title: 'Delete',
+                    data: 'id',
+                    "render": function (data) {
+                        return '<a  class="btn btn-danger" onclick="confirmDelete(' + data + ')" >Delete</a>';
+                    }
+                    }
                 ]
 
             });
         });
+    </script>
+    <script>
+        function confirmDelete(id) {
+            if (confirm("هل متاكد انك تريد مسح الفصل")) {
+              window.location.href = '@Url.Page("/List", "Delete", new { id = "" })/' + id;
+            }
+        }
     </script>
 }

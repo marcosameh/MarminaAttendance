@@ -31,12 +31,28 @@ namespace App.Core.Managers
             {
                 _context.Classes.Add(classData);
                 _context.SaveChanges();
-                return Result.Ok(string.Format(classData.Name,"{0}: بنجاح تم اضافة فصل"));
-            }catch(Exception ex)
+                return Result.Ok(string.Format(classData.Name, "{0}: بنجاح تم اضافة فصل"));
+            }
+            catch (Exception ex)
             {
                 return Result.Fail(ex.InnerException.Message);
             }
 
+        }
+
+        public Result DeleteClass(int Id)
+        {
+            try
+            {
+                var existClass = _context.Classes.Find(Id);
+                _context.Classes.Remove(existClass);
+                _context.SaveChanges();
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.InnerException.Message);
+            }
         }
         public Classes GetClass(int id)
         {
