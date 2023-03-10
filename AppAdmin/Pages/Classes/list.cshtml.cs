@@ -43,7 +43,8 @@ namespace App.UI.Pages.Classes
             FillData();
 
         }
-        public void Delete(int id)
+    
+        public void OnGetDelete(int id)
         {
             var Result = classManager.DeleteClass(id);
 

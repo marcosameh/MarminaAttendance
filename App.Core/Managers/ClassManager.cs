@@ -45,6 +45,7 @@ namespace App.Core.Managers
             try
             {
                 var existClass = _context.Classes.Find(Id);
+                
                 _context.Classes.Remove(existClass);
                 _context.SaveChanges();
                 return Result.Ok();

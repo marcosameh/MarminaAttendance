@@ -127,7 +127,8 @@
     <script>
         function confirmDelete(id) {
             if (confirm("هل متاكد انك تريد مسح الفصل")) {
-              window.location.href = '@Url.Page("/List", "Delete", new { id = "" })/' + id;
+               
+                window.location.href = `?handler=Delete&id=${id}`;
             }
         }
     </script>
