@@ -64,44 +64,26 @@
             </select>
         </div>
         <h2>الخدام</h2>
-        @*  <div class="row">
-        @foreach (var servant in Model.CurrentClass.Servants)
-        {
-        <div class="col-md-4">
-        <div class="card">
-        <img class="card-img-top" src="/photos/الخدام/@servant.Photo" alt="Example Servant 1">
-        <div class="card-body">
-        <h5 class="card-title">@servant.Name</h5>
-        <ul>
-        @foreach (var week in Model.Weeks)
-        {
-        <li><label><input class="form-check-input" type="checkbox" name="week[]" @(servant.ServantWeek.Where(x=>x.WeekId==week.Id).Any()?"checked":"") value="@week.Id"> @week.Name</label></li>
-
-        }
-
-        </ul>
-
-        </div>
-        </div>
-        </div>
-
-        }
-
-        </div>*@
-
         <div class="row">
-            @foreach (var servant in Model.CurrentClass.Servants)
+            @for (int i = 0; i < Model.ServantList.Count(); i++)
             {
+                <input type="hidden" asp-for="ServantWeeksDTOs[i].ServantId" value="@Model.ServantList[i].Id" />
                 <div class="col-sm-3">
                     <div class="servant-item">
-                        <label>  
-                            <img src="/photos/الخدام/@servant.Photo" class="servant-photo">
-                            <span class="servant-name"> @servant.Name</span>
+                        <label>
+                            <img src="/photos/الخدام/@Model.ServantList[i].Photo" class="servant-photo">
+                            <span class="servant-name"> @Model.ServantList[i].Name</span>
                         </label>
                         <ul class="week-list">
                             @foreach (var week in Model.Weeks)
                             {
-                                <li><label><input class="form-check-input" type="checkbox" name="CheckedServantWeeks[@servant.Id]" @(servant.ServantWeek.Where(x=>x.WeekId==week.Id).Any()?"checked":"") value="@week.Id"> @week.Name</label></li>
+                                var isChecked = @Model.ServantList[i].ServantWeek.Where(x => x.WeekId == week.Id).Any();
+                                <li>
+                                    <label>
+                                        <input class="form-check-input" type="checkbox" asp-for="@Model.ServantWeeksDTOs[i].IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true" />
+                                        @week.Name
+                                    </label>
+                                </li>
 
                             }
                         </ul>

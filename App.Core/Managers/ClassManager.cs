@@ -58,7 +58,7 @@ namespace App.Core.Managers
         {
             return _context.Classes.Where(x => x.Id == id).Include(x => x.Servants).ThenInclude(x => x.ServantWeek).FirstOrDefault();
         }
-        public Result UpdateClass(Classes ClassData, Dictionary<int, List<int>> checkedServantWeeks)
+        public Result UpdateClass(Classes ClassData,List<ServantWeeksDTO> servantWeeksDTOS)
         {
             // Retrieve the existing class and update its properties
             var existingClass = _context.Classes
@@ -80,12 +80,12 @@ namespace App.Core.Managers
             foreach (var servant in existingClass.Servants)
             {
                 // Get the list of checked week ids for the current servant
-                var checkedWeekIds = checkedServantWeeks.GetValueOrDefault(servant.Id, new List<int>());
+                var servantWeeksDTO = servantWeeksDTOS.Where(x=>x.ServantId==servant.Id).FirstOrDefault();
                 // Loop through all weeks, including those not displayed on the form
                 foreach (var week in allWeeks)
                 {
                     // Check if the checkbox for this week was checked
-                    var weekChecked = checkedWeekIds.Contains(week.Id);
+                    var weekChecked = servantWeeksDTO.IsWeekSelected[week.Id];
 
                     // Check if the current servant already has a ServantWeek object for this week
                     var existingServantWeek = servant.ServantWeek.FirstOrDefault(x => x.WeekId == week.Id);

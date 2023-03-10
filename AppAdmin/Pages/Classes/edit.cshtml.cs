@@ -1,5 +1,6 @@
 ﻿using App.Core.Entities;
 using App.Core.Managers;
+using App.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace App.UI.Pages.Classes
 {
     [Authorize]
-    public class editModel : PageModel       
+    public class editModel : PageModel
     {
         private readonly ClassManager classManager;
         private readonly WeekManager weekManager;
@@ -16,26 +17,27 @@ namespace App.UI.Pages.Classes
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
         [BindProperty]
-        public App.Core.Entities.Classes CurrentClass { get; set; }
+        public Core.Entities.Classes CurrentClass { get; set; }
 
         public List<Weeks> Weeks { get; set; }
         public List<Time> TimeList { get; set; }
-        [BindProperty]
-        public Dictionary<int, List<int>> CheckedServantWeeks { get; set; }
-        public editModel(ClassManager classManager,WeekManager  weekManager,TimeManager timeManager)
+        public List<Core.Entities.Servants> ServantList { get; set; }
+        [BindProperty]     
+        public List<ServantWeeksDTO> ServantWeeksDTOs { get; set; }
+        public editModel(ClassManager classManager, WeekManager weekManager, TimeManager timeManager)
         {
             this.classManager = classManager;
             this.weekManager = weekManager;
             this.timeManager = timeManager;
         }
-      
+
         public void OnGet()
         {
             FillData();
         }
         public void OnPost()
         {
-            var Result = classManager.UpdateClass(CurrentClass, CheckedServantWeeks);
+            var Result = classManager.UpdateClass(CurrentClass, ServantWeeksDTOs);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
@@ -47,6 +49,8 @@ namespace App.UI.Pages.Classes
             CurrentClass = classManager.GetClass(Id);
             Weeks = weekManager.GetWeeks();
             TimeList = timeManager.GetTimeList();
+            ServantList = CurrentClass.Servants?.ToList();
         }
     }
+   
 }
