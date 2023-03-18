@@ -64,6 +64,7 @@ public partial class MarminaAttendanceContext : DbContext
             entity.Property(e => e.Address).HasMaxLength(80);
             entity.Property(e => e.Birthday).HasColumnType("smalldatetime");
             entity.Property(e => e.FatherOfConfession).HasMaxLength(50);
+            entity.Property(e => e.Leader).HasDefaultValueSql("((0))");
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);

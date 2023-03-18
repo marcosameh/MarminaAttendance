@@ -36,7 +36,7 @@ namespace App.Core.Managers
                 Id=x.Id,
                 Name=x.Name,
                 Address=x.Address,
-                Birthday=x.Birthday,
+                Birthday=x.Birthday.Value.ToShortDateString(),
                 ClassName=x.Class.Name,
                 FatherOfConfession=x.FatherOfConfession,
                 Phone=x.Phone,

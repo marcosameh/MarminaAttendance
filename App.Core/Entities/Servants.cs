@@ -23,6 +23,8 @@ public partial class Servants
 
     public DateTime? Birthday { get; set; }
 
+    public bool? Leader { get; set; }
+
     public virtual Classes Class { get; set; }
 
     public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();

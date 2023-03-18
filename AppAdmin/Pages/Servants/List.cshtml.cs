@@ -1,11 +1,13 @@
 using App.Core.Entities;
 using App.Core.Managers;
 using App.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.UI.Pages.Servant
 {
+    [Authorize]
     public class ListModel : PageModel
     {
         private readonly ServantManager servantManager;
