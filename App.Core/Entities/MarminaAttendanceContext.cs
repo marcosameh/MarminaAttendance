@@ -19,6 +19,10 @@ public partial class MarminaAttendanceContext : DbContext
 
     public virtual DbSet<Servants> Servants { get; set; }
 
+    public virtual DbSet<Served> Served { get; set; }
+
+    public virtual DbSet<ServedWeeks> ServedWeeks { get; set; }
+
     public virtual DbSet<Time> Time { get; set; }
 
     public virtual DbSet<Weeks> Weeks { get; set; }
@@ -58,6 +62,8 @@ public partial class MarminaAttendanceContext : DbContext
         modelBuilder.Entity<Servants>(entity =>
         {
             entity.Property(e => e.Address).HasMaxLength(80);
+            entity.Property(e => e.Birthday).HasColumnType("smalldatetime");
+            entity.Property(e => e.FatherOfConfession).HasMaxLength(50);
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -68,6 +74,41 @@ public partial class MarminaAttendanceContext : DbContext
                 .HasForeignKey(d => d.ClassId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Servants_Classes");
+        });
+
+        modelBuilder.Entity<Served>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Address).HasMaxLength(80);
+            entity.Property(e => e.Birthday).HasColumnType("smalldatetime");
+            entity.Property(e => e.FatherOfConfession).HasMaxLength(50);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Phone).HasMaxLength(13);
+            entity.Property(e => e.Photo).HasMaxLength(60);
+
+            entity.HasOne(d => d.Class).WithMany(p => p.Served)
+                .HasForeignKey(d => d.ClassId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Served_Classes");
+        });
+
+        modelBuilder.Entity<ServedWeeks>(entity =>
+        {
+            entity.HasKey(e => new { e.ServedId, e.WeekId });
+
+            entity.Property(e => e.Notes).HasMaxLength(100);
+
+            entity.HasOne(d => d.Served).WithMany(p => p.ServedWeeks)
+                .HasForeignKey(d => d.ServedId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ServedWeeks_Served");
+
+            entity.HasOne(d => d.Week).WithMany(p => p.ServedWeeks)
+                .HasForeignKey(d => d.WeekId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ServedWeeks_Weeks");
         });
 
         modelBuilder.Entity<Time>(entity =>

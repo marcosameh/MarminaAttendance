@@ -14,4 +14,6 @@ public partial class Weeks
     public DateTime Date { get; set; }
 
     public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();
+
+    public virtual ICollection<ServedWeeks> ServedWeeks { get; } = new List<ServedWeeks>();
 }

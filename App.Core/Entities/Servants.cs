@@ -19,6 +19,10 @@ public partial class Servants
 
     public string Address { get; set; }
 
+    public string FatherOfConfession { get; set; }
+
+    public DateTime? Birthday { get; set; }
+
     public virtual Classes Class { get; set; }
 
     public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();

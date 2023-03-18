@@ -27,6 +27,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Served]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ServedWeeks]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Time]",
          "ObjectType": 0
       },

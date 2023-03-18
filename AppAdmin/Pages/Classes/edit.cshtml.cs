@@ -21,9 +21,13 @@ namespace App.UI.Pages.Classes
 
         public List<Weeks> Weeks { get; set; }
         public List<Time> TimeList { get; set; }
-        public List<Core.Entities.Servants> ServantList { get; set; }
-        [BindProperty]     
+        public List<Servants> ServantList { get; set; }
+        public List<Served> ServedList { get; private set; }
+        [BindProperty]
         public List<ServantWeeksDTO> ServantWeeksDTOs { get; set; }
+
+        [BindProperty]
+        public List<ServedWeeksDTO> ServedWeeksDTOs { get; set; }
         public editModel(ClassManager classManager, WeekManager weekManager, TimeManager timeManager)
         {
             this.classManager = classManager;
@@ -37,7 +41,7 @@ namespace App.UI.Pages.Classes
         }
         public void OnPost()
         {
-            var Result = classManager.UpdateClass(CurrentClass, ServantWeeksDTOs);
+            var Result = classManager.UpdateClass(CurrentClass, ServantWeeksDTOs, ServedWeeksDTOs);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
@@ -50,6 +54,7 @@ namespace App.UI.Pages.Classes
             Weeks = weekManager.GetWeeks();
             TimeList = timeManager.GetTimeList();
             ServantList = CurrentClass.Servants?.ToList();
+            ServedList= CurrentClass.Served?.ToList();
         }
     }
    
