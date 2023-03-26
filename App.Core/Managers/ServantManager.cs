@@ -44,7 +44,21 @@ namespace App.Core.Managers
             }).ToList();
             return Servants;
         }
+        public Result DeleteServant(int servantId)
+        {
+            try
+            {
+                var existServant = _context.Servants.Find(servantId);
 
+                _context.Servants.Remove(existServant);
+                _context.SaveChanges();
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.InnerException.Message);
+            }
+        }
 
     }
 }

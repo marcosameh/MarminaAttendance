@@ -1,9 +1,11 @@
-using App.Core.Entities;
+﻿using App.Core.Entities;
 using App.Core.Managers;
 using App.Core.Models;
+using App.UI.Ifraustrcuture;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SharedKernel.Core.Common;
 
 namespace App.UI.Pages.Servant
 {
@@ -16,9 +18,9 @@ namespace App.UI.Pages.Servant
         public List<ServantVM> ServantsVM { get; private set; }
         public List<ClassVM> Classes { get; private set; }
 
-        [BindProperty] 
+        [BindProperty]
         public Servants Servant { get; set; }
-        public ListModel(ServantManager servantManager,ClassManager classManager)
+        public ListModel(ServantManager servantManager, ClassManager classManager)
         {
             this.servantManager = servantManager;
             this.classManager = classManager;
@@ -33,9 +35,33 @@ namespace App.UI.Pages.Servant
 
             return new JsonResult(ServantsVM);
         }
+
+        public void OnPost()
+        {
+            FillData();
+            if (Servant.PhotoFile != null)
+            {
+                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/الخدام/", 130, 130);
+
+            }
+            var Result = servantManager.AddServant(Servant);
+
+            TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
+            TempData["Message"] = Result.IsSuccess ? "تم اضافة الخادم  بنجاح" : Result.Error;
+          
+        }
+        public void OnGetDelete(int id)
+        {
+            var Result = servantManager.DeleteServant(id);
+
+            TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
+            TempData["Message"] = Result.IsSuccess ? "تم مسح الخادم" : Result.Error;
+            FillData();
+        }
+
         public void FillData()
         {
-            Classes=classManager.GetClasses();
+            Classes = classManager.GetClasses();
         }
     }
 }

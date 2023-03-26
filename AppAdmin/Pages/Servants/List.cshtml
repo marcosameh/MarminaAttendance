@@ -9,7 +9,7 @@
             <h5 class="text-right m-0 text-white">اضافة خادم جديد</h5>
         </div>
         <div class="container mt-3">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <div class="p-3">
                     <div class="form-row">
                         <div class="col-md-3 mb-3">
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="servant-image">الصورة</label>
-                            <input type="file" class="form-control" asp-for="Servant.Photo" id="servant-image" accept="image/*">
+                            <input type="file" class="form-control" asp-for="Servant.PhotoFile" id="servant-image" accept="image/*">
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check form-check-primary">
@@ -146,7 +146,7 @@
     </script>
     <script>
         function confirmDelete(id) {
-            if (confirm("هل متاكد انك تريد مسح الفصل")) {
+            if (confirm("هل متاكد انك تريد مسح الخادم")) {
 
                 window.location.href = `?handler=Delete&id=${id}`;
             }
