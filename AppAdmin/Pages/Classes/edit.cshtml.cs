@@ -13,6 +13,7 @@ namespace App.UI.Pages.Classes
         private readonly ClassManager classManager;
         private readonly WeekManager weekManager;
         private readonly TimeManager timeManager;
+        private readonly int  NumberOfWeeksAppearInMarkup=5;
 
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
@@ -51,7 +52,7 @@ namespace App.UI.Pages.Classes
         public void FillData()
         {
             CurrentClass = classManager.GetClass(Id);
-            Weeks = weekManager.GetWeeks();
+            Weeks = weekManager.GetWeeks(5);
             TimeList = timeManager.GetTimeList();
             ServantList = CurrentClass.Servants?.ToList();
             ServedList= CurrentClass.Served?.ToList();

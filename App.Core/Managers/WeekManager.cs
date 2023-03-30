@@ -10,14 +10,13 @@ namespace App.Core.Managers
     public class WeekManager
     {
         private readonly MarminaAttendanceContext context;
-        private int NumberOfWeeksAppearInMarkup = 5;
-
+        
         public WeekManager(MarminaAttendanceContext context)
         {
             this.context = context;
            
         }
-        public List<Weeks> GetWeeks()
+        public List<Weeks> GetWeeks(int NumberOfWeeksAppearInMarkup)
         {
             return context.Weeks.OrderByDescending(x=>x.Id).Take(NumberOfWeeksAppearInMarkup).ToList();
         }

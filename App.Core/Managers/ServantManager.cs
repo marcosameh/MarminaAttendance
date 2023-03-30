@@ -31,16 +31,16 @@ namespace App.Core.Managers
 
         public List<ServantVM> GetServants()
         {
-            var Servants = _context.Servants.Include(s => s.Class).AsNoTracking().Select(x=> new ServantVM
+            var Servants = _context.Servants.Include(s => s.Class).AsNoTracking().Select(x => new ServantVM
             {
-                Id=x.Id,
-                Name=x.Name,
-                Address=x.Address,
-                Birthday=x.Birthday.Value.ToShortDateString(),
-                ClassName=x.Class.Name,
-                FatherOfConfession=x.FatherOfConfession,
-                Phone=x.Phone,
-                Photo=x.Photo,
+                Id = x.Id,
+                Name = x.Name,
+                Address = x.Address,
+                Birthday = x.Birthday.Value.ToShortDateString(),
+                ClassName = x.Class.Name,
+                FatherOfConfession = x.FatherOfConfession,
+                Phone = x.Phone,
+                Photo = x.Photo,
             }).ToList();
             return Servants;
         }
@@ -60,5 +60,11 @@ namespace App.Core.Managers
             }
         }
 
+        public Servants GetServant(int servantId)
+        {
+            var servant = _context.Servants.Where(x => x.Id == servantId)
+                .Include(x => x.ServantWeek).FirstOrDefault();
+            return servant;
+        }
     }
 }
