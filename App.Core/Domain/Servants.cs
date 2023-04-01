@@ -11,6 +11,9 @@ namespace App.Core.Entities
     public partial class Servants
     {
         [NotMapped]
-        public IFormFile PhotoFile { get; set; }    
+        public IFormFile PhotoFile { get; set; }
+        [NotMapped]
+        public Dictionary<int,bool> IsWeekSelected { get; set; }
+        
     }
 }
