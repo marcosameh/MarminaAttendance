@@ -5,8 +5,11 @@
 <link href="~/datatables/css/jquery.dataTables.css" rel="stylesheet" />
 <div class="container mt-4">
     <div class="border mb-4">
-        <div class="d-flex justify-content-between align-items-center bg-primary p-3">
+        <div class="d-flex justify-content-between align-items-center bg-primary p-3" id="toggle-form">
             <h5 class="text-right m-0 text-white">اضافة خادم جديد</h5>
+            <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#servant-form" aria-expanded="false" aria-controls="servant-form">
+                <span id="toggle-arrow" class="fa fa-angle-down float-left"></span>
+            </button>
         </div>
         <div class="container mt-3">
             <form method="post" enctype="multipart/form-data">
@@ -151,5 +154,17 @@
                 window.location.href = `?handler=Delete&id=${id}`;
             }
         }
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Hide the form initially
+            $('.container.mt-3').hide();
+
+            // Toggle form and arrow icon on click
+            $('#toggle-form').click(function () {
+                $('.container.mt-3').toggle();
+                $('#toggle-arrow').toggleClass('fa-angle-down fa-angle-up');
+            });
+        });
     </script>
 }
