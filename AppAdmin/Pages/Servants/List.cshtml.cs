@@ -41,7 +41,7 @@ namespace App.UI.Pages.Servant
             FillData();
             if (Servant.PhotoFile != null)
             {
-                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/الخدام/", 130, 130);
+                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/الخدام/", 285, 310);
 
             }
             var Result = servantManager.AddServant(Servant);
