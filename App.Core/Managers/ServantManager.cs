@@ -59,7 +59,7 @@ namespace App.Core.Managers
                 return Result.Fail(ex.InnerException.Message);
             }
         }
-        public Result EditServant(Servants servant)
+        public Result UpdateServant(Servants servant,ServantWeeksDTO servantWeeksDTO)
         {
             var existServant = _context.Servants.Where(x => x.Id == servant.Id).Include(x => x.ServantWeek).FirstOrDefault();
 
@@ -83,7 +83,7 @@ namespace App.Core.Managers
             var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
             foreach (var week in allWeeks)
             {
-                var weekChecked = servant.IsWeekSelected[week.Id];
+                var weekChecked = servantWeeksDTO.IsWeekSelected[week.Id];
                 var existingServantWeek = existServant.ServantWeek.FirstOrDefault(x => x.WeekId == week.Id);
                 if (weekChecked && existingServantWeek == null)
                 {

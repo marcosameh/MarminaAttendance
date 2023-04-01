@@ -70,8 +70,9 @@
                     <label for="servantWeek">الحضور الاسبوعى</label>
                     @foreach (var week in Model.WeeksList)
                     {
+                         var isChecked = @Model.Servant.ServantWeek.Where(x => x.WeekId == week.Id).Any();
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="week-@week.Id" name="Servant.IsWeekSelected[@week.Id]" value="true" @(Model.Servant.ServantWeek.Any(sw => sw.WeekId == week.Id) ? "checked" : "")>
+                            <input class="form-check-input" type="checkbox" id="week-@week.Id" asp-for="@Model.ServantWeeksDTO.IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true">
                             <label class="form-check-label" for="week-@week.Id">
                                 @week.Name
                             </label>

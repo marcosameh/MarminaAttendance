@@ -18,7 +18,9 @@ namespace App.UI.Pages.Servant
         public int Id { get; set; }
         public List<Weeks> WeeksList { get; private set; }
         [BindProperty]
-        public Servants Servant { get;  set; }
+        public Servants Servant { get; set; }
+        [BindProperty]
+        public ServantWeeksDTO ServantWeeksDTO { get; set; }
         public SelectList Classes { get; private set; }
 
         public EditcshtmlModel(ServantManager servantManager,WeekManager weekManager,ClassManager classManager)
@@ -45,7 +47,7 @@ namespace App.UI.Pages.Servant
                 Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/الخدام/", 285, 310);
 
             }
-            var Result = servantManager.EditServant(Servant);
+            var Result = servantManager.UpdateServant(Servant,ServantWeeksDTO);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;

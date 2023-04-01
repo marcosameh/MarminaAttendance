@@ -12,8 +12,7 @@ namespace App.Core.Entities
     {
         [NotMapped]
         public IFormFile PhotoFile { get; set; }
-        [NotMapped]
-        public Dictionary<int,bool> IsWeekSelected { get; set; }
+     
         
     }
 }

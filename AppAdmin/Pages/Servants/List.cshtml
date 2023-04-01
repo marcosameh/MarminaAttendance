@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="servant-class">الفصل</label>
-                            <select class="form-control" id="servant-class" asp-for="Servant.ClassId" required>
+                            <select class="form-control form-control-lg" id="servant-class" asp-for="Servant.ClassId" required>
                                 @foreach (var item in Model.Classes)
                                 {
                                     <option value="@item.Id">@item.Name</option>
