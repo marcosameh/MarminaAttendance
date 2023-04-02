@@ -58,7 +58,7 @@ namespace App.Core.Managers
         public Classes GetClass(int id)
         {
             return _context.Classes.Where(x => x.Id == id).Include(x => x.Servants).ThenInclude(x => x.ServantWeek).
-                Include(x => x.Served).ThenInclude(x=>x.ServedWeeks).AsNoTracking().FirstOrDefault();
+                Include(x => x.Served).ThenInclude(x=>x.ServedWeeks).Include(x=>x.Time).AsSplitQuery().AsNoTracking().FirstOrDefault();
 
         }
         public Result UpdateClass(Classes ClassData,List<ServantWeeksDTO> servantWeeksDTOS,List<ServedWeeksDTO> servedWeeksDTOs)

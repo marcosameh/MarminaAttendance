@@ -1,4 +1,5 @@
 ﻿using App.Core.Entities;
+using SharedKernel.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,10 @@ namespace App.Core.Managers
         {
             return context.Weeks.OrderByDescending(x=>x.Id).Take(NumberOfWeeksAppearInMarkup).ToList();
         }
+
+        //public Result AddNewWeek()
+        //{
+            
+        //}
     }
 }
