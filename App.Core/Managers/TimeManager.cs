@@ -1,4 +1,5 @@
 ﻿using App.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace App.Core.Managers
         }
         public List<Time> GetTimeList()
         {
-            return context.Time.ToList(); 
+            return context.Time.AsNoTracking().ToList(); 
         }
     }
 }

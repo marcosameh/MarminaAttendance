@@ -122,9 +122,6 @@ public partial class MarminaAttendanceContext : DbContext
         modelBuilder.Entity<Weeks>(entity =>
         {
             entity.Property(e => e.Date).HasColumnType("smalldatetime");
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

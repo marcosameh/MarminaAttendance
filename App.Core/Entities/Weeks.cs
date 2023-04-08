@@ -9,8 +9,6 @@ public partial class Weeks
 {
     public int Id { get; set; }
 
-    public string Name { get; set; }
-
     public DateTime Date { get; set; }
 
     public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();

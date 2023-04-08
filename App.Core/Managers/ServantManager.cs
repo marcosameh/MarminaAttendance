@@ -105,7 +105,7 @@ namespace App.Core.Managers
         public Servants GetServant(int servantId)
         {
             var servant = _context.Servants.Where(x => x.Id == servantId)
-                .Include(x => x.ServantWeek).FirstOrDefault();
+                .Include(x => x.ServantWeek).Include(x=>x.Class).ThenInclude(x=>x.Time).AsNoTracking().FirstOrDefault();
             return servant;
         }
     }
