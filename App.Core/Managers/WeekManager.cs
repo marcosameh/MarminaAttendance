@@ -23,9 +23,11 @@ namespace App.Core.Managers
             return context.Weeks.OrderByDescending(x=>x.Id).Take(NumberOfWeeksAppearInMarkup).AsNoTracking().ToList();
         }
 
-        //public Result AddNewWeek()
-        //{
-            
-        //}
+        public void AddNewWeek()
+        {
+            var today = DateTime.Today;
+            context.Weeks.Add(new Weeks { Date = today });
+            context.SaveChanges();
+        }
     }
 }
