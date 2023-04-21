@@ -16,9 +16,7 @@ namespace App.UI.Pages.Servant
         {
             this.servantManager = servantManager;
         }
-
-        public Result<ServantVM> ServantsVM { get; private set; }
-
+ 
         public void OnGet()
         {
         }
@@ -26,9 +24,14 @@ namespace App.UI.Pages.Servant
 
         public IActionResult OnGetSearchServants(string searchInput)
         {
-            ServantsVM = servantManager.SearchServants(searchInput);
+            var result = servantManager.SearchServants(searchInput);
+            if (result.IsSuccess)
+            {
+                return new JsonResult(result.Value);
+            }
+            return BadRequest(result.Error);
 
-            return new JsonResult(ServantsVM);
+           
         }
 
 

@@ -62,18 +62,16 @@
                     method: "GET",
                     data: { searchInput: searchInput },
                     success: function (data) {
-                        if (data.isSuccess) {                          
-                            $("#servant-name").text(data.value.name)
-                            $("#class-name").text(`${data.value.className}`)
-                            $("#servant-photo").attr("src", `/photos/الخدام/${data.value.photo}`);
-                            $("#servant-id").val(data.value.id)
+                                             
+                            $("#servant-name").text(data.name)
+                            $("#class-name").text(`${data.className}`)
+                            $("#servant-photo").attr("src", `/photos/الخدام/${data.photo}`);
+                            $("#servant-id").val(data.id)
                             $('#attendance-modal').modal('show');
-                        }else{
-                            alert("خادم غير موجود")
-                        }
+                                                                        
                     },
                     error: function (xhr, status, error) {
-                        //display warning message
+                        alert("خادم غير موجود")
                     }
                 });
             });
