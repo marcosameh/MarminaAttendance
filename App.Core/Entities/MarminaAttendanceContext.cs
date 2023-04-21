@@ -48,8 +48,6 @@ public partial class MarminaAttendanceContext : DbContext
         {
             entity.HasKey(e => new { e.ServantId, e.WeekId });
 
-            entity.Property(e => e.Notes).HasMaxLength(100);
-
             entity.HasOne(d => d.Servant).WithMany(p => p.ServantWeek)
                 .HasForeignKey(d => d.ServantId)
                 .HasConstraintName("FK_ServantWeek_Servants");
@@ -97,8 +95,6 @@ public partial class MarminaAttendanceContext : DbContext
         modelBuilder.Entity<ServedWeeks>(entity =>
         {
             entity.HasKey(e => new { e.ServedId, e.WeekId });
-
-            entity.Property(e => e.Notes).HasMaxLength(100);
 
             entity.HasOne(d => d.Served).WithMany(p => p.ServedWeeks)
                 .HasForeignKey(d => d.ServedId)

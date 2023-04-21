@@ -11,8 +11,6 @@ public partial class ServedWeeks
 
     public int WeekId { get; set; }
 
-    public string Notes { get; set; }
-
     public virtual Served Served { get; set; }
 
     public virtual Weeks Week { get; set; }

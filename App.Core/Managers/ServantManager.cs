@@ -138,6 +138,24 @@ namespace App.Core.Managers
 
             return Result.Ok(MapToServantVM(servant));
         }
+        public Result AttendanceRegistration(int ServantId)
+        {
+            var WeekId = _context.Weeks.AsNoTracking().OrderByDescending(w => w.Id).First().Id;
+            var exists = _context.ServantWeek.Any(x => x.ServantId == ServantId && x.WeekId == WeekId);
+            if (exists)
+            {
+                return Result.Ok("تم تسجل حضور الخادم من قبل بالفعل");
+            }
+            try
+            {
+                _context.ServantWeek.Add(new ServantWeek { ServantId = ServantId, WeekId = WeekId });
+                _context.SaveChanges();
+                return Result.Ok("تم تسجيل الحضور");
+            }catch(Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
 
     }
 }

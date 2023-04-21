@@ -53,7 +53,7 @@
    "UseHierarchyId": false,
    "UseInflector": false,
    "UseLegacyPluralizer": false,
-   "UseManyToManyEntity": false,
+   "UseManyToManyEntity": true,
    "UseNoDefaultConstructor": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
