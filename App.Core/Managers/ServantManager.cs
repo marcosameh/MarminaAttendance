@@ -1,7 +1,7 @@
 ﻿using App.Core.Entities;
 using App.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.Core.Common;
+using AppCore.Common;
 
 namespace App.Core.Managers
 {
@@ -59,7 +59,7 @@ namespace App.Core.Managers
                 return Result.Fail(ex.InnerException.Message);
             }
         }
-        public Result UpdateServant(Servants servant,ServantWeeksDTO servantWeeksDTO)
+        public Result UpdateServant(Servants servant, ServantWeeksDTO servantWeeksDTO)
         {
             var existServant = _context.Servants.Where(x => x.Id == servant.Id).Include(x => x.ServantWeek).FirstOrDefault();
 
@@ -105,8 +105,39 @@ namespace App.Core.Managers
         public Servants GetServant(int servantId)
         {
             var servant = _context.Servants.Where(x => x.Id == servantId)
-                .Include(x => x.ServantWeek).Include(x=>x.Class).ThenInclude(x=>x.Time).AsNoTracking().FirstOrDefault();
+                .Include(x => x.ServantWeek).Include(x => x.Class).ThenInclude(x => x.Time).AsNoTracking().FirstOrDefault();
             return servant;
         }
+
+        private ServantVM MapToServantVM(Servants servant)
+        {
+            return new ServantVM
+            {
+                Id = servant.Id,
+                Name = servant.Name,
+                Photo=servant.Photo,
+                ClassName = servant.Class.Name
+            };
+        }
+
+        public Result<ServantVM> SearchServants(string searchInput)
+        {
+            int servantId;
+            bool isNumeric = int.TryParse(searchInput, out servantId);
+
+            var servant = _context.Servants
+                .Where(x => (isNumeric && x.Id == servantId) || (!isNumeric && x.Name.Trim().Contains(searchInput.Trim())))
+                .Include(x => x.Class)
+                .AsNoTracking()
+                .FirstOrDefault();
+
+            if (servant == null)
+            {
+                return Result.Fail<ServantVM>("Servant not found");
+            }
+
+            return Result.Ok(MapToServantVM(servant));
+        }
+
     }
 }

@@ -5,7 +5,7 @@ using App.UI.Ifraustrcuture;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SharedKernel.Core.Common;
+using AppCore.Common;
 
 namespace App.UI.Pages.Servant
 {

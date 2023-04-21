@@ -1,7 +1,7 @@
 ﻿using App.Core.Entities;
 using App.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.Core.Common;
+using AppCore.Common;
 using System.Runtime.InteropServices;
 
 namespace App.Core.Managers

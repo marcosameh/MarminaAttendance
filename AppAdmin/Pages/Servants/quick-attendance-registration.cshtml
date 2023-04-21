@@ -1,66 +1,81 @@
 ﻿@page
 @model App.UI.Pages.Servant.quick_attendance_registrationModel
 
-    <div class="container">
-        <h1 class="text-center">Quick Attendance Registration</h1>
+<div class="container">
+    <h1 class="text-center">Quick Attendance Registration</h1>
+    <form id="searchForm">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search by servant name or code">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search by servant name or code" required>
                     <div class="input-group-append">
-                        <button class="btn btn-primary" id="search" type="button">Search</button>
+                        <button class="btn btn-primary" id="search" type="submit">Search</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+</div>
 
-    <!-- Popup Modal -->
-    <div class="modal fade" id="attendance-modal" tabindex="-1" role="dialog" aria-labelledby="attendance-modal-label" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="attendance-modal-label">Attendance Registration</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img src="servant-photo.jpg" class="img-fluid">
-                        </div>
-                        <div class="col-md-8">
-                            <h4>Servant Name</h4>
-                            <p>Phone Number: XXX-XXX-XXXX</p>
-                        </div>
+<!-- Popup Modal -->
+<div class="modal fade" id="attendance-modal" tabindex="-1" role="dialog" aria-labelledby="attendance-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="attendance-modal-label">Attendance Registration</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img id="servant-photo" src="" class="img-fluid">
+                    </div>
+                    <div class="col-md-8">
+                        <h4 id="servant-name"></h4>
+                        <p id="class-name"></p>
+                        <input type="hidden" id="servant-id" />
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Register Attendance</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                <button type="submit" class="btn btn-primary">تسجيل حضور</button>
             </div>
         </div>
+
+        </form>
     </div>
+</div>
 @section Scripts{
     <script>
         $(document).ready(function () {
             $('#attendance-modal').modal('hide'); // hide the modal initially
-           
-            $('#search').click(function () {
-                
-                // handle search button click
-                // replace the values in this example with your actual search code
-                var servantName = 'John Doe';
-                var phoneNumber = '555-555-5555';
 
-                // update modal with servant information
-                $('#attendance-modal .modal-body h4').text(servantName);
-                $('#attendance-modal .modal-body p').text('Phone Number: ' + phoneNumber);
-
-                // show the modal
-                $('#attendance-modal').modal('show');
+            $("#searchForm").submit(function (event) {
+                event.preventDefault(); //prevent the form from submitting
+                var searchInput = $("#searchInput").val();
+                $.ajax({
+                    url: "?handler=searchServants", // change the name of the handler
+                    method: "GET",
+                    data: { searchInput: searchInput },
+                    success: function (data) {
+                        if (data.isSuccess) {                          
+                            $("#servant-name").text(data.value.name)
+                            $("#class-name").text(`${data.value.className}`)
+                            $("#servant-photo").attr("src", `/photos/الخدام/${data.value.photo}`);
+                            $("#servant-id").val(data.value.id)
+                            $('#attendance-modal').modal('show');
+                        }else{
+                            alert("خادم غير موجود")
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        //display warning message
+                    }
+                });
             });
         });
     </script>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharedKernel.Core.Common
+namespace AppCore.Common
 {
     public static class ResultExtensions
     {
