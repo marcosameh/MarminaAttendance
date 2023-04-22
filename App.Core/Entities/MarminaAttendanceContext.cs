@@ -65,6 +65,7 @@ public partial class MarminaAttendanceContext : DbContext
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);
+            entity.Property(e => e.Notes).HasMaxLength(350);
             entity.Property(e => e.Phone).HasMaxLength(13);
             entity.Property(e => e.Photo).HasMaxLength(60);
 
@@ -83,6 +84,7 @@ public partial class MarminaAttendanceContext : DbContext
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);
+            entity.Property(e => e.Notes).HasMaxLength(350);
             entity.Property(e => e.Phone).HasMaxLength(13);
             entity.Property(e => e.Photo).HasMaxLength(60);
 

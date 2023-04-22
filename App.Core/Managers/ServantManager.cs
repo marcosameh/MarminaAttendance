@@ -80,6 +80,7 @@ namespace App.Core.Managers
             existServant.ClassId = servant.ClassId;
             existServant.FatherOfConfession = servant.FatherOfConfession;
             existServant.Leader = servant.Leader;
+            existServant.Notes=servant.Notes;
             var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
             foreach (var week in allWeeks)
             {

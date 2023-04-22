@@ -23,6 +23,8 @@ public partial class Served
 
     public DateTime? Birthday { get; set; }
 
+    public string Notes { get; set; }
+
     public virtual Classes Class { get; set; }
 
     public virtual ICollection<ServedWeeks> ServedWeeks { get; } = new List<ServedWeeks>();

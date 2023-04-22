@@ -25,6 +25,8 @@ public partial class Servants
 
     public bool Leader { get; set; }
 
+    public string Notes { get; set; }
+
     public virtual Classes Class { get; set; }
 
     public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();
