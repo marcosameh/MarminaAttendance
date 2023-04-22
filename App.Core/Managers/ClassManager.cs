@@ -3,6 +3,9 @@ using App.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using AppCore.Common;
 using System.Runtime.InteropServices;
+using OfficeOpenXml;
+using App.Core.Enums;
+using AppCore.Utilities;
 
 namespace App.Core.Managers
 {
@@ -10,6 +13,7 @@ namespace App.Core.Managers
     {
         private readonly MarminaAttendanceContext _context;
         private int NumberOfWeeksAppearInMarkup = 5;
+        private int NumberOfWeeksAppearInExcelFile = 12;
         public ClassManager(MarminaAttendanceContext context)
         {
             _context = context;
@@ -45,7 +49,7 @@ namespace App.Core.Managers
             try
             {
                 var existClass = _context.Classes.Find(Id);
-                
+
                 _context.Classes.Remove(existClass);
                 _context.SaveChanges();
                 return Result.Ok();
@@ -58,10 +62,10 @@ namespace App.Core.Managers
         public Classes GetClass(int id)
         {
             return _context.Classes.Where(x => x.Id == id).Include(x => x.Servants).ThenInclude(x => x.ServantWeek).
-                Include(x => x.Served).ThenInclude(x=>x.ServedWeeks).Include(x=>x.Time).AsSplitQuery().AsNoTracking().FirstOrDefault();
+                Include(x => x.Served).ThenInclude(x => x.ServedWeeks).Include(x => x.Time).AsSplitQuery().AsNoTracking().FirstOrDefault();
 
         }
-        public Result UpdateClass(Classes ClassData,List<ServantWeeksDTO> servantWeeksDTOS,List<ServedWeeksDTO> servedWeeksDTOs)
+        public Result UpdateClass(Classes ClassData, List<ServantWeeksDTO> servantWeeksDTOS, List<ServedWeeksDTO> servedWeeksDTOs)
         {
             // Retrieve the existing class and update its properties
             var existingClass = _context.Classes
@@ -83,7 +87,7 @@ namespace App.Core.Managers
             foreach (var servant in existingClass.Servants)
             {
                 // Get the list of checked week ids for the current servant
-                var servantWeeksDTO = servantWeeksDTOS.Where(x=>x.ServantId==servant.Id).FirstOrDefault();
+                var servantWeeksDTO = servantWeeksDTOS.Where(x => x.ServantId == servant.Id).FirstOrDefault();
                 // Loop through all weeks, including those not displayed on the form
                 foreach (var week in allWeeks)
                 {
@@ -110,7 +114,7 @@ namespace App.Core.Managers
 
 
             // Update the ServedWeek records for each Served
-           
+
             foreach (var served in existingClass.Served)
             {
                 // Get the list of checked week ids for the current servant
@@ -146,6 +150,94 @@ namespace App.Core.Managers
             return Result.Ok("Class updated successfully");
 
 
+        }
+
+        public (string, byte[]) GenerateExcelFile(int ClassId)
+        {
+            var CurrentClass = GetClass(ClassId);
+            var ServantList = CurrentClass.Servants.ToList();
+            var ServedList = CurrentClass.Served.ToList();
+            var Weeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInExcelFile).AsNoTracking().ToList();
+            byte[] result;
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add(string.Concat(CurrentClass.Name, " ", CurrentClass.Time.Time1));
+
+                // Add header row
+                worksheet.Cells[1, 1].Value = " ";
+
+                // Add data rows
+                int row = 1;
+                for (int i = 0; i < Weeks.Count(); i++)
+                {
+                    worksheet.Cells[row, (i + 2)].Value = GetFormattedWeekDate(Weeks[i].Date, CurrentClass.Time.Time1);
+                }
+
+                row = 2;
+                worksheet.Cells[2, 1].Value = "الخدام";
+                row = 3;
+                for (int i = 0; i < ServantList.Count(); i++)
+                {
+
+                    worksheet.Cells[row, 1].Value = ServantList[i].Name;
+                    for (int j = 0; j < Weeks.Count(); j++)
+                    {
+                        if (ServantList[i].ServantWeek.Where(x => x.WeekId == Weeks[j].Id).Any())
+                        {
+                            worksheet.Cells[row, (j + 2)].Value = "+";
+                        }
+                        else
+                        {
+                            worksheet.Cells[row, (j + 2)].Value = "-";
+                        }
+                    }
+                    row++;
+                }
+                worksheet.Cells[row, 1].Value = "المخدومين";
+                row++;
+                for (int i = 0; i < ServedList.Count(); i++)
+                {
+
+                    worksheet.Cells[row, 1].Value = ServedList[i].Name;
+                    for (int j = 0; j < Weeks.Count(); j++)
+                    {
+                        if (ServedList[i].ServedWeeks.Where(x => x.WeekId == Weeks[j].Id).Any())
+                        {
+                            worksheet.Cells[row, (j + 2)].Value = "+";
+                        }
+                        else
+                        {
+                            worksheet.Cells[row, (j + 2)].Value = "-";
+                        }
+                    }
+                    row++;
+                }
+
+                result = package.GetAsByteArray();
+            }
+
+            return (CurrentClass.Name + "_" + CurrentClass.Time.Time1+ ".xlsx", result);
+        }
+
+        private string GetFormattedWeekDate(DateTime week, string Time)
+        {
+            ServiceTime serviceTime;
+            if (!Enum.TryParse(Time.Replace(" ", ""), out serviceTime))
+            {
+                throw new ArgumentException($"Invalid value for 'time': {Time}");
+            }
+            string FormatedDate = (serviceTime) switch
+            {
+                ServiceTime.الخميس => week.ToString("dd/MM/yyyy"),
+                ServiceTime.الجمعةصباحا => week.AddDays(1).ToString("dd/MM/yyyy"),
+                ServiceTime.الجمعةمساء => week.AddDays(1).ToString("dd/MM/yyyy"),
+                ServiceTime.السبت => week.AddDays(2).ToString("dd/MM/yyyy"),
+                _ => week.ToString("dd/MM/yyyy"),
+
+            };
+            return FormatedDate;
         }
     }
 }

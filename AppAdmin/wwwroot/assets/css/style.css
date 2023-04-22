@@ -12373,7 +12373,7 @@ select.tt-hint {
   padding: 0.4375rem 0.75rem;
   border: 0;
   outline: 1px solid #ebedf2;
-  color: #c9c8c8; }
+ /* color: #c9c8c8;*/ }
   select.form-control:focus, .select2-container--default select.select2-selection--single:focus, .select2-container--default .select2-selection--single select.select2-search__field:focus, select.typeahead:focus,
   select.tt-query:focus,
   select.tt-hint:focus {

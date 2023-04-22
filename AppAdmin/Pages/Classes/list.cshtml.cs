@@ -43,7 +43,7 @@ namespace App.UI.Pages.Classes
             FillData();
 
         }
-    
+
         public void OnGetDelete(int id)
         {
             var Result = classManager.DeleteClass(id);
@@ -55,6 +55,14 @@ namespace App.UI.Pages.Classes
         private void FillData()
         {
             TimeList = timeManager.GetTimeList();
+        }
+
+        public IActionResult OnGetDownloadExcel(int classId)
+        {
+            FillData();
+            (string fileName, byte[] excelData) = classManager.GenerateExcelFile(classId);
+            return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
         }
     }
 }
