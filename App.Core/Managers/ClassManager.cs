@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 using OfficeOpenXml;
 using App.Core.Enums;
 using AppCore.Utilities;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace App.Core.Managers
 {
@@ -173,10 +175,13 @@ namespace App.Core.Managers
                 for (int i = 0; i < Weeks.Count(); i++)
                 {
                     worksheet.Cells[row, (i + 2)].Value = GetFormattedWeekDate(Weeks[i].Date, CurrentClass.Time.Time1);
+                    
                 }
 
                 row = 2;
                 worksheet.Cells[2, 1].Value = "الخدام";
+                worksheet.Cells[2, 1].Style.Font.Size = 14;
+                worksheet.Cells[2, 1].Style.Font.Color.SetColor(Color.Red);
                 row = 3;
                 for (int i = 0; i < ServantList.Count(); i++)
                 {
@@ -187,15 +192,21 @@ namespace App.Core.Managers
                         if (ServantList[i].ServantWeek.Where(x => x.WeekId == Weeks[j].Id).Any())
                         {
                             worksheet.Cells[row, (j + 2)].Value = "+";
+                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
                         }
                         else
                         {
                             worksheet.Cells[row, (j + 2)].Value = "-";
+                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
                         }
                     }
                     row++;
                 }
                 worksheet.Cells[row, 1].Value = "المخدومين";
+                worksheet.Cells[row, 1].Style.Font.Size = 14;
+                worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.Red);
                 row++;
                 for (int i = 0; i < ServedList.Count(); i++)
                 {
@@ -206,15 +217,19 @@ namespace App.Core.Managers
                         if (ServedList[i].ServedWeeks.Where(x => x.WeekId == Weeks[j].Id).Any())
                         {
                             worksheet.Cells[row, (j + 2)].Value = "+";
+                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
                         }
                         else
                         {
                             worksheet.Cells[row, (j + 2)].Value = "-";
+                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
                         }
                     }
                     row++;
                 }
-
+                worksheet.Cells.AutoFitColumns();
                 result = package.GetAsByteArray();
             }
 
