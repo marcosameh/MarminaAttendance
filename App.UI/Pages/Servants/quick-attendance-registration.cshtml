@@ -1,13 +1,15 @@
 ﻿@page
 @model App.UI.Pages.Servant.quick_attendance_registrationModel
-
+@{
+    ViewData["Title"] = "تسجيل حضور سريع للخدام";
+}
 <div class="container">
-    <h1 class="text-center">تسجيل حضور سريع خدام</h1>
+    <h1 class="text-center">تسجيل حضور سريع للخدام</h1>
     <form id="searchForm">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Search by servant name or code" required>
+                    <input type="text" class="form-control" id="searchInput" placeholder="اكتب اسم الخادم او الكود الخاص بة" required>
                     <div class="input-group-append">
                         <button class="btn btn-primary" id="search" type="submit">Search</button>
                     </div>
