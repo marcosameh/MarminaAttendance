@@ -1,0 +1,112 @@
+﻿@page "/class/edit/{id}"
+@model App.UI.Pages.Classes.editModel
+@{
+}
+
+
+
+
+<div class="container">
+    <h1>تعديل بيانات الفصل</h1>
+    <form method="post">
+        <input type="hidden" asp-for="CurrentClass.Id" />
+        <div class="form-group">
+            <label for="className">اسم الفصل</label>
+            <input type="text" class="form-control" asp-for="CurrentClass.Name">
+        </div>
+        <div class="form-group">
+            <label for="intercessor">شفيع الفصل</label>
+            <input type="text" class="form-control" asp-for="CurrentClass.Intercessor">
+        </div>
+        <div class="form-group">
+            <label for="classTime">وقت الخدمة</label>
+            <select class="form-control form-control-lg" asp-for="CurrentClass.TimeId">
+                @foreach (var Time in Model.TimeList)
+                {
+                    <option value="@Time.Id">@Time.Time1</option>
+
+                }
+
+            </select>
+        </div>
+        @if (Model.ServantList.Any())
+        {
+            <h2>الخدام</h2>
+            <div class="row">
+                @for (int i = 0; i < Model.ServantList.Count(); i++)
+                {
+                    <input type="hidden" asp-for="ServantWeeksDTOs[i].ServantId" value="@Model.ServantList[i].Id" />
+                    <div class="col-sm-3">
+                        <div class="servant-item">
+                            <label>
+                                <img src="/photos/الخدام/@Model.ServantList[i].Photo" class="servant-photo">
+                                <span class="servant-name"> @Model.ServantList[i].Name</span>
+                            </label>
+                            <ul class="week-list">
+                                @foreach (var week in Model.Weeks)
+                                {
+                                    var isChecked = @Model.ServantList[i].ServantWeek.Where(x => x.WeekId == week.Id).Any();
+                                    <li>
+                                        <label>
+                                            <input class="form-check-input" type="checkbox" asp-for="@Model.ServantWeeksDTOs[i].IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true" />
+                                            @Model.GetFormattedWeekDate(week.Date,Model.CurrentClass.Time.Time1)
+                                        </label>
+                                    </li>
+
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        }
+
+        @if (Model.ServedList.Any())
+        {
+            <h2>المخدومين</h2>
+            <div class="row">
+                @for (int i = 0; i < Model.ServedList.Count(); i++)
+                {
+                    <input type="hidden" asp-for="ServedWeeksDTOs[i].ServedId" value="@Model.ServedList[i].Id" />
+                    <div class="col-sm-3">
+                        <div class="servant-item">
+                            <label>
+                                <img src="/photos/المخدومين/@Model.ServedList[i].Photo" class="servant-photo">
+                                <span class="servant-name"> @Model.ServedList[i].Name</span>
+                            </label>
+                            <ul class="week-list">
+                                @foreach (var week in Model.Weeks)
+                                {
+                                    var isChecked = @Model.ServedList[i].ServedWeeks.Where(x => x.WeekId == week.Id).Any();
+                                    <li>
+                                        <label>
+                                            <input class="form-check-input" type="checkbox" asp-for="@Model.ServedWeeksDTOs[i].IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true" />
+                                            @Model.GetFormattedWeekDate(week.Date,Model.CurrentClass.Time.Time1)
+                                        </label>
+                                    </li>
+
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        }
+
+
+        <br>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+
+@section Scripts{
+
+
+    <!-- Bootstrap 4 JS (required for some features) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    }

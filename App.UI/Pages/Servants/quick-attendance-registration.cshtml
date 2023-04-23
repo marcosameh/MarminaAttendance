@@ -1,0 +1,80 @@
+﻿@page
+@model App.UI.Pages.Servant.quick_attendance_registrationModel
+
+<div class="container">
+    <h1 class="text-center">تسجيل حضور سريع خدام</h1>
+    <form id="searchForm">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search by servant name or code" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" id="search" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Popup Modal -->
+<div class="modal fade" id="attendance-modal" tabindex="-1" role="dialog" aria-labelledby="attendance-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <h5 class="modal-title" id="attendance-modal-label">تسجيل حضور</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img id="servant-photo" src="" class="img-fluid">
+                    </div>
+                    <div class="col-md-8">
+                        <h4 id="servant-name"></h4>
+                        <p id="class-name"></p>
+                        <input type="hidden" id="servant-id" asp-for="ServantId" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                <button type="submit" class="btn btn-primary">تسجيل حضور</button>
+            </div>
+        </div>
+
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#attendance-modal').modal('hide'); // hide the modal initially
+
+            $("#searchForm").submit(function (event) {
+                event.preventDefault(); //prevent the form from submitting
+                var searchInput = $("#searchInput").val();
+                $.ajax({
+                    url: "?handler=searchServants", // change the name of the handler
+                    method: "GET",
+                    data: { searchInput: searchInput },
+                    success: function (data) {
+                                             
+                            $("#servant-name").text(data.name)
+                            $("#class-name").text(`${data.className}`)
+                            $("#servant-photo").attr("src", `/photos/الخدام/${data.photo}`);
+                            $("#servant-id").val(data.id)
+                            $('#attendance-modal').modal('show');
+                                                                        
+                    },
+                    error: function (xhr, status, error) {
+                        alert("خادم غير موجود")
+                    }
+                });
+            });
+        });
+    </script>
+}
