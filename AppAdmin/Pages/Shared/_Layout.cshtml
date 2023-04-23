@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css" />
-   @* <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css" />*@
+    @* <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css" />*@
     <link rel="stylesheet" href="/assets/vendors/select2/select2.min.css" />
     <link rel="stylesheet" href="/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/style.css" />
@@ -55,7 +55,7 @@
                         <span class="menu-title">الفصول</span>
                     </a>
                 </li>
-           
+
                 <li class="nav-item">
                     <a class="nav-link" href="/servants/list">
                         <i class="mdi mdi-contacts menu-icon"></i>
@@ -74,14 +74,20 @@
                         <div class="mt-4">
 
                             <ul class="mt-4 pl-0">
-                                <li><a asp-page="/Account/Logout" asp-route-returnUrl="/Account/Login"></a>تسحيل خروج</li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Account/Logout" asp-route-returnUrl="/Account/Login">
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                        <span class="menu-title">تسحيل خروج </span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </li>
             </ul>
         </nav>
-        <div class="container-fluid page-body-wrapper">         
+        <div class="container-fluid page-body-wrapper">
             <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
                 <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between">
                     <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
