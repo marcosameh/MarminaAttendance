@@ -46,14 +46,36 @@
               
                 <li class="nav-item">
                     <a class="nav-link" href="/classes/list">
-                        <i class="mdi mdi-home menu-icon"></i>
+                        <i class="fa-solid fa-church menu-icon"></i>
                         <span class="menu-title">الفصول</span>
                     </a>
                 </li>
-
+               
+           
                 <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                        <span class="menu-title">الخدام</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/servants/list">الخدام</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/servants/quick-attendance-registration">تسجيل حضور سريع</a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </li>
+
+
+           @*     <li class="nav-item">
                     <a class="nav-link" href="/servants/list">
-                        <i class="mdi mdi-contacts menu-icon"></i>
+                        <i class="fa-solid fa-hand-holding-heart menu-icon"></i>
                         <span class="menu-title">الخدام</span>
                     </a>
                 </li>
@@ -62,10 +84,10 @@
                         <i class="mdi mdi-home menu-icon"></i>
                         <span class="menu-title"> تسجيل حضور سريع للخدام</span>
                     </a>
-                </li>
+                </li>*@
                 <li class="nav-item">
                     <a class="nav-link" href="/served/list">
-                        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                        <i class="fa-solid fa-hands-holding-child menu-icon"></i>
                         <span class="menu-title">المخدومين</span>
                     </a>
                 </li>
@@ -96,7 +118,7 @@
         <div class="container-fluid page-body-wrapper">
             <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
                 <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between">
-                    <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img src="/assets/images/logo-mini.png" alt="logo" /></a>
+                    <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="/classes/list"><img src="/assets/images/logo-mini.png" alt="logo" /></a>
                     <button class="navbar-toggler navbar-toggler align-self-center mr-2" type="button" data-toggle="minimize">
                         <i class="mdi mdi-menu"></i>
                     </button>
