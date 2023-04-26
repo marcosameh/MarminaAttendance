@@ -10765,16 +10765,18 @@ input:focus {
 
 /* Typography */
 body {
-  font-size: 1rem;
-  font-family: "Rubik", sans-serif;
-  font-weight: 400;
-  line-height: normal;
-  -webkit-font-smoothing: antialiased; }
+    font-size: 1rem;
+/*    font-family: "Cairo", sans-serif;*/
+    font-weight: 400;
+    line-height: normal;
+    -webkit-font-smoothing: antialiased;
+}
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Rubik", sans-serif;
-  font-weight: medium; }
+/*    font-family: "Cairo", sans-serif;*/
+    font-weight: medium;
+}
 
 p {
   font-size: 0.875rem; }

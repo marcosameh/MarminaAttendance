@@ -18,7 +18,7 @@ namespace App.UI.Pages
         public void OnGet()
         {       
             RecurringJob.AddOrUpdate(() => AddNewWeek(),
-                          Cron.Weekly(DayOfWeek.Saturday, hour: 16, minute: 35));
+                          Cron.Weekly(DayOfWeek.Wednesday, hour: 22, minute: 1));
 
         }
         public void AddNewWeek()

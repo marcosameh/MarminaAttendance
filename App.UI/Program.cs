@@ -33,7 +33,6 @@ builder.Services.AddScoped<ClassManager>();
 builder.Services.AddScoped<WeekManager>();
 builder.Services.AddScoped<ServantManager>();
 builder.Services.AddScoped<TimeManager>();
-builder.Services.AddScoped(typeof(ILookup<,>), typeof(Lookup<,>));
 builder.Services.AddHangfire(configuration => configuration
                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                   .UseSimpleAssemblyNameTypeSerializer()
@@ -60,6 +59,7 @@ app.UseHangfireDashboard("/hangfire-marmina", new DashboardOptions
 {
     Authorization = new[] { new HangfireAuthorizationFilter() }
 });
+app.UseHangfireServer();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapRazorPages();
