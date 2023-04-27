@@ -1,0 +1,124 @@
+﻿@page "/Served/edit/{Id}"
+@using AppCore.Utilities;
+@model App.UI.Pages.Serveds.EditcshtmlModel
+@{
+    ViewData["Title"] = "تعديل بيانات المخدوم";
+}
+
+<div class="container">
+    <form class="border border-primary" method="post" enctype="multipart/form-data">
+        <h2 class="text-center">تحديث بيانات المخدوم</h2>
+        <div class="row ml-4">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="name">الاسم </label>
+                    <input type="text" class="form-control" id="name" asp-for="Served.Name">
+                </div>
+                <input type="hidden" asp-for="Served.Id" />
+                <div class="form-group">
+                    <label for="class">الفصل</label>
+                    <select class="form-control form-control-lg" asp-items="Model.Classes" asp-for="Served.ClassId" id="class">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone">رقم التليفون </label>
+                    <input type="text" class="form-control" id="phone" asp-for="Served.Phone">
+                </div>
+                <div class="form-group">
+                    <label for="address">العنوان</label>
+                    <input type="text" class="form-control" id="address" asp-for="Served.Address">
+                </div>
+                <div class="form-group">
+                    <label for="fatherOfConfession">اب الاعتراف</label>
+                    <input type="text" class="form-control" id="fatherOfConfession" asp-for="Served.FatherOfConfession">
+                </div>
+                <div class="form-group">
+                    <label for="birthday">تاريخ الميلاد </label>
+                    <input type="date" class="form-control" id="birthday" asp-for="Served.Birthday">
+                </div>
+                <div class="form-group">
+                    <label for="Notes"> ملاحظات </label>
+                    <textarea class="form-control" id="Notes" asp-for="Served.Notes"></textarea>
+                </div>             
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="photo">الصورة</label>
+                    <div class="card" style="width: 18rem;">
+                        <img src="/photos/المخدومين/@Model.Served.Photo" class="card-img-top" alt="Current photo">
+                    </div>
+                    <div class="mt-3">
+                        <input type="file" class="form-control-file" id="photo" asp-for="Served.PhotoFile">
+                        <small class="form-text text-muted">. من فضلك قم برفع صورة جديدة لتحديث الصورة الحالية</small>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="ServedWeek">الحضور الاسبوعى</label>
+                    @foreach (var week in Model.WeeksList)
+                    {
+                         var isChecked = @Model.Served.ServedWeeks.Where(x => x.WeekId == week.Id).Any();
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="week-@week.Id" asp-for="@Model.ServedWeeksDTO.IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true">
+                            <label class="form-check-label" for="week-@week.Id">
+                               @Model.GetFormattedWeekDate(week.Date,Model.Served.Class.Time.Time1)
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex justify-content-end mb-3 mr-3">
+            <button type="submit" class="btn btn-primary">تحديث</button>
+        </div>
+    </form>
+    @* <div class="row text-center">
+    <div class="col-md-12">
+    <select id="chart-select" class="form-select mb-3">
+    <option value="attended">Attended</option>
+    <option value="missed">Missed</option>
+    </select>
+    <canvas id="attendanceChart" width="400" height="400"></canvas>
+    </div>
+    </div>*@
+</div>
+
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script>
+        var attendanceData = {
+            labels: ['Attended', 'Missed'],
+            datasets: [{
+                data: [8, 2],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Create the attendance chart
+        var ctx = document.getElementById('attendanceChart').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: attendanceData,
+            options: {
+                responsive: false,
+                legend: {
+                    position: 'center'
+                }
+            }
+        });
+
+    </script>
+    }

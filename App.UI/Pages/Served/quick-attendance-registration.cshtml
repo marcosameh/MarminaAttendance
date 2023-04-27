@@ -1,0 +1,82 @@
+﻿@page
+@model App.UI.Pages.Serveds.quick_attendance_registrationModel
+@{
+    ViewData["Title"] = "تسجيل حضور سريع للمخدومين";
+}
+<div class="container">
+    <h1 class="text-center">تسجيل حضور سريع للمخدومين</h1>
+    <form id="searchForm">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="اكتب اسم الخدوم او الكود الخاص بة" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" id="search" type="submit">ابحث</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Popup Modal -->
+<div class="modal fade" id="attendance-modal" tabindex="-1" role="dialog" aria-labelledby="attendance-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <h5 class="modal-title" id="attendance-modal-label">تسجيل حضور</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img id="Served-photo" src="" class="img-fluid">
+                    </div>
+                    <div class="col-md-8">
+                        <h4 id="Served-name"></h4>
+                        <p id="class-name"></p>
+                        <input type="hidden" id="Served-id" asp-for="ServedId" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                <button type="submit" class="btn btn-primary">تسجيل حضور</button>
+            </div>
+        </div>
+
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#attendance-modal').modal('hide'); // hide the modal initially
+
+            $("#searchForm").submit(function (event) {
+                event.preventDefault(); //prevent the form from submitting
+                var searchInput = $("#searchInput").val();
+                $.ajax({
+                    url: "?handler=searchServeds", // change the name of the handler
+                    method: "GET",
+                    data: { searchInput: searchInput },
+                    success: function (data) {
+                                             
+                            $("#Served-name").text(data.name)
+                            $("#class-name").text(`${data.className}`)
+                            $("#Served-photo").attr("src", `/photos/المخدومين/${data.photo}`);
+                            $("#Served-id").val(data.id)
+                            $('#attendance-modal').modal('show');
+                                                                        
+                    },
+                    error: function (xhr, status, error) {
+                        alert("مخدوم غير موجود")
+                    }
+                });
+            });
+        });
+    </script>
+}

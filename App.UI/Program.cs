@@ -33,6 +33,7 @@ builder.Services.AddScoped<ClassManager>();
 builder.Services.AddScoped<WeekManager>();
 builder.Services.AddScoped<ServantManager>();
 builder.Services.AddScoped<TimeManager>();
+builder.Services.AddScoped<ServedManager>();
 builder.Services.AddHangfire(configuration => configuration
                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                   .UseSimpleAssemblyNameTypeSerializer()
