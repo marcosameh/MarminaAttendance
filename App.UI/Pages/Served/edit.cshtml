@@ -36,10 +36,12 @@
                     <label for="birthday">تاريخ الميلاد </label>
                     <input type="date" class="form-control" id="birthday" asp-for="Served.Birthday">
                 </div>
-                <div class="form-group">
-                    <label for="Notes"> ملاحظات </label>
-                    <textarea class="form-control" id="Notes" asp-for="Served.Notes"></textarea>
-                </div>             
+                <if is-true='User.IsInRole("SuperAdmin")'>
+                    <div class="form-group">
+                        <label for="Notes"> ملاحظات </label>
+                        <textarea class="form-control" id="Notes" asp-for="Served.Notes"></textarea>
+                    </div>
+                </if>
             </div>
             <div class="col-md-5">
                 <div class="form-group">
@@ -60,11 +62,11 @@
                     <label for="ServedWeek">الحضور الاسبوعى</label>
                     @foreach (var week in Model.WeeksList)
                     {
-                         var isChecked = @Model.Served.ServedWeeks.Where(x => x.WeekId == week.Id).Any();
+                        var isChecked = @Model.Served.ServedWeeks.Where(x => x.WeekId == week.Id).Any();
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="week-@week.Id" asp-for="@Model.ServedWeeksDTO.IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true">
                             <label class="form-check-label" for="week-@week.Id">
-                               @Model.GetFormattedWeekDate(week.Date,Model.Served.Class.Time.Time1)
+                                @Model.GetFormattedWeekDate(week.Date,Model.Served.Class.Time.Time1)
                             </label>
                         </div>
                     }

@@ -36,10 +36,12 @@
                     <label for="birthday">تاريخ الميلاد </label>
                     <input type="date" class="form-control" id="birthday" asp-for="Servant.Birthday">
                 </div>
-                <div class="form-group">
-                    <label for="Notes"> ملاحظات </label>
-                    <textarea class="form-control" id="Notes" asp-for="Servant.Notes"></textarea>
-                </div>
+                <if is-true='User.IsInRole("SuperAdmin")'>
+                    <div class="form-group">
+                        <label for="Notes"> ملاحظات </label>
+                        <textarea class="form-control" id="Notes" asp-for="Servant.Notes"></textarea>
+                    </div>
+                </if>
                 <div class="form-check form-check-flat form-check-primary">
                     <label class="form-check-label">
                         <input type="checkbox" asp-for="Servant.Leader" class="form-check-input"> امين الفصل <i class="input-helper"></i>
@@ -65,11 +67,11 @@
                     <label for="servantWeek">الحضور الاسبوعى</label>
                     @foreach (var week in Model.WeeksList)
                     {
-                         var isChecked = @Model.Servant.ServantWeek.Where(x => x.WeekId == week.Id).Any();
+                        var isChecked = @Model.Servant.ServantWeek.Where(x => x.WeekId == week.Id).Any();
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="week-@week.Id" asp-for="@Model.ServantWeeksDTO.IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true">
                             <label class="form-check-label" for="week-@week.Id">
-                               @Model.GetFormattedWeekDate(week.Date,Model.Servant.Class.Time.Time1)
+                                @Model.GetFormattedWeekDate(week.Date,Model.Servant.Class.Time.Time1)
                             </label>
                         </div>
                     }

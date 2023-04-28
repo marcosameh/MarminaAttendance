@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MarminaAttendance.Pages.Account
 {
-    [Authorize]
+    [Authorize(Roles ="SuperAdmin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -49,10 +49,10 @@ namespace MarminaAttendance.Pages.Account
             [Required]
             public string UserName { get; set; }
 
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
-            public string Email { get; set; }
+            //[Required]
+            //[EmailAddress]
+            //[Display(Name = "Email")]
+            //public string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -67,6 +67,8 @@ namespace MarminaAttendance.Pages.Account
             public string ConfirmPassword { get; set; }
 
             public IFormFile Photo { get; set; }
+            [Required]
+            public string Role { get; set; }
         }
 
 
@@ -77,21 +79,24 @@ namespace MarminaAttendance.Pages.Account
 
             if (ModelState.IsValid)
             {
-                string folderName = "photos/users";
-                string webRootPath = environment.WebRootPath;
-                string FolderPath = Path.Combine(webRootPath, folderName);
-                string photoname = Path.GetFileName(Input.Photo.FileName);
-                string finalPath= Path.Combine(FolderPath, photoname);
-                if (!Directory.Exists(FolderPath))
+                string photoname = "user.jpg";
+                if (Input.Photo!= null)
                 {
-                    Directory.CreateDirectory(FolderPath);
-                }             
-                using (var stream = System.IO.File.Create(finalPath))
-                {
-                    await Input.Photo.CopyToAsync(stream);
-                }
-
-                var user = new ApplicationUser { UserName = Input.UserName, Email = Input.Email, Photo = photoname};
+                    string folderName = "photos/users";
+                    string webRootPath = environment.WebRootPath;
+                    string FolderPath = Path.Combine(webRootPath, folderName);
+                    photoname = Path.GetFileName(Input.Photo.FileName);
+                    string finalPath = Path.Combine(FolderPath, photoname);
+                    if (!Directory.Exists(FolderPath))
+                    {
+                        Directory.CreateDirectory(FolderPath);
+                    }
+                    using (var stream = System.IO.File.Create(finalPath))
+                    {
+                        await Input.Photo.CopyToAsync(stream);
+                    }
+                }              
+                var user = new ApplicationUser { UserName = Input.UserName, Photo = photoname};
          
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -99,10 +104,10 @@ namespace MarminaAttendance.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                   // await roleManager.CreateAsync(new IdentityRole("Admin"));
-                    await _userManager.AddToRoleAsync(user, "Admin");
+                    //await roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+                    await _userManager.AddToRoleAsync(user, Input.Role);
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect("/index");
+                    return LocalRedirect("/classes/list");
 
                 }
                 foreach (var error in result.Errors)

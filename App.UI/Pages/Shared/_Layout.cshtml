@@ -88,6 +88,15 @@
                         <span class="menu-title"> تسجيل حضور سريع للمخدومين</span>
                     </a>
                 </li>
+                <if is-true='User.IsInRole("SuperAdmin")'>
+                <li class="nav-item">
+                    <a class="nav-link" href="/account/register">
+                        <i class="fa-solid fa-user menu-icon"></i>
+                        <span class="menu-title">اضافة مستخدم جديد</span>
+                    </a>
+                </li>
+
+                </if>
                 <li class="nav-item sidebar-actions">
                     <div class="nav-link">
                         <div class="mt-4">
