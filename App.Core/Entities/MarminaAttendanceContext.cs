@@ -124,5 +124,10 @@ public partial class MarminaAttendanceContext : DbContext
         OnModelCreatingPartial(modelBuilder);
     }
 
+    internal Task BulkInsertAsync(List<Served> value)
+    {
+        throw new NotImplementedException();
+    }
+
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

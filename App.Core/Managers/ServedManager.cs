@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AppCore.Common;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace App.Core.Managers
 {
@@ -81,7 +82,7 @@ namespace App.Core.Managers
             existServed.Name = Served.Name;
             existServed.ClassId = Served.ClassId;
             existServed.FatherOfConfession = Served.FatherOfConfession;
-            existServed.Notes=Served.Notes;
+            existServed.Notes = Served.Notes;
             var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
             foreach (var week in allWeeks)
             {
@@ -117,7 +118,7 @@ namespace App.Core.Managers
             {
                 Id = Served.Id,
                 Name = Served.Name,
-                Photo=Served.Photo,
+                Photo = Served.Photo,
                 ClassName = Served.Class.Name
             };
         }
@@ -153,11 +154,33 @@ namespace App.Core.Managers
                 _context.ServedWeeks.Add(new ServedWeeks { ServedId = ServedId, WeekId = WeekId });
                 _context.SaveChanges();
                 return Result.Ok("تم تسجيل الحضور");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return Result.Fail(ex.Message);
             }
         }
+        public async Task<Result<List<Served>>> ServedBulkInsertAsync(IFormFile formFile, int classId)
+        {
+            var ImportExcelResult = await ImportExcelAsync(formFile, classId);
+            if (ImportExcelResult.IsFailure)
+            {
+                return ImportExcelResult;
+            }
+
+            try
+            {
+                var servedList=ImportExcelResult.Value.ToList();
+                _context.AddRange(servedList);
+                _context.SaveChanges();
+                return Result.Ok(servedList);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<List<Served>>(ex.Message);
+            }
+        }
+
         private async Task<Result<List<Served>>> ImportExcelAsync(IFormFile formFile, int classId)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -167,18 +190,18 @@ namespace App.Core.Managers
                 return Result.Fail<List<Served>>("File Is Empty");
             }
 
-            //check for XLS extension
-            var isValidFileType = Path.GetExtension(formFile.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase) == true;
-            if (isValidFileType == false)
+            // check for valid file extension
+            var fileExtension = Path.GetExtension(formFile.FileName);
+            if (!fileExtension.Equals(".xlsx", StringComparison.OrdinalIgnoreCase) &&
+                !fileExtension.Equals(".csv", StringComparison.OrdinalIgnoreCase))
             {
-                return Result.Fail<List<Served>>("Not Support file extension ,Please upload .xlsx files only!");
+                return Result.Fail<List<Served>>("Unsupported file extension. Please upload .xlsx or .csv files only.");
             }
 
             var list = new List<Served>();
 
             try
             {
-
                 using (var stream = new MemoryStream())
                 {
                     await formFile.CopyToAsync(stream);
@@ -193,38 +216,32 @@ namespace App.Core.Managers
                             if (worksheet.Cells[row, 1].Value is null)
                             {
                                 continue;
-
                             }
                             else
                             {
                                 list.Add(new Served
                                 {
-
                                     Name = worksheet.Cells[row, 2].Value.ToString(),
                                     Phone = worksheet.Cells[row, 3].Value.ToString(),
                                     Address = worksheet.Cells[row, 4].Value.ToString(),
                                     FatherOfConfession = worksheet.Cells[row, 5].Value.ToString(),
-                                    Birthday = DateTime.Parse(worksheet.Cells[row, 6].Value.ToString())
-
-
-
+                                    Birthday = DateTime.Parse(worksheet.Cells[row, 6].Value.ToString()),
+                                    ClassId = classId
                                 });
-
                             }
                         }
                     }
                 }
 
-                // add list to db ..  
-                // here just read and return  ?????
+                return Result.Ok(list);
             }
             catch (Exception ex)
             {
-
                 return Result.Fail<List<Served>>(ex.Message);
             }
 
-            return Result<List<Served>>.Ok(list);
+          
         }
+
     }
 }

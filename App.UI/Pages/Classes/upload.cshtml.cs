@@ -18,24 +18,31 @@ namespace App.UI.Pages.Classes
     public class uploadModel : PageModel
     {
         private readonly ClassManager classManager;
+        private readonly ServedManager servedManager;
 
         public SelectList ClassesSelectList { get; private set; }
+        [BindProperty(SupportsGet = true)]
+        public int ClassId { get; set; }
 
-        public uploadModel(ClassManager classManager)
+        [BindProperty(SupportsGet =true)]
+
+        public IFormFile ExcelFile { get; set; }    
+        public uploadModel(ClassManager classManager,ServedManager servedManager)
         {
             this.classManager = classManager;
+            this.servedManager = servedManager;
         }
 
         public void OnGet()
         {
             FillData();
         }
-        public void OnPost()
+        public async void OnPost()
         {
-            //var Result = classManager.UpdateClass(CurrentClass, ServantWeeksDTOs, ServedWeeksDTOs);
+            var Result =await servedManager.ServedBulkInsertAsync(ExcelFile, ClassId);
 
-            //TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
-            //TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
+            TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
+            TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
             FillData();
 
         }
