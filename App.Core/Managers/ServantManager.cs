@@ -1,7 +1,7 @@
 ﻿using App.Core.Entities;
 using App.Core.Models;
-using Microsoft.EntityFrameworkCore;
 using AppCore.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Core.Managers
 {
@@ -80,7 +80,7 @@ namespace App.Core.Managers
             existServant.ClassId = servant.ClassId;
             existServant.FatherOfConfession = servant.FatherOfConfession;
             existServant.Leader = servant.Leader;
-            existServant.Notes=servant.Notes;
+            existServant.Notes = servant.Notes;
             var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
             foreach (var week in allWeeks)
             {
@@ -116,7 +116,7 @@ namespace App.Core.Managers
             {
                 Id = servant.Id,
                 Name = servant.Name,
-                Photo=servant.Photo,
+                Photo = servant.Photo,
                 ClassName = servant.Class.Name
             };
         }
@@ -152,7 +152,8 @@ namespace App.Core.Managers
                 _context.ServantWeek.Add(new ServantWeek { ServantId = ServantId, WeekId = WeekId });
                 _context.SaveChanges();
                 return Result.Ok("تم تسجيل الحضور");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return Result.Fail(ex.Message);
             }

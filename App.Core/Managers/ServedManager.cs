@@ -2,6 +2,8 @@
 using App.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using AppCore.Common;
+using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
 
 namespace App.Core.Managers
 {
@@ -156,6 +158,73 @@ namespace App.Core.Managers
                 return Result.Fail(ex.Message);
             }
         }
+        private async Task<Result<List<Served>>> ImportExcelAsync(IFormFile formFile, int classId)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+            if (formFile == null || formFile.Length <= 0)
+            {
+                return Result.Fail<List<Served>>("File Is Empty");
+            }
+
+            //check for XLS extension
+            var isValidFileType = Path.GetExtension(formFile.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase) == true;
+            if (isValidFileType == false)
+            {
+                return Result.Fail<List<Served>>("Not Support file extension ,Please upload .xlsx files only!");
+            }
+
+            var list = new List<Served>();
+
+            try
+            {
+
+                using (var stream = new MemoryStream())
+                {
+                    await formFile.CopyToAsync(stream);
+
+                    using (var package = new ExcelPackage(stream))
+                    {
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                        var rowCount = worksheet.Dimension.Rows;
+
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+                            if (worksheet.Cells[row, 1].Value is null)
+                            {
+                                continue;
+
+                            }
+                            else
+                            {
+                                list.Add(new Served
+                                {
+
+                                    Name = worksheet.Cells[row, 2].Value.ToString(),
+                                    Phone = worksheet.Cells[row, 3].Value.ToString(),
+                                    Address = worksheet.Cells[row, 4].Value.ToString(),
+                                    FatherOfConfession = worksheet.Cells[row, 5].Value.ToString(),
+                                    Birthday = DateTime.Parse(worksheet.Cells[row, 6].Value.ToString())
+
+
+
+                                });
+
+                            }
+                        }
+                    }
+                }
+
+                // add list to db ..  
+                // here just read and return  ?????
+            }
+            catch (Exception ex)
+            {
+
+                return Result.Fail<List<Served>>(ex.Message);
+            }
+
+            return Result<List<Served>>.Ok(list);
+        }
     }
 }

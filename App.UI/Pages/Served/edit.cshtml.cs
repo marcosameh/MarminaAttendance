@@ -58,7 +58,8 @@ namespace App.UI.Pages.Serveds
         public string GetFormattedWeekDate(DateTime week, string Time)
         {
             ServiceTime serviceTime;
-            if (!Enum.TryParse(Time.Replace(" ", ""), out serviceTime))
+            Time = Time.Replace(" ", "");
+            if (!Enum.TryParse(Time, out serviceTime))
             {
                 throw new ArgumentException($"Invalid value for 'time': {Time}");
             }

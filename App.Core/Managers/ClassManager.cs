@@ -8,6 +8,7 @@ using App.Core.Enums;
 using AppCore.Utilities;
 using OfficeOpenXml.Style;
 using System.Drawing;
+using Microsoft.AspNetCore.Http;
 
 namespace App.Core.Managers
 {
@@ -175,7 +176,7 @@ namespace App.Core.Managers
                 for (int i = 0; i < Weeks.Count(); i++)
                 {
                     worksheet.Cells[row, (i + 2)].Value = GetFormattedWeekDate(Weeks[i].Date, CurrentClass.Time.Time1);
-                    
+
                 }
 
                 row = 2;
@@ -233,13 +234,14 @@ namespace App.Core.Managers
                 result = package.GetAsByteArray();
             }
 
-            return (CurrentClass.Name + "_" + CurrentClass.Time.Time1+ ".xlsx", result);
+            return (CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
         }
 
         private string GetFormattedWeekDate(DateTime week, string Time)
         {
             ServiceTime serviceTime;
-            if (!Enum.TryParse(Time.Replace(" ", ""), out serviceTime))
+            Time = Time.Replace(" ", "");
+            if (!Enum.TryParse(Time, out serviceTime))
             {
                 throw new ArgumentException($"Invalid value for 'time': {Time}");
             }
@@ -254,5 +256,7 @@ namespace App.Core.Managers
             };
             return FormatedDate;
         }
+
+      
     }
 }

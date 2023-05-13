@@ -61,10 +61,11 @@ namespace App.UI.Pages.Classes
             ServedList = CurrentClass.Served?.ToList();
         }
 
-        public string GetFormattedWeekDate(DateTime week,string Time)
+        public string GetFormattedWeekDate(DateTime week, string Time)
         {
             ServiceTime serviceTime;
-            if (!Enum.TryParse(Time.Replace(" ", ""), out serviceTime))
+            Time = Time.Replace(" ", "");
+            if (!Enum.TryParse(Time, out serviceTime))
             {
                 throw new ArgumentException($"Invalid value for 'time': {Time}");
             }
