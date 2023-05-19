@@ -2,6 +2,7 @@
 using App.Core.Models;
 using AppCore.Common;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace App.Core.Managers
 {
@@ -31,12 +32,13 @@ namespace App.Core.Managers
 
         public List<ServantVM> GetServants()
         {
+           
             var Servants = _context.Servants.Include(s => s.Class).AsNoTracking().Select(x => new ServantVM
             {
                 Id = x.Id,
                 Name = x.Name,
                 Address = x.Address,
-                Birthday = x.Birthday.Value.ToShortDateString(),
+                Birthday = x.Birthday.HasValue? x.Birthday.Value.ToString("dd/MM/yyyy") :string.Empty,
                 ClassName = x.Class.Name,
                 FatherOfConfession = x.FatherOfConfession,
                 Phone = x.Phone,

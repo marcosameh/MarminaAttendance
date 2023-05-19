@@ -23,6 +23,6 @@ namespace App.Core.Models
         public string FatherOfConfession { get; set; }
 
         public string Birthday { get; set; }
-
+ 
     }
 }

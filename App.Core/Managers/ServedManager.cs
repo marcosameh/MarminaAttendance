@@ -42,7 +42,7 @@ namespace App.Core.Managers
                 Id = x.Id,
                 Name = x.Name,
                 Address = x.Address,
-                Birthday = x.Birthday.Value.ToShortDateString(),
+                Birthday = x.Birthday.HasValue ? x.Birthday.Value.ToString("dd/MM/yyyy") : string.Empty,
                 ClassName = x.Class.Name,
                 FatherOfConfession = x.FatherOfConfession,
                 Phone = x.Phone,
@@ -174,11 +174,11 @@ namespace App.Core.Managers
             try
             {
                 var servedList = ImportExcelResult.Value.ToList();
-                foreach (var servent in servedList)
-                {
-                    _context.Served.Add(servent);
-                }
-                //_context.AddRange(servedList);
+                //foreach (var servent in servedList)
+                //{
+                //    _context.Served.Add(servent);
+                //}
+                _context.AddRange(servedList);
                 _context.SaveChanges();
                 return Result.Ok(servedList);
             }
