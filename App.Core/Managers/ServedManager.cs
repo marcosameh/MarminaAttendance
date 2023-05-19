@@ -5,6 +5,9 @@ using AppCore.Common;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Formats.Asn1;
+using System.Globalization;
+using CsvHelper;
 
 namespace App.Core.Managers
 {
@@ -170,8 +173,12 @@ namespace App.Core.Managers
 
             try
             {
-                var servedList=ImportExcelResult.Value.ToList();
-                _context.AddRange(servedList);
+                var servedList = ImportExcelResult.Value.ToList();
+                foreach (var servent in servedList)
+                {
+                    _context.Served.Add(servent);
+                }
+                //_context.AddRange(servedList);
                 _context.SaveChanges();
                 return Result.Ok(servedList);
             }
@@ -198,42 +205,34 @@ namespace App.Core.Managers
                 return Result.Fail<List<Served>>("Unsupported file extension. Please upload .xlsx or .csv files only.");
             }
 
-            var list = new List<Served>();
+            
 
             try
             {
-                using (var stream = new MemoryStream())
+                var records = new List<Served>();
+                using (var reader = new StreamReader(formFile.OpenReadStream()))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    await formFile.CopyToAsync(stream);
-
-                    using (var package = new ExcelPackage(stream))
+                  
+                    csv.Read();
+                    csv.ReadHeader();
+                    while (csv.Read())
                     {
-                        ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                        var rowCount = worksheet.Dimension.Rows;
-
-                        for (int row = 2; row <= rowCount; row++)
+                        var record = new Served
                         {
-                            if (worksheet.Cells[row, 1].Value is null)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                list.Add(new Served
-                                {
-                                    Name = worksheet.Cells[row, 2].Value.ToString(),
-                                    Phone = worksheet.Cells[row, 3].Value.ToString(),
-                                    Address = worksheet.Cells[row, 4].Value.ToString(),
-                                    FatherOfConfession = worksheet.Cells[row, 5].Value.ToString(),
-                                    Birthday = DateTime.Parse(worksheet.Cells[row, 6].Value.ToString()),
-                                    ClassId = classId
-                                });
-                            }
-                        }
+                            Name = csv.GetField<string>("الاسم"),
+                            Phone= csv.GetField<string>("رقم التليفون"),
+                            Address=csv.GetField<string>("العنوان"),
+                            FatherOfConfession=csv.GetField<string>("اب الاعتراف"),
+                            ClassId=classId,
+                            Birthday=csv.GetField<DateTime>("تاريخ الميلاد")
+
+                        };
+                        records.Add(record);
                     }
                 }
 
-                return Result.Ok(list);
+                return Result.Ok(records);
             }
             catch (Exception ex)
             {
