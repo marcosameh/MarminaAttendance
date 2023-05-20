@@ -16,54 +16,60 @@
         </div>
 
         <form method="post" id="toggle-form" enctype="multipart/form-data">
-                <div class="p-3">
-                    <div class="form-row">
-                        <div class="col-md-3 mb-3">
-                            <label for="servant-name">الاسم</label>
-                            <input type="text" class="form-control" asp-for="Servant.Name" id="servant-name" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="servant-phone">رقم التليفون</label>
-                            <input type="text" class="form-control" asp-for="Servant.Phone" id="servant-phone" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="servant-class">الفصل</label>
-                            <select class="form-control form-control-lg" id="servant-class" asp-for="Servant.ClassId" required>
-                                @foreach (var item in Model.Classes)
-                                {
-                                    <option value="@item.Id">@item.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="servant-address">العنوان</label>
-                            <input type="text" class="form-control" asp-for="Servant.Address" id="servant-address" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="servant-father-name">اب الاعتراف</label>
-                            <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" id="servant-father-name" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="servant-birthdate">تاريخ الميلاد</label>
-                            <input type="date" class="form-control" asp-for="Servant.Birthday" id="servant-birthdate" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="servant-image">الصورة</label>
-                            <input type="file" class="form-control" asp-for="Servant.PhotoFile" id="servant-image" accept="image/*">
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-check form-check-primary">
-                              <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" asp-for="Servant.Leader"/> امين الفصل </label>
-                            </div>
-                        </div>
+            <div class="p-3">
+                <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-name">الاسم</label>
+                        <input type="text" class="form-control" asp-for="Servant.Name" id="servant-name" required>
                     </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button type="submit" class="btn btn-primary">اضافة</button>
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-phone">رقم التليفون</label>
+                        <input type="text" class="form-control" asp-for="Servant.Phone" id="servant-phone" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-class">الفصل</label>
+                        <select class="form-control form-control-lg" id="servant-class" asp-for="Servant.ClassId" required>
+                            @foreach (var item in Model.Classes)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-address">العنوان</label>
+                        <input type="text" class="form-control" asp-for="Servant.Address" id="servant-address" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-father-name">اب الاعتراف</label>
+                        <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" id="servant-father-name" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-birthdate">الايميل</label>
+                        <input type="text" class="form-control" asp-for="Servant.Email" id="servant-birthdate" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-image">الصورة</label>
+                        <input type="file" class="form-control" asp-for="Servant.PhotoFile" id="servant-image" accept="image/*">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check form-check-primary">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" asp-for="Servant.Leader" /> امين الفصل
+                            </label>
+                        </div>
+                        <div class="form-check form-check-primary">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" asp-for="Servant.ReceiveReminderEmails" /> الحصول على ايميل الافتقاد
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </form>
-        
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">اضافة</button>
+                </div>
+            </div>
+        </form>
+
 
 
     </div>
@@ -79,7 +85,7 @@
                     <th>التليفون</th>
                     <th>العنوان</th>
                     <th>اب الاعتراف</th>
-                    <th>تاريخ الميلاد</th>
+                    <th>الايميل</th>
 
                 </tr>
             </thead>
@@ -140,8 +146,8 @@
                         data: 'fatherOfConfession'
                     },
                     {
-                        title: 'تاريخ الميلاد',
-                        data: 'birthday'
+                        title: 'الايميل',
+                        data: 'email'
                     },
 
 

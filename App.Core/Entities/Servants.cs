@@ -13,6 +13,8 @@ public partial class Servants
 
     public string Name { get; set; }
 
+    public string Email { get; set; }
+
     public string Photo { get; set; }
 
     public string Phone { get; set; }
@@ -21,9 +23,9 @@ public partial class Servants
 
     public string FatherOfConfession { get; set; }
 
-    public DateTime? Birthday { get; set; }
-
     public bool Leader { get; set; }
+
+    public bool ReceiveReminderEmails { get; set; }
 
     public string Notes { get; set; }
 

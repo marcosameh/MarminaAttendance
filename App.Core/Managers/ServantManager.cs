@@ -38,7 +38,7 @@ namespace App.Core.Managers
                 Id = x.Id,
                 Name = x.Name,
                 Address = x.Address,
-                Birthday = x.Birthday.HasValue? x.Birthday.Value.ToString("dd/MM/yyyy") :string.Empty,
+                Email= x.Email,
                 ClassName = x.Class.Name,
                 FatherOfConfession = x.FatherOfConfession,
                 Phone = x.Phone,
@@ -72,7 +72,7 @@ namespace App.Core.Managers
                 return Result.Fail("الخادم غير موجود");
             }
             existServant.Address = servant.Address;
-            existServant.Birthday = servant.Birthday;
+            existServant.Email = servant.Email;
             existServant.Phone = servant.Phone;
             if (!string.IsNullOrEmpty(servant.Photo))
             {
@@ -82,6 +82,7 @@ namespace App.Core.Managers
             existServant.ClassId = servant.ClassId;
             existServant.FatherOfConfession = servant.FatherOfConfession;
             existServant.Leader = servant.Leader;
+            existServant.ReceiveReminderEmails = servant.ReceiveReminderEmails;
             existServant.Notes = servant.Notes;
             var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
             foreach (var week in allWeeks)

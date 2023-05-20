@@ -33,8 +33,8 @@
                     <input type="text" class="form-control" id="fatherOfConfession" asp-for="Servant.FatherOfConfession">
                 </div>
                 <div class="form-group">
-                    <label for="birthday">تاريخ الميلاد </label>
-                    <input type="date" class="form-control" id="birthday" asp-for="Servant.Birthday">
+                    <label for="email">الايميل</label>
+                    <input type="date" class="form-control" id="email" asp-for="Servant.Email">
                 </div>
                 <if is-true='User.IsInRole("SuperAdmin")'>
                     <div class="form-group">
@@ -45,6 +45,11 @@
                 <div class="form-check form-check-flat form-check-primary">
                     <label class="form-check-label">
                         <input type="checkbox" asp-for="Servant.Leader" class="form-check-input"> امين الفصل <i class="input-helper"></i>
+                    </label>
+                </div>
+                <div class="form-check form-check-flat form-check-primary">
+                    <label class="form-check-label">
+                        <input type="checkbox" asp-for="Servant.ReceiveReminderEmails" class="form-check-input"> الحصول على ايميل الافتقاد <i class="input-helper"></i>
                     </label>
                 </div>
             </div>

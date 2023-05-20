@@ -60,7 +60,10 @@ public partial class MarminaAttendanceContext : DbContext
         modelBuilder.Entity<Servants>(entity =>
         {
             entity.Property(e => e.Address).HasMaxLength(80);
-            entity.Property(e => e.Birthday).HasColumnType("smalldatetime");
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(70)
+                .HasDefaultValueSql("(N'ma')");
             entity.Property(e => e.FatherOfConfession).HasMaxLength(50);
             entity.Property(e => e.Name)
                 .IsRequired()
@@ -122,11 +125,6 @@ public partial class MarminaAttendanceContext : DbContext
         });
 
         OnModelCreatingPartial(modelBuilder);
-    }
-
-    internal Task BulkInsertAsync(List<Served> value)
-    {
-        throw new NotImplementedException();
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
