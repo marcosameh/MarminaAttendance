@@ -37,11 +37,12 @@ namespace App.UI.Pages.Serveds
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
+
             if (Result.IsFailure)
             {
                 return Page();
             }
-            return Redirect($"/class/edit/{ClassId}");
+            return LocalRedirect($"/class/edit/{ClassId}");
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using App.Core.Entities;
 using App.Core.Managers;
 using App.UI.InfraStructure;
+using AppCore.Infrastructure;
 using Hangfire;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +35,7 @@ builder.Services.AddScoped<WeekManager>();
 builder.Services.AddScoped<ServantManager>();
 builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<ServedManager>();
+builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 builder.Services.AddHangfire(configuration => configuration
                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                   .UseSimpleAssemblyNameTypeSerializer()
