@@ -13,7 +13,7 @@ namespace AppCore.Utilities
         ///
         public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> collection)
         {
-           return collection.Select((item, index) => (item, index));
+            return collection.Select((item, index) => (item, index));
         }
 
         public static void Put<T>(this ITempDataDictionary tempData, string key, T value) where T : class
@@ -58,7 +58,24 @@ namespace AppCore.Utilities
             }
             return videoId;
         }
+
+        private static Random random = new Random();
+        public static T GetRandomElement<T>(this T[] array)
+        {
+            if (array == null)
+            {
+                throw new ArgumentNullException(nameof(array));
+            }
+
+            if (array.Length == 0)
+            {
+                throw new ArgumentException("Array must not be empty.");
+            }
+
+            int randomIndex = random.Next(array.Length);
+            return array[randomIndex];
+        }
     }
 
-   
+
 }
