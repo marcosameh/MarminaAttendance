@@ -3,12 +3,14 @@ using App.Core.Enums;
 using App.Core.Managers;
 using App.Core.Models;
 using App.UI.Ifraustrcuture;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace App.UI.Pages.Servant
 {
+    [Authorize]
     public class EditcshtmlModel : PageModel
     {
         private readonly ServantManager servantManager;

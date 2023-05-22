@@ -210,7 +210,7 @@
                                             <!-- content -->
                                             <tr>
                                                 <td align="right" style="font-family: 'Open Sans', Arial, sans-serif; font-size:13px; color:#7f8c8d;">
-                                                     من فاضلك يا@string.Join(", ", Model.ServantsWhoWillRecieveReminderEmails.Select(x => x.Name)) قم بافتقاد
+                                                      من فاضلك يا @string.Join(", ", Model.ServantsWhoWillRecieveReminderEmails.Select(x => x.Name)) قم بافتقاد
                                                     <br />
                                                     <br />
 
@@ -226,7 +226,7 @@
                                                             @foreach (var served in Model.ServedNeedTobeRemembered)
                                                             {
                                                                 <tr>
-                                                                    <td>@served.Name</td>
+                                                                    <td><a href="https://marmina.innovix.site/Served/edit/@served.Id" target="_blank">@served.Name</a></td>
                                                                     <td>@served.Phone</td>
 
                                                                 </tr>
