@@ -256,7 +256,72 @@ namespace App.Core.Managers
             };
             return FormatedDate;
         }
+        public List<ReminderEmailModel> GetServedNeedToBeRemembered()
+        {
+            List<ReminderEmailModel> reminderEmailModels = new List<ReminderEmailModel>();
 
-      
+            // Get Classes with Servants and Served relationships
+            var classesWithServantsAndServed = _context.Classes
+                .Where(c => c.Servants.Any() && c.Served.Any())
+                .Include(c => c.Servants)
+                .Include(c => c.Served)
+                .ThenInclude(s => s.ServedWeeks)
+                .ThenInclude(sw => sw.Week)
+                .AsNoTracking();
+
+            foreach (var sundaySchoolClass in classesWithServantsAndServed)
+            {
+                // Get Servants who receive reminder emails for the class
+                List<Servants> servants = sundaySchoolClass.Servants
+                    .Where(s => s.ReceiveReminderEmails)
+                    .ToList();
+
+                // If no Servants are found, add the first Servant as fallback
+                if (!servants.Any())
+                {
+                    servants.Add(sundaySchoolClass.Servants.FirstOrDefault());
+                }
+
+                var lastMonth = DateTime.Now.AddMonths(-1);
+
+                // Get weeks from the last month
+                var lastMonthWeeks = _context.Weeks
+                    .Where(w => w.Date.Month == lastMonth.Month)
+                    .AsNoTracking();
+
+                List<Served> servedNeedToBeRemembered = new List<Served>();
+
+                foreach (var served in sundaySchoolClass.Served)
+                {
+                    int missedWeeksCount = 0;
+
+                    // Count missed weeks for the served person
+                    foreach (var week in lastMonthWeeks)
+                    {
+                        if (!served.ServedWeeks.Any(sw => sw.WeekId == week.Id))
+                        {
+                            missedWeeksCount++;
+                        }
+                    }
+
+                    if (missedWeeksCount >= 2)
+                    {
+                        servedNeedToBeRemembered.Add(served);
+                    }
+                }
+
+                if (servedNeedToBeRemembered.Any())
+                {
+                    reminderEmailModels.Add(new ReminderEmailModel(servants, servedNeedToBeRemembered));
+                }
+            }
+
+            return reminderEmailModels;
+        }
+
+       
+
+
+
     }
 }

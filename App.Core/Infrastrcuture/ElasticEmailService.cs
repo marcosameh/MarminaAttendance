@@ -5,7 +5,7 @@ using static ElasticEmailClient.Api;
 using static ElasticEmailClient.ApiTypes;
 
 namespace App.Core.Infrastrcuture;
-public class ElasticEmailService
+public class EmailManager
 {
     private readonly IConfiguration config;
 
@@ -13,7 +13,7 @@ public class ElasticEmailService
     public string fromName { get; set; }
     public string apiKey { get; set; }
 
-    public ElasticEmailService(IConfiguration config)
+    public EmailManager(IConfiguration config)
     {
         this.config = config;
         apiKey = config.GetSection("MailSettings:APIKey").Value;

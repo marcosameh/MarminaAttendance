@@ -1,0 +1,358 @@
+﻿@page
+@{
+    Layout = null;
+    string[] Bible = { "فَإِنْ كُنْتُ وَأَنَا ٱلسَّيِّدُ وَٱلْمُعَلِّمُ قَدْ غَسَلْتُ أَرْجُلَكُمْ، فَأَنْتُمْ يَجِبُ عَلَيْكُمْ أَنْ يَغْسِلَ بَعْضُكُمْ أَرْجُلَ بَعْضٍ", "فَلَا يَكُونُ هَكَذَا فِيكُمْ. بَلْ مَنْ أَرَادَ أَنْ يَكُونَ فِيكُمْ عَظِيمًا فَلْيَكُنْ لَكُمْ خَادِمًا، وَمَنْ أَرَادَ أَنْ يَكُونَ فِيكُمْ أَوَّلًا فَلْيَكُنْ لَكُمْ عَبْدًا", "غَيْرَ مُتَكَاسِلِينَ فِي الاجْتِهَادِ، حَارِّينَ فِي الرُّوحِ، عَابِدِينَ الرَّبَّ، فَرِحِينَ فِي الرَّجَاءِ، صَابِرِينَ فِي الضِّيْقِ، مُواظِبِينَ عَلَى الصَّلاَةِ، مُشْتَرِكِينَ فِي احْتِيَاجَاتِ الْقِدِّيسِينَ، عَاكِفِينَ عَلَى إِضَافَةِ الْغُرَبَاءِ", "فَجَلَسَ وَنَادَى ٱلِٱثْنَيْ عَشَرَ وَقَالَ لَهُمْ: إِذَا أَرَادَ أَحَدٌ أَنْ يَكُونَ أَوَّلًا فَيَكُونُ آخِرَ ٱلْكُلِّ وَخَادِمًا لِلْكُلِّ", "بَلْ أَقْمَعُ جَسَدِي وَأَسْتَعْبِدُهُ، حَتَّى بَعْدَ مَا كَرَزْتُ لِلآخَرِينَ لاَ أَصِيرُ أَنَا نَفْسِي مَرْفُوضًا", "اُذْكُرُوا الْمُقَيَّدِينَ كَأَنَّكُمْ مُقَيَّدُونَ مَعَهُمْ، وَالْمُذَلِّينَ كَأَنَّكُمْ أَنْتُمْ أَيْضًا فِي الْجَسَدِ", "تَشَدَّدْ وَتَشَجَّعْ وَاعْمَلْ. لاَ تَخَفْ وَلاَ تَرْتَعِبْ، لأَنَّ الرَّبَّ الإِلهَ إِلهِي مَعَكَ. لاَ يَخْذُلُكَ وَلاَ يَتْرُكُكَ حَتَّى تُكَمِّلَ كُلَّ عَمَلِ خِدْمَةِ بَيْتِ الرَّبِّ" };
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <title>
+       افتقاد
+    </title>
+    <style type="text/css">
+        table.orderTable {
+            text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            table.orderTable td,
+            table.orderTable th {
+                border: 1px solid #AAAAAA;
+                padding: 3px 2px;
+            }
+
+            table.orderTable tbody tr:last-child td:not(:last-child) {
+                border: 0;
+            }
+
+            table.orderTable tbody td {
+                font-size: 14px;
+            }
+
+            table.orderTable thead {
+            }
+
+                table.orderTable thead th {
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+        .ReadMsgBody {
+            width: 100%;
+            background-color: #ffffff;
+        }
+
+        .ExternalClass {
+            width: 100%;
+            background-color: #ffffff;
+        }
+
+            .ExternalClass,
+            .ExternalClass p,
+            .ExternalClass span,
+            .ExternalClass font,
+            .ExternalClass td,
+            .ExternalClass div {
+                line-height: 100%;
+            }
+
+        html {
+            width: 100%;
+        }
+
+        body {
+            -webkit-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin: 0 auto;
+        }
+
+            table table table {
+                table-layout: auto;
+            }
+
+        img {
+            display: block !important;
+        }
+
+        table td {
+            border-collapse: collapse;
+        }
+
+        .yshortcuts a {
+            border-bottom: none !important;
+        }
+
+        img:hover {
+            opacity: 0.9 !important;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .textbutton a {
+            font-family: 'open sans', arial, sans-serif !important;
+            color: #ffffff !important;
+        }
+
+        .text-link a {
+            color: #95a5a6 !important;
+        }
+
+        @@media only screen and (max-width: 640px) {
+            body {
+                width: auto !important;
+            }
+
+            table[class="table-inner"] {
+                width: 90% !important;
+            }
+
+            table[class="table-full"] {
+                width: 100% !important;
+                text-align: center !important;
+            }
+        }
+
+        @@media only screen and (max-width: 479px) {
+            body {
+                width: auto !important;
+            }
+
+            table[class="table-inner"] {
+                width: 90% !important;
+            }
+
+            table[class="table-full"] {
+                width: 100% !important;
+                text-align: center !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <table width="100%" border="0" align="center" cellpadding="10" cellspacing="0">
+        <tr>
+            <td align="center">
+                <table class="table-inner" border="0" align="center" cellpadding="10" cellspacing="0">
+                    <tr>
+                        <td height="60"></td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <table align="center" bgcolor="#f5f5f5" style="border-radius:10px; box-shadow: 0px 0px 15px 0px rgba(156,151,156,0.5)" width="100%" border="0" cellspacing="0" cellpadding="10">
+                                <tr>
+                                    <td height="40"></td>
+                                </tr>
+                                <!-- logo -->
+                                <tr>
+                                    <td align="center" style="line-height: 0px;">
+
+                                        <table class="textbutton" align="center" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td height="55" align="center" style="font-family: 'Open Sans', Arial, sans-serif; font-size:16px; font-weight: bold;padding-left: 25px;padding-right: 25px">
+                                                
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                </tr>
+                                <!-- end logo -->
+                                <tr>
+                                    <td height="15"></td>
+                                </tr>
+                                <!-- slogan -->
+                                @*  <tr>
+                                <td align="center" style="font-family: 'Open Sans', Arial, sans-serif; font-size:12px; color:#3b3b3b; text-transform:uppercase; letter-spacing:2px; font-weight: normal;">
+                                @Model.BusinessName
+                                </td>
+                                </tr>*@
+                                <!-- end slogan -->
+                                <tr>
+                                    <td height="40"></td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <table align="center" class="table-inner" width="500" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td height="50"></td>
+                                            </tr>
+                                            <!-- title -->
+                                            <tr>
+                                                <td align="center" style="font-family: 'Open Sans', Arial, sans-serif; font-size:23px; color:#3b3b3b; font-weight: bold; letter-spacing:4px;">
+                                                    @Model.Title
+                                                </td>
+                                            </tr>
+                                            <!-- end title -->
+                                            <tr>
+                                                <td align="center">
+                                                    <table width="25" border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td height="15" style="border-bottom:2px solid #3bb5e8;"></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="20"></td>
+                                            </tr>
+                                            <!-- content -->
+                                            <tr>
+                                                <td align="left" style="font-family: 'Open Sans', Arial, sans-serif; font-size:13px; color:#7f8c8d;">
+                                                    Dear Administrator,
+                                                    <br />
+                                                    <br />
+                                                    New Order has been submitted:
+                                                    <br />
+                                                    <b>Customer:</b> @Model.FullName
+                                                    <br />
+                                                    <b>Email:</b> @Model.Email
+                                                    <br />
+                                                    <b>Phone:</b> @Model.PhoneNumber
+                                                    <br />
+                                                    <b>Address:</b> @Model.Address
+                                                    <br />
+
+                                                    <b> Order Number :</b> @Model.ReferenceNumber
+
+                                                    @if (Model.CouponCode != null)
+                                                    {
+                                                        <br />
+                                                        <b>CouponCode:</b> @Model.CouponCode
+                                                        <br />
+                                                        <b>CouponDiscount:</b> @Model.CouponDiscount
+                                                        <br />
+                                                    }
+                                                    <br />
+                                                    <b>Order Date:</b> @Model.OrderDate
+                                                    <br /> @if (Model.Notes != null)
+                                                    {
+                                                        <b>Notes :</b> @Model.Notes
+                                                        <br />
+                                                    }
+                                                    <br />
+                                                    <br />
+                                                    <table class="orderTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Item</th>
+                                                                <th>Size</th>
+                                                                <th>Quantity</th>
+                                                                <th>Price</th>
+                                                                <th>Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var orderItem in Model.CartProducts)
+                                                            {
+                                                                <tr>
+                                                                    <td>@orderItem.Name</td>
+                                                                    <td>@orderItem.Size</td>
+                                                                    <td>@orderItem.Quantity</td>
+                                                                    <td>@orderItem.Price.ToString("###.##")</td>
+                                                                    <td>@((orderItem.Price * orderItem.Quantity).ToString("###.##"))</td>
+                                                                </tr>
+
+                                                            }
+                                                            @*  <tr>
+                                                            <td style="border: 0;"></td>
+                                                            <td style="border: 0;"></td>
+                                                            <td>Shipping Price</td>
+                                                            <td>
+                                                            <b>
+                                                            @Model.ShippingPrice.ToString("N2") @Model.CurrencyName
+
+                                                            </b>
+                                                            </td>
+                                                            </tr>*@
+                                                            <tr>
+                                                                <td style="border: 0;"></td>
+                                                                <td style="border: 0;"></td>
+                                                                <td style="border: 0;"></td>
+                                                                <td style="border: 0;"></td>
+                                                                <td>
+                                                                    <b>
+                                                                        @Model.TotalPrice
+
+                                                                    </b>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <br /> Please don't reply directly to this email, this is a system generated message.
+                                                    <br /><br />
+                                                    @*  To print your receipt, <b><a href="@Model.ReceiptLink">click here</a></b>*@
+                                                </td>
+                                            </tr>
+                                            <!-- end content -->
+                                            <tr>
+                                                <td height="50"></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td height="40"></td>
+                                </tr>
+                                <!-- end option -->
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="30"></td>
+                    </tr>
+                    <!-- copyright -->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', Arial, sans-serif; font-size:13px; color:#ffffff;"> © @DateTime.Today.Year <a href="@Model.WebsiteLink" style="color:#3cb2d0; text-decoration: none" target="_blank">@Model.WebsiteText</a> | All Rights Reserved. </td>
+                    </tr>
+                    <!-- end copyright -->
+                    <tr>
+                        <td height="25"></td>
+                    </tr>
+                    <!-- social -->
+                    <tr>
+                        <td align="center">
+                            <table align="center" width="80" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    @{
+                                        if (!string.IsNullOrEmpty(Model.FacebookLink))
+                                        {
+                                            <td width="10" align="center" style="line-height:0px;">
+                                                <a href="@Model.FacebookLink" target="_blank">
+                                                    <img style="display:block; line-height:0px; font-size:0px; border:0px;" src="@Model.HostName/images/mail-templates/facebook.png" alt="img" />
+                                                </a>
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- end social -->
+                    <tr>
+                        <td height="45"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
