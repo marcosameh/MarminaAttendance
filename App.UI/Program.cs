@@ -1,6 +1,8 @@
 ﻿using App.Core.Entities;
 using App.Core.Infrastrcuture;
 using App.Core.Managers;
+using App.Tenant.Entities;
+using App.Tenant.Managers;
 using App.UI.InfraStructure;
 using AppCore.Infrastructure;
 using Hangfire;
@@ -13,11 +15,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<IdentityContext>(options =>
+
+builder.Services.AddDbContext<SharedTenantContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<MarminaAttendanceContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddScoped<TenantManager>();
+
+builder.Services.AddScoped<Tenant>(serviceProvider => serviceProvider.GetService<TenantManager>().GetCurrentTenant());
+
+builder.Services.AddScoped(serviceProvider => new IdentityContext(new DbContextOptionsBuilder<IdentityContext>()
+    .UseSqlServer(serviceProvider.GetService<Tenant>().ConnectionString).Options));
+
+builder.Services.AddScoped(serviceProvider => new MarminaAttendanceContext(new DbContextOptionsBuilder<MarminaAttendanceContext>()
+    .UseSqlServer(serviceProvider.GetService<Tenant>().ConnectionString).Options));
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {

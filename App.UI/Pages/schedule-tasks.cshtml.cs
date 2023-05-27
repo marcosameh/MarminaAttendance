@@ -36,7 +36,7 @@ namespace App.UI.Pages
         }
         public async Task SendReminderEmailsAsync()
         {
-            var emailSubject = $"{DateTime.Now.AddMonths(-1).Month}افتقاد شهر";
+            var emailSubject = $" {DateTime.Now.AddMonths(-1).Month} افتقاد شهر";
             var reminderEmails = classManager.GetServedNeedToBeRemembered();
             foreach (var reminderEmail in reminderEmails)
             {

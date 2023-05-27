@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using App.Tenant.Entities;
+using App.Tenant.Managers;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -15,11 +17,13 @@ namespace MarminaAttendance.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly TenantManager tenantManager;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger,TenantManager tenantManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            this.tenantManager = tenantManager;
         }
 
         /// <summary>
@@ -43,6 +47,7 @@ namespace MarminaAttendance.Pages.Account
         /// </summary>
         [TempData]
         public string ErrorMessage { get; set; }
+        public Tenant CurrentTenant { get; private set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -75,6 +80,7 @@ namespace MarminaAttendance.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            CurrentTenant=tenantManager.GetCurrentTenant();
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
