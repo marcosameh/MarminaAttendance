@@ -165,6 +165,7 @@ lib
 bundle.css
 bundle.min.css
 Html
+App.Tenant
 datatables
 bundle.js
 bundle.min.js
