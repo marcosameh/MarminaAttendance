@@ -23,9 +23,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
 
     options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.SignIn.RequireConfirmedEmail = false;
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+أبتثجحخدذرزسشصضطظعغفقكلمنهويىئءآإةؤا ";
     options.ClaimsIdentity.UserIdClaimType = "UserID";
 }).AddEntityFrameworkStores<IdentityContext>().AddDefaultUI().AddDefaultTokenProviders();
 
