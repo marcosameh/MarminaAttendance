@@ -73,43 +73,43 @@
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <form class="forms-sample" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-
+                        <label asp-for="Servant.Name">الاسم</label>
                         <input type="text" asp-for="Servant.Name" class="form-control" id="exampleInputUsername1" placeholder="الاسم" required />
                         <span asp-validation-for="Servant.Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-
+                        <label asp-for="Servant.Email">الايميل</label>
                         <input type="email" class="form-control" asp-for="Servant.Email" id="exampleInputEmail1" placeholder="الايميل" required />
                         <span asp-validation-for="Servant.Email" class="text-danger"></span>
                        
                     </div>
                     <div class="form-group">
-
+                        <label asp-for="Servant.Password">كلمة السر</label>
                         <input type="password" asp-for="Servant.Password" class="form-control" placeholder="كلمة السر" />
                         <span asp-validation-for="Servant.Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-
+                        <label asp-for="Servant.ConfirmPassword">تاكيد كلمة السر</label>
                         <input type="password" class="form-control" asp-for="Servant.ConfirmPassword" placeholder="تاكيد كلمة السر" />
                         <span asp-validation-for="Servant.ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-
+                        <label asp-for="Servant.Phone">التليفون</label>
                         <input type="text" asp-for="Servant.Phone" class="form-control" placeholder="التليفون" required />
                         <span asp-validation-for="Servant.Phone" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-
+                        <label asp-for="Servant.Address">العنوان</label>
                         <input type="text" class="form-control" asp-for="Servant.Address" placeholder="العنوان" required />
                         <span asp-validation-for="Servant.Address" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-
+                        <label asp-for="Servant.FatherOfConfession">اب الاعتراف</label>
                         <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" placeholder="اب الاعتراف" required />
                         <span asp-validation-for="Servant.FatherOfConfession" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-
+                        <label asp-for="Servant.ClassId">الفصل</label>
                         <select class="form-control form-control-lg" asp-for="Servant.ClassId" required>
                             <option value="" selected disabled>الفصل</option>
                             @foreach (var item in Model.Classes)
