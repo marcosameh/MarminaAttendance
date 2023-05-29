@@ -71,9 +71,9 @@
                     <th>الصورة</th>
                     <th>الفصل</th>
                     <th>التليفون</th>
-                    <th>العنوان</th>
+                    @*<th>العنوان</th>*@
                     <th>اب الاعتراف</th>
-                    <th>تاريخ الميلاد</th>
+                   <th>تاريخ الميلاد</th>
 
                 </tr>
             </thead>
@@ -125,10 +125,10 @@
                         title: 'التليفون',
                         data: 'phone'
                     },
-                    {
-                        title: 'العنوان',
-                        data: 'address'
-                    },
+                    //{
+                    //    title: 'العنوان',
+                    //    data: 'address'
+                    //},
                     {
                         title: 'اب الاعتراف',
                         data: 'fatherOfConfession'
@@ -146,7 +146,7 @@
     </script>
     <script>
         function confirmDelete(id) {
-            if (confirm("هل متاكد انك تريد مسح الخادم")) {
+            if (confirm("هل متاكد انك تريد مسح المخدوم")) {
 
                 window.location.href = `?handler=Delete&id=${id}`;
             }
