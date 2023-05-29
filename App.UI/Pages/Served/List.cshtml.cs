@@ -55,7 +55,7 @@ namespace App.UI.Pages.Serveds
             var Result = ServedManager.DeleteServed(id);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
-            TempData["Message"] = Result.IsSuccess ? "تم مسح الخادم" : Result.Error;
+            TempData["Message"] = Result.IsSuccess ? "تم مسح المخدوم " : Result.Error;
             FillData();
         }
 

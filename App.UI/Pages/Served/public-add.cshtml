@@ -1,5 +1,5 @@
 ﻿@page
-@model App.UI.Pages.Servant.public_addModel
+@model App.UI.Pages.Serveds.public_addModel
 @{
     Layout = null;
 }
@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>اضافة خادم جديد</title>
+    <title>اضافة مخدوم جديد</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css" />
@@ -69,61 +69,50 @@
     <div class="col-lg-6 move-down stretch-card mx-auto">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">اضافة خادم جديد</h3>
+                <h3 class="card-title">اضافة مخدوم جديد</h3>
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <form class="forms-sample" method="post" enctype="multipart/form-data">
                     <div class="form-group">
 
-                        <input type="text" asp-for="Servant.Name" class="form-control" id="exampleInputUsername1" placeholder="الاسم" required />
-                        <span asp-validation-for="Servant.Name" class="text-danger"></span>
+                        <input type="text" asp-for="Served.Name" class="form-control" id="exampleInputUsername1" placeholder="الاسم" required />
+                        <span asp-validation-for="Served.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" asp-for="Served.Phone" class="form-control" placeholder="التليفون" required />
+                        <span asp-validation-for="Served.Phone" class="text-danger"></span>
                     </div>
                     <div class="form-group">
 
-                        <input type="email" class="form-control" asp-for="Servant.Email" id="exampleInputEmail1" placeholder="الايميل" required />
-                        <span asp-validation-for="Servant.Email" class="text-danger"></span>
-                       
+                        <input type="text" class="form-control" asp-for="Served.Address" placeholder="العنوان" required />
+                        <span asp-validation-for="Served.Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Served.Birthday">تاريخ الميلاد</label>
+                        <input type="date" class="form-control" asp-for="Served.Birthday" placeholder="تاريخ الميلاد" required />
+                        <span asp-validation-for="Served.Birthday" class="text-danger"></span>
+
                     </div>
                     <div class="form-group">
 
-                        <input type="password" asp-for="Servant.Password" class="form-control" placeholder="كلمة السر" />
-                        <span asp-validation-for="Servant.Password" class="text-danger"></span>
+                        <input type="text" class="form-control" asp-for="Served.FatherOfConfession" placeholder="اب الاعتراف" required />
+                        <span asp-validation-for="Served.FatherOfConfession" class="text-danger"></span>
                     </div>
                     <div class="form-group">
 
-                        <input type="password" class="form-control" asp-for="Servant.ConfirmPassword" placeholder="تاكيد كلمة السر" />
-                        <span asp-validation-for="Servant.ConfirmPassword" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-
-                        <input type="text" asp-for="Servant.Phone" class="form-control" placeholder="التليفون" required />
-                        <span asp-validation-for="Servant.Phone" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-
-                        <input type="text" class="form-control" asp-for="Servant.Address" placeholder="العنوان" required />
-                        <span asp-validation-for="Servant.Address" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-
-                        <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" placeholder="اب الاعتراف" required />
-                        <span asp-validation-for="Servant.FatherOfConfession" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-
-                        <select class="form-control form-control-lg" asp-for="Servant.ClassId" required>
+                        <select class="form-control form-control-lg" asp-for="Served.ClassId" required>
                             <option value="" selected disabled>الفصل</option>
                             @foreach (var item in Model.Classes)
                             {
                                 <option value="@item.Id">@item.Name</option>
                             }
                         </select>
-                        <span asp-validation-for="Servant.ClassId" class="text-danger"></span>
+                        <span asp-validation-for="Served.ClassId" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>صورة شخصية</label>
-                        <input type="file" asp-for="Servant.PhotoFile" class="file-upload-default" />
-                        <span asp-validation-for="Servant.PhotoFile" class="text-danger"></span>
+                        <input type="file" asp-for="Served.PhotoFile" class="file-upload-default" />
+                        <span asp-validation-for="Served.PhotoFile" class="text-danger"></span>
                         <div class="input-group col-xs-12">
                             <input type="text" class="form-control file-upload-info" disabled placeholder="رفع صورة" />
                             <span class="input-group-append">
@@ -131,12 +120,7 @@
                             </span>
                         </div>
                     </div>
-
-                    <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="remember-me" asp-for="Servant.ReceiveReminderEmails">
-                        <label class="form-check-label" for="remember-me">الحصول على ايميل الافتقاد</label>
-
-                    </div>
+                
                     <button type="submit" class="btn btn-primary mr-2"> تسجيل </button>
 
                 </form>
@@ -174,7 +158,3 @@
     <partial name="_ValidationScriptsPartial" />
 </body>
 </html>
-
-
-
-
