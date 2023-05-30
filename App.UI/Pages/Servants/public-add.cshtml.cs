@@ -35,51 +35,23 @@ namespace App.UI.Pages.Servant
         {
             Classes = ClassManager.GetClasses();
         }
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
             Classes = ClassManager.GetClasses();
-            if (ModelState.IsValid)
+
+            if (Servant.PhotoFile != null)
             {
-
-                string photoname = "user.jpg";
-                if (Servant.PhotoFile != null)
-                {
-                    Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/الخدام/", 285, 310);
-                    photoname = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/users/", 285, 310);
-
-                }
-                var user = new ApplicationUser { UserName = Servant.Name, Photo = photoname };
-
-                var result = await _userManager.CreateAsync(user, Servant.Password);
-
-                if (result.Succeeded)
-                {
-
-
-                    //await roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
-                    await _userManager.AddToRoleAsync(user, "Admin");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    var Result = servantManager.AddServant(Servant);
-                    TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
-                    TempData["Message"] = Result.IsSuccess ? "تم اضافة الخادم بنجاح" : Result.Error;
-                    return LocalRedirect("/classes/list");
-
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-
-
-
+                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/المخدومين/", 285, 310);
 
             }
-            // If we got this far, something failed, redisplay form
-
+            var Result = servantManager.AddServant(Servant);
+            if (Result.IsSuccess)
+            {
+                return LocalRedirect($"/thank-you?name={Servant.Name}");
+            }
+            TempData["NotificationType"] = "error";
+            TempData["Message"] = Result.Error;
             return Page();
-
-
-
         }
     }
 }

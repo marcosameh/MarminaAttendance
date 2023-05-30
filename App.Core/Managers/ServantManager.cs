@@ -51,7 +51,10 @@ namespace App.Core.Managers
             try
             {
                 var existServant = _context.Servants.Find(servantId);
-
+                if(existServant == null)
+                {
+                    return Result.Fail("تم مسح الخادم بالفعل");
+                }
                 _context.Servants.Remove(existServant);
                 _context.SaveChanges();
                 return Result.Ok();

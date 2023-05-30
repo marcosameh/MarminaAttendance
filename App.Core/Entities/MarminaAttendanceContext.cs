@@ -60,10 +60,7 @@ public partial class MarminaAttendanceContext : DbContext
         modelBuilder.Entity<Servants>(entity =>
         {
             entity.Property(e => e.Address).HasMaxLength(80);
-            entity.Property(e => e.Email)
-                .IsRequired()
-                .HasMaxLength(70)
-                .HasDefaultValueSql("(N'ma')");
+            entity.Property(e => e.Email).HasMaxLength(70);
             entity.Property(e => e.FatherOfConfession).HasMaxLength(50);
             entity.Property(e => e.Name)
                 .IsRequired()
@@ -102,12 +99,10 @@ public partial class MarminaAttendanceContext : DbContext
 
             entity.HasOne(d => d.Served).WithMany(p => p.ServedWeeks)
                 .HasForeignKey(d => d.ServedId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ServedWeeks_Served");
 
             entity.HasOne(d => d.Week).WithMany(p => p.ServedWeeks)
                 .HasForeignKey(d => d.WeekId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ServedWeeks_Weeks");
         });
 

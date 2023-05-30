@@ -79,20 +79,11 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Servant.Email">الايميل</label>
-                        <input type="email" class="form-control" asp-for="Servant.Email" id="exampleInputEmail1" placeholder="الايميل" required />
-                        <span asp-validation-for="Servant.Email" class="text-danger"></span>
+                        <input type="email" class="form-control" asp-for="Servant.Email" id="exampleInputEmail1" placeholder="الايميل" />
+                      @*  <span asp-validation-for="Servant.Email" class="text-danger"></span>*@
                        
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Servant.Password">كلمة السر</label>
-                        <input type="password" asp-for="Servant.Password" class="form-control" placeholder="كلمة السر" />
-                        <span asp-validation-for="Servant.Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Servant.ConfirmPassword">تاكيد كلمة السر</label>
-                        <input type="password" class="form-control" asp-for="Servant.ConfirmPassword" placeholder="تاكيد كلمة السر" />
-                        <span asp-validation-for="Servant.ConfirmPassword" class="text-danger"></span>
-                    </div>
+        
                     <div class="form-group">
                         <label asp-for="Servant.Phone">التليفون</label>
                         <input type="text" asp-for="Servant.Phone" class="form-control" placeholder="التليفون" required />

@@ -52,7 +52,10 @@ namespace App.Core.Managers
             try
             {
                 var existClass = _context.Classes.Find(Id);
-
+                if (existClass == null)
+                {
+                    Result.Fail("تم مسح الفصل بالفعل");
+                }
                 _context.Classes.Remove(existClass);
                 _context.SaveChanges();
                 return Result.Ok();

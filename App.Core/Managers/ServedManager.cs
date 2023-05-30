@@ -55,7 +55,10 @@ namespace App.Core.Managers
             try
             {
                 var existServed = _context.Served.Find(ServedId);
-
+                if(existServed == null)
+                {
+                    return Result.Fail("تم مسح المخدوم بالفعل");
+                }
                 _context.Served.Remove(existServed);
                 _context.SaveChanges();
                 return Result.Ok();
