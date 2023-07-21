@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace App.UI.Pages.Servant
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class EditcshtmlModel : PageModel
     {
         private readonly ServantManager servantManager;

@@ -31,7 +31,7 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-top:10px;
+            margin-top: 10px;
         }
 
     </style>
@@ -61,21 +61,20 @@
                         <span class="menu-title">الفصول</span>
                     </a>
                 </li>
-
-
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/servants/list">
-                        <i class="fa-solid fa-hand-holding-heart menu-icon"></i>
-                        <span class="menu-title">الخدام</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/servants/quick-attendance-registration">
-                        <i class="fa-solid fa-wifi menu-icon"></i>
-                        <span class="menu-title"> تسجيل حضور سريع للخدام</span>
-                    </a>
-                </li>
+                <if is-true='!User.IsInRole("Servant")'>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/servants/list">
+                            <i class="fa-solid fa-hand-holding-heart menu-icon"></i>
+                            <span class="menu-title">الخدام</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/servants/quick-attendance-registration">
+                            <i class="fa-solid fa-wifi menu-icon"></i>
+                            <span class="menu-title"> تسجيل حضور سريع للخدام</span>
+                        </a>
+                    </li>
+                </if>
                 <li class="nav-item">
                     <a class="nav-link" href="/served/list">
                         <i class="fa-solid fa-hands-holding-child menu-icon"></i>
@@ -97,12 +96,12 @@
                     </li>
 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/account/register">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/register">
                             <i class="fa-solid fa-user-plus menu-icon"></i>
-                        <span class="menu-title"> اضافة مستخدم جديد</span>
-                    </a>
-                </li>
+                            <span class="menu-title"> اضافة مستخدم جديد</span>
+                        </a>
+                    </li>
 
                 </if>
                 <li class="nav-item sidebar-actions">

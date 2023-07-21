@@ -9,7 +9,7 @@ using AppCore.Common;
 
 namespace App.UI.Pages.Servant
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class ListModel : PageModel
     {
         private readonly ServantManager servantManager;

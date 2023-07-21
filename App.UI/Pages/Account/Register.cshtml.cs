@@ -104,7 +104,7 @@ namespace MarminaAttendance.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    //await roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+                   // await roleManager.CreateAsync(new IdentityRole("Servant"));
                     await _userManager.AddToRoleAsync(user, Input.Role);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect("/classes/list");

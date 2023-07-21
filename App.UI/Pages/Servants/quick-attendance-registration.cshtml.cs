@@ -8,7 +8,7 @@ using App.UI.Ifraustrcuture;
 
 namespace App.UI.Pages.Servant
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class quick_attendance_registrationModel : PageModel
     {
         private readonly ServantManager servantManager;
