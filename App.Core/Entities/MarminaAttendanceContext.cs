@@ -91,6 +91,10 @@ public partial class MarminaAttendanceContext : DbContext
                 .HasForeignKey(d => d.ClassId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Served_Classes");
+
+            entity.HasOne(d => d.ResponsibleServant).WithMany(p => p.Served)
+                .HasForeignKey(d => d.ResponsibleServantId)
+                .HasConstraintName("FK_Served_Servants");
         });
 
         modelBuilder.Entity<ServedWeeks>(entity =>

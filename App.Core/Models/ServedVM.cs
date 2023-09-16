@@ -12,6 +12,8 @@ namespace App.Core.Models
 
         public string ClassName { get; set; }
 
+        public string ResponsibleServant { get; set; }
+
         public string Name { get; set; }
 
         public string Photo {private get ; set; }

@@ -37,13 +37,14 @@ namespace App.Core.Managers
 
         public List<ServedVM> GetServeds()
         {
-            var Serveds = _context.Served.Include(s => s.Class).AsNoTracking().Select(x => new ServedVM
+            var Serveds = _context.Served.Include(s => s.Class).Include(x=>x.ResponsibleServant).AsNoTracking().Select(x => new ServedVM
             {
                 Id = x.Id,
                 Name = x.Name,
                 Address = x.Address,
                 Birthday = x.Birthday.HasValue ? x.Birthday.Value.ToString("dd/MM/yyyy") : string.Empty,
                 ClassName = x.Class.Name,
+                ResponsibleServant=x.ResponsibleServant.Name,
                 FatherOfConfession = x.FatherOfConfession,
                 Phone = x.Phone,
                 Photo = x.Photo,
@@ -81,6 +82,7 @@ namespace App.Core.Managers
             existServed.Address = Served.Address;
             existServed.Birthday = Served.Birthday;
             existServed.Phone = Served.Phone;
+            existServed.ResponsibleServantId= Served.ResponsibleServantId;
             if (!string.IsNullOrEmpty(Served.Photo))
             {
                 existServed.Photo = Served.Photo;

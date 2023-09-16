@@ -32,13 +32,28 @@ namespace App.Core.Managers
 
         public List<ServantVM> GetServants()
         {
-           
+
             var Servants = _context.Servants.Include(s => s.Class).AsNoTracking().Select(x => new ServantVM
             {
                 Id = x.Id,
                 Name = x.Name,
                 Address = x.Address,
-                Email= x.Email,
+                Email = x.Email,
+                ClassName = x.Class.Name,
+                FatherOfConfession = x.FatherOfConfession,
+                Phone = x.Phone,
+                Photo = x.Photo,
+            }).ToList();
+            return Servants;
+        }
+        public List<ServantVM> GetResponsibleServants(int classId)
+        {
+            var Servants = _context.Servants.Where(s => s.ClassId == classId).AsNoTracking().Select(x => new ServantVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Address = x.Address,
+                Email = x.Email,
                 ClassName = x.Class.Name,
                 FatherOfConfession = x.FatherOfConfession,
                 Phone = x.Phone,
@@ -51,7 +66,7 @@ namespace App.Core.Managers
             try
             {
                 var existServant = _context.Servants.Find(servantId);
-                if(existServant == null)
+                if (existServant == null)
                 {
                     return Result.Fail("تم مسح الخادم بالفعل");
                 }

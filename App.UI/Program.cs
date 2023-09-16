@@ -5,6 +5,7 @@ using App.UI.InfraStructure;
 using AppCore.Infrastructure;
 using Hangfire;
 using MarminaAttendance.Identity;
+using MarminaAttendanceAPI.Endpoints;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
@@ -44,6 +45,7 @@ builder.Services.AddHangfire(configuration => configuration
                   .UseSimpleAssemblyNameTypeSerializer()
                   .UseRecommendedSerializerSettings()
                   .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHangfireServer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,6 +60,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.ConfigureResponsibleServantEndpoints();
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -65,16 +68,14 @@ app.UseHangfireDashboard("/hangfire-marmina", new DashboardOptions
 {
     Authorization = new[] { new HangfireAuthorizationFilter() }
 });
-app.UseHangfireServer();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
 
-    endpoints.MapGet("/", async context =>
-    {
-        context.Response.Redirect("/classes/list");
-    });
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/classes/list");
+    return Task.CompletedTask;
 });
+
+app.MapRazorPages();
 
 
 app.Run();

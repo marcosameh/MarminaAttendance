@@ -11,6 +11,8 @@ public partial class Served
 
     public int ClassId { get; set; }
 
+    public int? ResponsibleServantId { get; set; }
+
     public string Name { get; set; }
 
     public string Photo { get; set; }
@@ -26,6 +28,8 @@ public partial class Served
     public string Notes { get; set; }
 
     public virtual Classes Class { get; set; }
+
+    public virtual Servants ResponsibleServant { get; set; }
 
     public virtual ICollection<ServedWeeks> ServedWeeks { get; } = new List<ServedWeeks>();
 }
