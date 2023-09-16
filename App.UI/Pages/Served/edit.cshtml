@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label for="photo">الصورة</label>
                     <div class="card" style="width: 18rem;">
-                        <img src="/photos/المخدومين/@Model.Served.Photo" class="card-img-top" alt="Current photo">
+                        <img src="@Model.Served.PhotoPath" class="card-img-top" alt="Current photo">
                     </div>
                     <div class="mt-3">
                         <input type="file" class="form-control-file" id="photo" asp-for="Served.PhotoFile">
@@ -78,49 +78,7 @@
             <button type="submit" class="btn btn-primary">تحديث</button>
         </div>
     </form>
-    @* <div class="row text-center">
-    <div class="col-md-12">
-    <select id="chart-select" class="form-select mb-3">
-    <option value="attended">Attended</option>
-    <option value="missed">Missed</option>
-    </select>
-    <canvas id="attendanceChart" width="400" height="400"></canvas>
-    </div>
-    </div>*@
+
 </div>
 
 
-@section Scripts{
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-    <script>
-        var attendanceData = {
-            labels: ['Attended', 'Missed'],
-            datasets: [{
-                data: [8, 2],
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        };
-
-        // Create the attendance chart
-        var ctx = document.getElementById('attendanceChart').getContext('2d');
-        var myPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: attendanceData,
-            options: {
-                responsive: false,
-                legend: {
-                    position: 'center'
-                }
-            }
-        });
-
-    </script>
-    }

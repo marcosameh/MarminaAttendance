@@ -11,8 +11,19 @@ namespace App.Core.Entities
     public partial class Served
     {
         [NotMapped]
-        public IFormFile PhotoFile { get; set; }
-     
-        
+        public IFormFile PhotoFile { get; set; }     
+        public string PhotoPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Photo))
+                {
+                    return "/photos/المخدومين/default.jpg";
+                }
+                return "/photos/المخدومين/" + Photo;
+            }
+
+        }
+
     }
 }

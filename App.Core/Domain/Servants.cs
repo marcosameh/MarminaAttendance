@@ -13,7 +13,19 @@ namespace App.Core.Entities
     public partial class Servants
     {
         [NotMapped]
-        public IFormFile PhotoFile { get; set; }
+        public IFormFile PhotoFile { get; set; }     
+        public string PhotoPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Photo))
+                {
+                    return "/photos/الخدام/default.jpg";
+                }
+                return "/photos/الخدام/" + Photo;
+            }
+
+        }
 
     }
 }

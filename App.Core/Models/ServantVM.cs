@@ -14,7 +14,19 @@ namespace App.Core.Models
 
         public string Name { get; set; }
 
-        public string Photo { get; set; }
+        public string Photo { private get; set; }
+        public string PhotoPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Photo))
+                {
+                    return "/photos/الخدام/default.jpg";
+                }
+                return "/photos/الخدام/" + Photo;
+            }
+
+        }
 
         public string Phone { get; set; }
 
@@ -23,6 +35,7 @@ namespace App.Core.Models
         public string FatherOfConfession { get; set; }
 
         public string Email { get; set; }
- 
+
+
     }
 }

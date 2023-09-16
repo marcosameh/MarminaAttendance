@@ -14,7 +14,20 @@ namespace App.Core.Models
 
         public string Name { get; set; }
 
-        public string Photo { get; set; }
+        public string Photo {private get ; set; }
+        public string PhotoPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Photo))
+                {
+                    return "/photos/المخدومين/default.jpg";
+                }
+                return "/photos/المخدومين/" + Photo;
+            }
+
+        }
+
 
         public string Phone { get; set; }
 
