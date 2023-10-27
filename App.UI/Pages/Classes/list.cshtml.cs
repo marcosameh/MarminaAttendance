@@ -60,10 +60,17 @@ namespace App.UI.Pages.Classes
             TimeList = timeManager.GetTimeList();
         }
 
-        public IActionResult OnGetDownloadExcel(int classId)
+        public IActionResult OnGetDownloadExcelAttendance(int classId)
         {
             FillData();
             (string fileName, byte[] excelData) = excelProcessor.GenerateExcelAttendance(classId);
+            return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
+        }
+        public IActionResult OnGetDownloadExcelClassDetails(int classId)
+        {
+            FillData();
+            (string fileName, byte[] excelData) = excelProcessor.GenerateExcelClassDetails(classId);
             return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
 
         }
