@@ -157,6 +157,92 @@ namespace App.Core.Managers
 
 
         }
+        public async Task<Result> UpdateClassAsync(Classes ClassData, List<ServantWeeksDTO> servantWeeksDTOS, List<ServedWeeksDTO> servedWeeksDTOs)
+        {
+            // Retrieve the existing class and update its properties
+            var existingClass = await _context.Classes
+                .Include(c => c.Servants).ThenInclude(x => x.ServantWeek).Include(x => x.Served).ThenInclude(x => x.ServedWeeks)
+                .SingleOrDefaultAsync(c => c.Id == ClassData.Id);
+
+            if (existingClass == null)
+            {
+                // Return an error if the class does not exist
+                return Result.Fail("Class not found");
+            }
+
+            existingClass.Name = ClassData.Name;
+            existingClass.Intercessor = ClassData.Intercessor;
+            existingClass.TimeId = ClassData.TimeId;
+
+            // Update the ServantWeek records for each servant
+            var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
+
+            foreach (var servant in existingClass.Servants)
+            {
+                // Get the list of checked week ids for the current servant
+                var servantWeeksDTO = servantWeeksDTOS.FirstOrDefault(x => x.ServantId == servant.Id);
+                if (servantWeeksDTO == null)
+                    continue; // Skip if the servant is not found in the DTOs
+
+                // Loop through all weeks, including those not displayed on the form
+                foreach (var week in allWeeks)
+                {
+                    // Check if the checkbox for this week was checked
+                    var weekChecked = servantWeeksDTO.IsWeekSelected[week.Id];
+
+                    // Check if the current servant already has a ServantWeek object for this week
+                    var existingServantWeek = servant.ServantWeek.FirstOrDefault(x => x.WeekId == week.Id);
+
+                    if (weekChecked && existingServantWeek == null)
+                    {
+                        // Checkbox was checked and there is no existing ServantWeek object, so create a new one
+                        var newServantWeek = new ServantWeek { ServantId = servant.Id, WeekId = week.Id };
+                        _context.ServantWeek.Add(newServantWeek);
+                    }
+                    else if (!weekChecked && existingServantWeek != null)
+                    {
+                        // Checkbox was unchecked and there is an existing ServantWeek object, so delete it
+                        _context.ServantWeek.Remove(existingServantWeek);
+                    }
+                }
+            }
+
+            // Update the ServedWeek records for each Served
+            foreach (var served in existingClass.Served)
+            {
+                // Get the list of checked week ids for the current served
+                var servedWeeksDTO = servedWeeksDTOs.FirstOrDefault(x => x.ServedId == served.Id);
+                if (servedWeeksDTO == null)
+                    continue; // Skip if the served is not found in the DTOs
+
+                // Loop through all weeks, including those not displayed on the form
+                foreach (var week in allWeeks)
+                {
+                    // Check if the checkbox for this week was checked
+                    var weekChecked = servedWeeksDTO.IsWeekSelected[week.Id];
+
+                    // Check if the current served already has a ServedWeek object for this week
+                    var existingServedWeek = served.ServedWeeks.FirstOrDefault(x => x.WeekId == week.Id);
+
+                    if (weekChecked && existingServedWeek == null)
+                    {
+                        // Checkbox was checked and there is no existing ServedWeek object, so create a new one
+                        var newServedWeek = new ServedWeeks { ServedId = served.Id, WeekId = week.Id };
+                        _context.ServedWeeks.Add(newServedWeek);
+                    }
+                    else if (!weekChecked && existingServedWeek != null)
+                    {
+                        // Checkbox was unchecked and there is an existing ServedWeek object, so delete it
+                        _context.ServedWeeks.Remove(existingServedWeek);
+                    }
+                }
+            }
+
+            // Save changes to the database asynchronously
+            await _context.SaveChangesAsync();
+
+            return Result.Ok("Class updated successfully");
+        }
 
         public (string, byte[]) GenerateExcelFile(int ClassId)
         {

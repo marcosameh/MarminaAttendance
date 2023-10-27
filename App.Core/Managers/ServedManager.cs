@@ -30,8 +30,9 @@ namespace App.Core.Managers
             }
             catch (Exception ex)
             {
-                return Result.Fail(ex.InnerException?.Message);
+                return Result.Fail($"{ex.Message}{(ex.InnerException != null ? $" Inner Exception: {ex.InnerException.Message}" : "")}");
             }
+
 
         }
 

@@ -11,6 +11,7 @@ using System.Globalization;
 namespace App.UI.Pages.Classes
 {
     [Authorize]
+    [DisableRequestSizeLimit]
     public class editModel : PageModel
     {
         private readonly ClassManager classManager;
@@ -27,7 +28,7 @@ namespace App.UI.Pages.Classes
         public List<Time> TimeList { get; set; }
         public List<Servants> ServantList { get; set; }
         public List<Served> ServedList { get; private set; }
-        [BindProperty]
+        [BindProperty(SupportsGet =false)]
         public List<ServantWeeksDTO> ServantWeeksDTOs { get; set; }
 
         [BindProperty]
@@ -43,19 +44,31 @@ namespace App.UI.Pages.Classes
         {
             FillData();
         }
-        public void OnPost()
+
+        //public void OnPost()
+        //{
+        //    var Result = classManager.UpdateClass(CurrentClass, ServantWeeksDTOs, ServedWeeksDTOs);
+
+        //    TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
+        //    TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
+        //    FillData();
+
+        //}
+        public async Task<IActionResult> OnPostAsync()
         {
-            var Result = classManager.UpdateClass(CurrentClass, ServantWeeksDTOs, ServedWeeksDTOs);
+            var Result = await classManager.UpdateClassAsync(CurrentClass, ServantWeeksDTOs, ServedWeeksDTOs);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
             FillData();
 
+            return Page();
         }
+
         public void FillData()
         {
             CurrentClass = classManager.GetClass(Id);
-            Weeks = weekManager.GetWeeks(5);
+            Weeks = weekManager.GetWeeks(NumberOfWeeksAppearInMarkup);
             TimeList = timeManager.GetTimeList();
             ServantList = CurrentClass.Servants?.ToList();
             ServedList = CurrentClass.Served?.ToList();

@@ -6,6 +6,7 @@ using AppCore.Infrastructure;
 using Hangfire;
 using MarminaAttendance.Identity;
 using MarminaAttendanceAPI.Endpoints;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
@@ -30,6 +31,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+أبتثجحخدذرزسشصضطظعغفقكلمنهويىئءآإةؤا ";
     options.ClaimsIdentity.UserIdClaimType = "UserID";
 }).AddEntityFrameworkStores<IdentityContext>().AddDefaultUI().AddDefaultTokenProviders();
+builder.Services.Configure<FormOptions>(options =>
+{
+    //options.ValueLengthLimit = int.MaxValue;
+    options.ValueCountLimit = int.MaxValue;
+    //options.BufferBodyLengthLimit = int.MaxValue;
+    //options.MultipartBodyLengthLimit = int.MaxValue;
+});
+
 
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
 
