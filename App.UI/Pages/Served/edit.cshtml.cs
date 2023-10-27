@@ -59,22 +59,7 @@ namespace App.UI.Pages.Serveds
         }
         public string GetFormattedWeekDate(DateTime week, string Time)
         {
-            ServiceTime serviceTime;
-            Time = Time.Replace(" ", "");
-            if (!Enum.TryParse(Time, out serviceTime))
-            {
-                throw new ArgumentException($"Invalid value for 'time': {Time}");
-            }
-            string FormatedDate = (serviceTime) switch
-            {
-                ServiceTime.الخميس => week.ToString("dd/MM/yyyy"),
-                ServiceTime.الجمعةصباحا => week.AddDays(1).ToString("dd/MM/yyyy"),
-                ServiceTime.الجمعةمساء => week.AddDays(1).ToString("dd/MM/yyyy"),
-                ServiceTime.السبت => week.AddDays(2).ToString("dd/MM/yyyy"),
-                _ => week.ToString("dd/MM/yyyy"),
-
-            };
-            return FormatedDate;
+            return classManager.GetFormattedWeekDate(week, Time);
         }
     }
 }

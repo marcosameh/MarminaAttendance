@@ -33,7 +33,7 @@ namespace App.Core.Managers
         public List<ServantVM> GetServants()
         {
 
-            var Servants = _context.Servants.Include(s => s.Class).AsNoTracking().Select(x => new ServantVM
+            var Servants = _context.Servants.Include(s => s.Class).OrderBy(x=>x.Name).AsNoTracking().Select(x => new ServantVM
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -48,7 +48,7 @@ namespace App.Core.Managers
         }
         public List<ServantVM> GetResponsibleServants(int classId)
         {
-            var Servants = _context.Servants.Where(s => s.ClassId == classId).AsNoTracking().Select(x => new ServantVM
+            var Servants = _context.Servants.Where(s => s.ClassId == classId).AsNoTracking().OrderBy(x=>x.Name).Select(x => new ServantVM
             {
                 Id = x.Id,
                 Name = x.Name,

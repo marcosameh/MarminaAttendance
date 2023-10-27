@@ -37,7 +37,7 @@ namespace App.Core.Managers
 
         public List<ServedVM> GetServeds()
         {
-            var Serveds = _context.Served.Include(s => s.Class).Include(x=>x.ResponsibleServant).AsNoTracking().Select(x => new ServedVM
+            var Serveds = _context.Served.Include(s => s.Class).Include(x=>x.ResponsibleServant).OrderBy(x=>x.Name).AsNoTracking().Select(x => new ServedVM
             {
                 Id = x.Id,
                 Name = x.Name,

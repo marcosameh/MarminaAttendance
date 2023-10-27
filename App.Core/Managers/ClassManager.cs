@@ -24,7 +24,7 @@ namespace App.Core.Managers
         public List<ClassVM> GetClasses()
         {
 
-            return _context.Classes.Include(x => x.Time).Select(x => new ClassVM
+            return _context.Classes.Include(x => x.Time).OrderBy(x=>x.Name).Select(x => new ClassVM
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -240,7 +240,7 @@ namespace App.Core.Managers
             return (CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
         }
 
-        private string GetFormattedWeekDate(DateTime week, string Time)
+        public string GetFormattedWeekDate(DateTime week, string Time)
         {
             ServiceTime serviceTime;
             Time = Time.Replace(" ", "");
