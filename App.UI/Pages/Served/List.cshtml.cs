@@ -47,7 +47,7 @@ namespace App.UI.Pages.Serveds
             var Result = ServedManager.AddServed(Served);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
-            TempData["Message"] = Result.IsSuccess ? "تم اضافة الخادم  بنجاح" : Result.Error;
+            TempData["Message"] = Result.IsSuccess ? "تم اضافة المخدوم بنجاح" : Result.Error;
           
         }
         public void OnGetDelete(int id)

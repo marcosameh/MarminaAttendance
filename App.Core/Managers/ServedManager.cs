@@ -30,7 +30,7 @@ namespace App.Core.Managers
             }
             catch (Exception ex)
             {
-                return Result.Fail(ex.Message);
+                return Result.Fail(ex.InnerException?.Message);
             }
 
         }
