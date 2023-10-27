@@ -9,7 +9,6 @@ using MarminaAttendanceAPI.Endpoints;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +30,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+أبتثجحخدذرزسشصضطظعغفقكلمنهويىئءآإةؤا ";
     options.ClaimsIdentity.UserIdClaimType = "UserID";
 }).AddEntityFrameworkStores<IdentityContext>().AddDefaultUI().AddDefaultTokenProviders();
+
 builder.Services.Configure<FormOptions>(options =>
 {
     //options.ValueLengthLimit = int.MaxValue;
@@ -48,12 +48,15 @@ builder.Services.AddScoped<ServantManager>();
 builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<ServedManager>();
 builder.Services.AddScoped<EmailManager>();
+builder.Services.AddScoped<ExcelProcessor>();
 builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
+
 builder.Services.AddHangfire(configuration => configuration
                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                   .UseSimpleAssemblyNameTypeSerializer()
                   .UseRecommendedSerializerSettings()
                   .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddHangfireServer();
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿using App.Core.Entities;
+using App.Core.Infrastrcuture;
 using App.Core.Managers;
 using App.Core.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,16 +14,18 @@ namespace App.UI.Pages.Classes
     {
         private readonly ClassManager classManager;
         private readonly TimeManager timeManager;
+        private readonly ExcelProcessor excelProcessor;
 
         public List<ClassVM> Classes { get; set; }
         [BindProperty]
         public App.Core.Entities.Classes classData { get; set; }
         public List<Time> TimeList { get; private set; }
 
-        public listModel(ClassManager classManager, TimeManager timeManager)
+        public listModel(ClassManager classManager, TimeManager timeManager,ExcelProcessor excelProcessor)
         {
             this.classManager = classManager;
             this.timeManager = timeManager;
+            this.excelProcessor = excelProcessor;
         }
         public void OnGet()
         {
@@ -60,7 +63,7 @@ namespace App.UI.Pages.Classes
         public IActionResult OnGetDownloadExcel(int classId)
         {
             FillData();
-            (string fileName, byte[] excelData) = classManager.GenerateExcelFile(classId);
+            (string fileName, byte[] excelData) = excelProcessor.GenerateExcelAttendance(classId);
             return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
 
         }
