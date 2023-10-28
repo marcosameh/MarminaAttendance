@@ -100,7 +100,7 @@ namespace App.Core.Infrastrcuture
                 result = package.GetAsByteArray();
             }
 
-            return ("كشف حضور وغياب"+CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
+            return ("كشف حضور وغياب"+" "+CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
         }
 
         public (string, byte[]) GenerateExcelClassDetails(int ClassId)
@@ -175,7 +175,7 @@ namespace App.Core.Infrastrcuture
                 result = package.GetAsByteArray();
             }
 
-            return ("كشف بيانات الفصل"+CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
+            return ("كشف بيانات الفصل"+" "+CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
         }
     }
 }
