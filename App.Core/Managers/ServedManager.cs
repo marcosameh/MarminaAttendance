@@ -131,7 +131,47 @@ namespace App.Core.Managers
                 ClassName = Served.Class.Name
             };
         }
+        public Result<string> RegisterAttendance(int servedId)
+        {
+            try
+            {
+                var currentWeek = _context.Weeks.AsNoTracking()
+                                                .OrderByDescending(w => w.Id)
+                                                .FirstOrDefault();
 
+
+                var currentWeekId = currentWeek.Id;
+
+                var served = _context.Served.AsNoTracking()
+                                         .FirstOrDefault(x => x.Id == servedId);
+                if (_context.ServedWeeks.Any(x => x.ServedId == servedId && x.WeekId == currentWeekId))
+                {
+                    return Result.Ok($"تم تسجل حضور المخدوم {served.Name}من قبل بالفعل");
+                }
+
+
+
+                if (served == null)
+                {
+                    return Result.Fail<string>(".المخدوم غير موجود");
+                }
+
+                var newServedWeek = new ServedWeeks
+                {
+                    ServedId = servedId,
+                    WeekId = currentWeekId
+                };
+
+                _context.ServedWeeks.Add(newServedWeek);
+                _context.SaveChanges();
+
+                return Result.Ok($"{served.Name} تم تسجيل الحضور");
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<string>(ex.Message);
+            }
+        }
         public Result<ServedVM> SearchServeds(string searchInput)
         {
             int ServedId;

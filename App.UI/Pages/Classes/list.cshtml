@@ -93,12 +93,12 @@
 
 
                 columns: [
-                    {
+                   {
+
                         data: 'id',
                         "render": function (data) {
-                            return '<a href="/class/edit/' + data + '" ><i class="fas fa-edit"></i></a> &nbsp;<a onclick="confirmDelete(' + data + ')"  > <i class="fas fa-trash" > </i></a> &nbsp; <a href="?handler=downloadexcelattendance&classId=' + data + '"> <i class="fa-solid fa-file-excel" style="color:green" data-toggle="tooltip" data-placement="top" title="كشف حضور وغياب"></i></a>&nbsp;<a href="?handler=downloadexcelclassdetails&classId=' + data + '"> <i class="fa-solid fa-file-arrow-down" data-toggle="tooltip" data-placement="top" title="بيانات الفصل"></i></a>';
+                            return '<a href="/class/edit/' + data + '" ><i class="fas fa-edit"></i></a> &nbsp;<a onclick="confirmDelete(' + data + ')"  > <i class="fas fa-trash" > </i></a> &nbsp; <a href="?handler=downloadexcel&classId=' + data + '"> <i class="fa-solid fa-file-arrow-down" style="color:green"></i></a> &nbsp; <a href="/served/served-card?classId=' + data + '" ><i class="fas fa-print" style="color:black"></i></a>';
                         }
-
                     },
 
                     {

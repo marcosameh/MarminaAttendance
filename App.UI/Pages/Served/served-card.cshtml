@@ -1,0 +1,27 @@
+﻿@page
+@model App.UI.Pages.Serveds.printModel
+
+@section Styles {
+    <link rel="stylesheet" href="/css/printable-card.css" />
+}
+
+<div class="main-content">
+    @if (Model.Serveds.Any())
+    {
+        foreach (var served in Model.Serveds)
+        {
+            <div class="printable-card">
+                <img src="/photos/tenant/scout-logo.jpg" alt="StMina" class="scout-logo">
+                <div class="info">
+                    <h2>مجموعات افا مينا الكشفية</h2>
+                    <p><strong>الاسم:</strong> @served.Name</p>
+                    <p><strong>الفريق:</strong> @served.ClassName</p>
+                </div>
+                <div class="images">
+                    <img src="/photos/الافراد/@served.Photo" alt="Profile Photo" class="profile-image" />
+                    <img src="/photos/الافراد/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
+                </div>
+            </div>
+        }
+    }
+</div>
