@@ -25,7 +25,7 @@ namespace App.UI.Pages
 
         public void OnGet()
         {
-            RecurringJob.AddOrUpdate(() => AddNewWeek(), Cron.Weekly(DayOfWeek.Wednesday, hour: 22, minute: 1));
+            RecurringJob.AddOrUpdate(() => AddNewWeek(), Cron.Weekly(DayOfWeek.Thursday, hour: 0, minute: 1));
             RecurringJob.AddOrUpdate(() => SendReminderEmailsAsync(), Cron.Monthly(1));
 
 

@@ -26,8 +26,15 @@ namespace App.Core.Managers
         public void AddNewWeek()
         {
             var today = DateTime.Today;
-            context.Weeks.Add(new Weeks { Date = today });
-            context.SaveChanges();
+            // Ensure we always add Thursday's date
+            var thursday = today.AddDays(DayOfWeek.Thursday - today.DayOfWeek);
+            if (!context.Weeks.Any(w => w.Date.Date == thursday.Date))
+            {
+                context.Weeks.Add(new Weeks { Date = thursday });
+                context.SaveChanges();
+            }
+          
         }
+
     }
 }
