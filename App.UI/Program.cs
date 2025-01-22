@@ -49,6 +49,7 @@ builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<ServedManager>();
 builder.Services.AddScoped<EmailManager>();
 builder.Services.AddScoped<ExcelProcessor>();
+builder.Services.AddScoped<QrCodeService>();
 builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
 builder.Services.AddHangfire(configuration => configuration
