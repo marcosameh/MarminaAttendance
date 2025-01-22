@@ -16,7 +16,7 @@ namespace App.Core.Models
 
         public string Name { get; set; }
 
-        public string Photo {private get ; set; }
+        public string Photo { get ; set; }
         public string PhotoPath
         {
             get

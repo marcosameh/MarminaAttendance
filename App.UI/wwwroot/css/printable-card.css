@@ -1,70 +1,82 @@
 ﻿body {
     -webkit-print-color-adjust: exact;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
 }
 
 .main-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 20px;
 }
 
 .printable-card {
     width: 8cm;
-    height: 10cm;
-    border: 1px solid #000;
-    padding: 10px;
+    height: 11cm;
+    background-color: #ffffff;
+    border: 1px solid #000; /* Retained previous solid black border */
+    padding: 15px;
     margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: inline-block;
-    page-break-inside: avoid;
+    text-align: center;
     box-sizing: border-box;
+    page-break-inside: avoid;
 }
 
 .scout-logo {
     width: 50px;
     height: auto;
     display: block;
-    margin: 0 auto 10px;
+    margin: 0 auto 15px;
 }
 
 .info {
-    text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
     .info h2 {
         font-size: 1.2em;
+        font-weight: bold;
         margin: 0 0 10px;
+        color: #333;
+    }
+
+    .info strong {
+        font-size: 1.1em;
+        color: #555;
+        display: block;
+        margin-bottom: 8px;
     }
 
     .info p {
         margin: 5px 0;
         font-size: 0.9em;
+        color: #777;
     }
 
 .images {
-    text-align: center;
-}
-
-.profile-image, .barcode {
-    width: 80px;
-    height: 80px;
-    margin: 5px auto;
-    display: block;
+    margin-top: 15px;
 }
 
 .profile-image {
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     border-radius: 50%;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
 }
 
 .barcode {
     width: 60px;
     height: 60px;
+    margin-top: 10px;
 }
 
 @media print {
-    /* Hide navigation bars and other non-print elements */
+    /* Hide unnecessary elements */
     .navbar, .sidebar, .header, .footer {
         display: none !important;
     }

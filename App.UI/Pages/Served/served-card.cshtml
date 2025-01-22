@@ -11,14 +11,17 @@
         foreach (var served in Model.Serveds)
         {
             <div class="printable-card">
-                <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo">
+                <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
                 <div class="info">
                     <h2>كنيسة الشهيد العظيم مارمينا</h2>
-                    <p><strong>الاسم:</strong> @served.Name</p>
-                    <p><strong>الفريق:</strong> @served.ClassName</p>
+                    <strong>@served.Name</strong>
+                    <p>@served.ClassName</p>
                 </div>
                 <div class="images">
-                    <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
+                    @if (!string.IsNullOrEmpty(served.Photo))
+                    {
+                        <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
+                    }
                     <img src="/photos/المخدومين/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
                 </div>
             </div>
