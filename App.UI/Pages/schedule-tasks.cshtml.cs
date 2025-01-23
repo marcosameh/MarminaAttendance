@@ -27,6 +27,8 @@ namespace App.UI.Pages
         {
             RecurringJob.AddOrUpdate(() => AddNewWeek(), Cron.Weekly(DayOfWeek.Thursday, hour: 0, minute: 1));
             RecurringJob.AddOrUpdate(() => SendReminderEmailsAsync(), Cron.Monthly(1));
+            RecurringJob.AddOrUpdate(() => SendReminderEmailsAsync(), Cron.Monthly(1));
+            RecurringJob.AddOrUpdate(() => SendBirthdayEmailsAsync(), Cron.Daily());
 
 
         }
@@ -49,7 +51,21 @@ namespace App.UI.Pages
 
             }
         }
+        public async Task SendBirthdayEmailsAsync()
+        {
+            var emailSubject = $"{DateTime.Now.ToString("dd/MM")}اعياد ميلاد";
+            var birthdayEmails = classManager.GetServedNeedToBeRememberedforBithday();
+            foreach (var birthdayEmail in birthdayEmails)
+            {
+                var MsgTo = birthdayEmail.Servants.Select(x => x.Email).ToArray();
+                var emailContent = await viewRenderService.RenderToStringAsync("BirthdayEmail", birthdayEmail);
+                if (MsgTo != null && MsgTo.Any())
+                {
+                    _mailManager.SendEmail(emailSubject, MsgTo, emailContent);
+                }
 
+            }
+        }
 
     }
 }

@@ -243,9 +243,51 @@ namespace App.Core.Managers
             return reminderEmailModels;
         }
 
-       
 
 
+        public List<BithdayEmailModel> GetServedNeedToBeRememberedforBithday()
+        {
+            var today = DateTime.Now;
+            List<BithdayEmailModel> reminderEmailModels = new List<BithdayEmailModel>();
+
+            // Get Classes with Servants and Served relationships
+            var classesWithServantsAndServed = _context.Classes
+                .Where(c => c.Servants.Any() && c.Served.Any())
+                .Include(c => c.Servants)
+                .Include(c => c.Served)               
+                .AsNoTracking();
+
+            foreach (var sundaySchoolClass in classesWithServantsAndServed)
+            {
+                // Get Servants who receive reminder emails for the class
+                List<Servants> servants = sundaySchoolClass.Servants
+                    .Where(s => s.ReceiveReminderEmails)
+                    .ToList();
+
+                // If no Servants are found, add the first Servant as fallback
+                if (!servants.Any())
+                {
+                    servants.Add(sundaySchoolClass.Servants.FirstOrDefault());
+                }
+
+
+
+                List<Served> servedNeedToBeRemembered = sundaySchoolClass.Served
+                    .Where(x => x.Birthday?.Month == today.Month && x.Birthday?.Day == today.Day).ToList();
+
+
+
+                    if (servedNeedToBeRemembered.Any())
+                    {
+                        reminderEmailModels.Add(new BithdayEmailModel(servants, servedNeedToBeRemembered));
+                    }
+                }
+
+            return reminderEmailModels;
+               
+            }
+
+        
 
     }
 }

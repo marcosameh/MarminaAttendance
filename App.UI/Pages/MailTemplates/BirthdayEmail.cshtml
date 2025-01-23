@@ -1,0 +1,96 @@
+﻿@using App.Core.Models;
+@using AppCore.Utilities;
+@model BithdayEmailModel
+
+@{
+    Layout = null;
+    string[] Bible = {
+        "ٱلْمَحَبَّةُ تَتَأَنَّى وَتَرْفُقُ. ٱلْمَحَبَّةُ لَا تَحْسِدُ. ٱلْمَحَبَّةُ لَا تَتَفَاخَرُ وَلَا تَنْتَفِخُ.",
+        "لِيَكُنْ كُلُّ شَيْءٍ عِنْدَكُمْ بِمَحَبَّةٍ.",
+        "هَذِهِ هِيَ وَصِيَّتِي أَنْ تُحِبُّوا بَعْضُكُمْ بَعْضًا كَمَا أَحْبَبْتُكُمْ.",
+        "وَٱلرَّبُّ يُنْمِي لَكُمُ ٱلْمَحَبَّةَ بَعْضَكُمْ لِبَعْضٍ وَلِلْجَمِيعِ.",
+        "فَوْقَ كُلِّ شَيْءٍ، ٱلْمَحَبَّةُ تَرْبِطُ ٱلْكُلَّ فِي كَمَالٍ.",
+        "ٱلْمَحَبَّةُ لَا تَسْقُطُ أَبَدًا.",
+        "إِنْ كَانَ أَحَدٌ فِيكُمْ يَسْتَطِيعُ أَنْ يُحِبَّ بِلاَ غَايَةٍ فَلْيَفْعَلْ ذَلِكَ بِإِخْلَاصٍ."
+    };
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>أعياد الميلاد</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            direction: rtl;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .verse {
+            font-size: 18px;
+            color: #007bff;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .message {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .birthday-list {
+            font-size: 16px;
+            color: #444;
+            text-align: right;
+        }
+
+        .footer {
+            font-size: 14px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">🎉 أعياد ميلاد النهاردة 🎉</div>
+        <div class="verse">@Bible.GetRandomElement()</div>
+        <div class="message">
+            النهاردة عيد ميلاد:
+            <br />
+            <div class="birthday-list">
+                @foreach (var birthdayPerson in Model.BirthdayServed)
+                {
+                    <div>- <a href="https://marmina.innovix.site/Served/edit/@birthdayPerson.Id" target="_blank">@birthdayPerson.Name</a> - @birthdayPerson.Phone</div>
+                }
+            </div>
+            <br />
+            من فضلك يا @string.Join(", ", Model.Servants.Select(x => x.Name)) قم بمعايدتهم وادخل السرور إلى قلوبهم. 🌹
+        </div>
+        <div class="footer">
+            شكرًا لخدمتك الرائعة! ❤️
+            <br />
+            <small>برجاء عدم الرد على هذا الإيميل، حيث أنه رسالة مُرسلة آليًا.</small>
+        </div>
+    </div>
+</body>
+</html>
