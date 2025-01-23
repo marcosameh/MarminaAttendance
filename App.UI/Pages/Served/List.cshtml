@@ -16,53 +16,57 @@
         </div>
 
         <form method="post" id="toggle-form" enctype="multipart/form-data">
-                <div class="p-3">
-                    <div class="form-row">
-                        <div class="col-md-3 mb-3">
-                            <label for="Served-name">الاسم</label>
-                            <input type="text" class="form-control" asp-for="Served.Name" id="Served-name" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Served-phone">رقم التليفون</label>
-                            <input type="text" class="form-control" asp-for="Served.Phone" id="Served-phone" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Served-class">الفصل</label>
-                            <select class="form-control form-control-lg" id="Served-class" asp-for="Served.ClassId" required>
-                                @foreach (var item in Model.Classes)
-                                {
-                                    <option value="@item.Id">@item.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Served-address">العنوان</label>
-                            <input type="text" class="form-control" asp-for="Served.Address" id="Served-address" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Served-father-name">اب الاعتراف</label>
-                            <input type="text" class="form-control" asp-for="Served.FatherOfConfession" id="Served-father-name">
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Served-birthdate">تاريخ الميلاد</label>
-                            <input type="date" class="form-control" asp-for="Served.Birthday" id="Served-birthdate" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="Served-image">الصورة</label>
-                            <input type="file" class="form-control" asp-for="Served.PhotoFile" id="Served-image" accept="image/*">
-                        </div>
+            <div class="p-3">
+                <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <label for="Served-name">الاسم</label>
+                        <input type="text" class="form-control" asp-for="Served.Name" id="Served-name" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="Served-phone">رقم التليفون</label>
+                        <input type="text" class="form-control" asp-for="Served.Phone" id="Served-phone" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="Guardian-phone">تليفون ولي الأمر</label>
+                        <input type="text" class="form-control" asp-for="Served.HomePhone" id="Guardian-phone">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="Served-class">الفصل</label>
+                        <select class="form-control form-control-lg" id="Served-class" asp-for="Served.ClassId" required>
+                            @foreach (var item in Model.Classes)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="Served-address">العنوان</label>
+                        <input type="text" class="form-control" asp-for="Served.Address" id="Served-address" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="Served-father-name">اب الاعتراف</label>
+                        <input type="text" class="form-control" asp-for="Served.FatherOfConfession" id="Served-father-name">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="Served-birthdate">تاريخ الميلاد</label>
+                        <input type="date" class="form-control" asp-for="Served.Birthday" id="Served-birthdate" required>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="Served-image">الصورة</label>
+                        <input type="file" class="form-control" asp-for="Served.PhotoFile" id="Served-image" accept="image/*">
+                    </div>
                     <div class="col-md-3 mb-3">
                         <label for="Served-class">الخادم المسوؤل</label>
                         <select class="form-control form-control-lg" id="responsible-Servant" asp-for="Served.ResponsibleServantId">
-                           
                         </select>
                     </div>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button type="submit" class="btn btn-primary">اضافة</button>
-                    </div>
                 </div>
-            </form>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">اضافة</button>
+                </div>
+            </div>
+        </form>
+
         
 
 

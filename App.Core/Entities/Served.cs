@@ -19,6 +19,8 @@ public partial class Served
 
     public string Phone { get; set; }
 
+    public string HomePhone { get; set; }
+
     public string Address { get; set; }
 
     public string FatherOfConfession { get; set; }
@@ -31,5 +33,5 @@ public partial class Served
 
     public virtual Servants ResponsibleServant { get; set; }
 
-    public virtual ICollection<ServedWeeks> ServedWeeks { get; } = new List<ServedWeeks>();
+    public virtual ICollection<ServedWeeks> ServedWeeks { get; set; } = new List<ServedWeeks>();
 }

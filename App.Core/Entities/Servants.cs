@@ -31,7 +31,7 @@ public partial class Servants
 
     public virtual Classes Class { get; set; }
 
-    public virtual ICollection<ServantWeek> ServantWeek { get; } = new List<ServantWeek>();
+    public virtual ICollection<ServantWeek> ServantWeek { get; set; } = new List<ServantWeek>();
 
-    public virtual ICollection<Served> Served { get; } = new List<Served>();
+    public virtual ICollection<Served> Served { get; set; } = new List<Served>();
 }

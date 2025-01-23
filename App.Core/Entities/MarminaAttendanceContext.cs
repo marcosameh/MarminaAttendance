@@ -77,12 +77,14 @@ public partial class MarminaAttendanceContext : DbContext
 
         modelBuilder.Entity<Served>(entity =>
         {
-            entity.Property(e => e.Address).HasMaxLength(80);
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Address).HasMaxLength(300);
             entity.Property(e => e.Birthday).HasColumnType("smalldatetime");
             entity.Property(e => e.FatherOfConfession).HasMaxLength(50);
+            entity.Property(e => e.HomePhone).HasMaxLength(13);
             entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(150);
             entity.Property(e => e.Notes).HasMaxLength(350);
             entity.Property(e => e.Phone).HasMaxLength(13);
             entity.Property(e => e.Photo).HasMaxLength(60);

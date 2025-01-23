@@ -11,5 +11,5 @@ public partial class Time
 
     public string Time1 { get; set; }
 
-    public virtual ICollection<Classes> Classes { get; } = new List<Classes>();
+    public virtual ICollection<Classes> Classes { get; set; } = new List<Classes>();
 }

@@ -48,6 +48,7 @@ namespace App.Core.Managers
                 ResponsibleServant = x.ResponsibleServant.Name,
                 FatherOfConfession = x.FatherOfConfession,
                 Phone = x.Phone,
+                HomePhone = x.HomePhone,
                 Photo = x.Photo,
             }).ToList();
             return Serveds;
@@ -65,6 +66,7 @@ namespace App.Core.Managers
                 ResponsibleServant = x.ResponsibleServant.Name,
                 FatherOfConfession = x.FatherOfConfession,
                 Phone = x.Phone,
+                HomePhone = x.HomePhone,
                 Photo = x.Photo,
             }).ToList();
             return Serveds;

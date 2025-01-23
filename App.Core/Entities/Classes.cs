@@ -15,9 +15,9 @@ public partial class Classes
 
     public int TimeId { get; set; }
 
-    public virtual ICollection<Servants> Servants { get; } = new List<Servants>();
+    public virtual ICollection<Servants> Servants { get; set; } = new List<Servants>();
 
-    public virtual ICollection<Served> Served { get; } = new List<Served>();
+    public virtual ICollection<Served> Served { get; set; } = new List<Served>();
 
     public virtual Time Time { get; set; }
 }

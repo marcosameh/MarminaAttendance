@@ -13,6 +13,7 @@
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
    "Tables": [
       {
          "Name": "[dbo].[Classes]",
@@ -43,11 +44,13 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "Marco.MarminaAttendance",
+   "UiHint": "marco.MarminaAttendance.dbo",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
    "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
    "UseHierarchyId": false,
@@ -55,10 +58,12 @@
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": true,
    "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,
    "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
    "UseSpatial": false,
    "UseT4": false
 }

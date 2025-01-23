@@ -17,6 +17,7 @@ namespace App.Core.Models
         public string Name { get; set; }
 
         public string Photo { get ; set; }
+      
         public string PhotoPath
         {
             get
@@ -30,7 +31,7 @@ namespace App.Core.Models
 
         }
 
-
+        public string HomePhone { get; set; }
         public string Phone { get; set; }
 
         public string Address { get; set; }
