@@ -18,7 +18,7 @@ namespace App.UI.Pages.Serveds
         {
             if(servedId.HasValue &&servedId.Value > 0)
             {
-                var Result = servedManager.RegisterAttendance(servedId.Value);
+                var Result = servedManager.AttendanceRegistration(servedId.Value);
 
                 TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
                 TempData["Message"] = Result.IsSuccess ? Result.Value : Result.Error;

@@ -8,6 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Formats.Asn1;
 using System.Globalization;
 using CsvHelper;
+using App.Core.Enums;
 
 namespace App.Core.Managers
 {
@@ -150,47 +151,49 @@ namespace App.Core.Managers
                 ClassName = Served.Class.Name
             };
         }
-        public Result<string> RegisterAttendance(int servedId)
-        {
-            try
-            {
-                var currentWeek = _context.Weeks.AsNoTracking()
-                                                .OrderByDescending(w => w.Id)
-                                                .FirstOrDefault();
+        //public Result<string> RegisterAttendance(int servedId)
+        //{
+        //    try
+        //    {
+
+        //        var today = DateTime.Now.Date;
+        //        var currentWeek = _context.Weeks.AsNoTracking()
+        //                                        .OrderByDescending(w => w.Id)
+        //                                        .FirstOrDefault();
+
+                
+        //        var currentWeekId = currentWeek.Id;
+
+        //        var served = _context.Served.AsNoTracking()
+        //                                 .FirstOrDefault(x => x.Id == servedId);
+        //        if (_context.ServedWeeks.Any(x => x.ServedId == servedId && x.WeekId == currentWeekId))
+        //        {
+        //            return Result.Ok($"تم تسجل حضور المخدوم {served.Name}من قبل بالفعل");
+        //        }
+        //        if(currentWeek.Date.>)
 
 
-                var currentWeekId = currentWeek.Id;
+        //        if (served == null)
+        //        {
+        //            return Result.Fail<string>(".المخدوم غير موجود");
+        //        }
 
-                var served = _context.Served.AsNoTracking()
-                                         .FirstOrDefault(x => x.Id == servedId);
-                if (_context.ServedWeeks.Any(x => x.ServedId == servedId && x.WeekId == currentWeekId))
-                {
-                    return Result.Ok($"تم تسجل حضور المخدوم {served.Name}من قبل بالفعل");
-                }
+        //        var newServedWeek = new ServedWeeks
+        //        {
+        //            ServedId = servedId,
+        //            WeekId = currentWeekId
+        //        };
 
+        //        _context.ServedWeeks.Add(newServedWeek);
+        //        _context.SaveChanges();
 
-
-                if (served == null)
-                {
-                    return Result.Fail<string>(".المخدوم غير موجود");
-                }
-
-                var newServedWeek = new ServedWeeks
-                {
-                    ServedId = servedId,
-                    WeekId = currentWeekId
-                };
-
-                _context.ServedWeeks.Add(newServedWeek);
-                _context.SaveChanges();
-
-                return Result.Ok($"{served.Name} تم تسجيل الحضور");
-            }
-            catch (Exception ex)
-            {
-                return Result.Fail<string>(ex.Message);
-            }
-        }
+        //        return Result.Ok($"{served.Name} تم تسجيل الحضور");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Result.Fail<string>(ex.Message);
+        //    }
+        //}
         public Result<ServedVM> SearchServeds(string searchInput)
         {
             int ServedId;
@@ -209,23 +212,34 @@ namespace App.Core.Managers
 
             return Result.Ok(MapToServedVM(Served));
         }
-        public Result AttendanceRegistration(int ServedId)
+        public Result<string> AttendanceRegistration(int servedId)
         {
-            var WeekId = _context.Weeks.AsNoTracking().OrderByDescending(w => w.Id).First().Id;
-            var exists = _context.ServedWeeks.Any(x => x.ServedId == ServedId && x.WeekId == WeekId);
+            var Week = _context.Weeks.AsNoTracking().OrderByDescending(w => w.Id).First();
+            var exists = _context.ServedWeeks.Any(x => x.ServedId == servedId && x.WeekId == Week.Id);
+            var served = _context.Served.AsNoTracking()
+                .Include(s=>s.Class)
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == servedId);
+
+            var today = DateTime.Now.Date;
             if (exists)
             {
-                return Result.Ok("تم تسجل حضور الخادم من قبل بالفعل");
+                return Result.Fail<string>($"تم تسجل حضور المخدوم {served.Name} من قبل بالفعل");
+            }
+            var daysToAdd = DaysToAdd(served.Class.TimeId);
+            if (today> Week.Date.AddDays(daysToAdd).Date)
+            {
+                return Result.Fail<string>("يوم الخدمة لم ياتى بعد");
             }
             try
             {
-                _context.ServedWeeks.Add(new ServedWeeks { ServedId = ServedId, WeekId = WeekId });
+                _context.ServedWeeks.Add(new ServedWeeks { ServedId = servedId, WeekId = Week.Id });
                 _context.SaveChanges();
-                return Result.Ok("تم تسجيل الحضور");
+                return Result.Ok($"{served.Name} تم تسجيل الحضور");
             }
             catch (Exception ex)
             {
-                return Result.Fail(ex.Message);
+                return Result.Fail<string>(ex.Message);
             }
         }
         public async Task<Result<List<Served>>> ServedBulkInsertAsync(IFormFile formFile, int classId)
@@ -306,6 +320,19 @@ namespace App.Core.Managers
 
           
         }
+        private int DaysToAdd(int timeId)
+        {
+           
+            int DaysToAdd = (timeId) switch
+            {
+                /*ServiceTime.الخميس*/ 1=> 0,
+               /* ServiceTime.الجمعةصباحا*/ 2=> 1,
+               /* ServiceTime.الجمعةمساء*/ 3=> 1,
+                /*ServiceTime.السبت*/ 4=> 2,
+                _ => 0,
 
+            };
+            return DaysToAdd;
+        }
     }
 }

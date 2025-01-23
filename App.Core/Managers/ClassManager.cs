@@ -159,7 +159,7 @@ namespace App.Core.Managers
             return Result.Ok("Class updated successfully");
         }
 
-   
+
 
         public string GetFormattedWeekDate(DateTime week, string Time)
         {
@@ -180,6 +180,7 @@ namespace App.Core.Managers
             };
             return FormatedDate;
         }
+     
         public List<ReminderEmailModel> GetServedNeedToBeRemembered()
         {
             List<ReminderEmailModel> reminderEmailModels = new List<ReminderEmailModel>();

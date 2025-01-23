@@ -39,7 +39,7 @@ namespace App.UI.Pages.Serveds
             var Result = ServedManager.AttendanceRegistration(ServedId);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
-            TempData["Message"] = Result.IsSuccess? "تم تسحيل حضور المخدوم" : Result.Error;
+            TempData["Message"] = Result.IsSuccess ? Result.Value : Result.Error;
 
         }
 

@@ -53,7 +53,8 @@ namespace App.UI.Pages
         }
         public async Task SendBirthdayEmailsAsync()
         {
-            var emailSubject = $"{DateTime.Now.ToString("dd/MM")}اعياد ميلاد";
+            var emailSubject = $"🎉 أعياد ميلاد اليوم - {DateTime.Now:dd/MM} 🎂";
+
             var birthdayEmails = classManager.GetServedNeedToBeRememberedforBithday();
             foreach (var birthdayEmail in birthdayEmails)
             {
