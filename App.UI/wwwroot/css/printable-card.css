@@ -12,6 +12,18 @@ body {
     padding: 20px;
 }
 
+.print-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
 .printable-card {
     width: 8.56cm;
     height: 5.4cm;
@@ -63,18 +75,6 @@ body {
     border: 2px solid #ddd;
 }
 
-.no-image {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #eee;
-    border-radius: 50%;
-    font-size: 10px;
-    color: #666;
-}
-
 .info {
     flex-grow: 1;
     text-align: center;
@@ -91,6 +91,10 @@ body {
 }
 
 @media print {
+    .navbar, .sidebar, .header, .footer, .print-btn {
+        display: none !important;
+    }
+
     .main-content {
         width: 100%;
         margin: 0;

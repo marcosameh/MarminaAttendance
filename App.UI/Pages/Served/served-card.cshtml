@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="/css/printable-card.css" asp-append-version="true" />
 }
 
+<button onclick="printPage()" class="print-btn">طباعة / تحويل إلى PDF</button>
+
 <div class="main-content">
     @if (Model.Serveds.Any())
     {
@@ -21,10 +23,6 @@
                         {
                             <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
                         }
-                        else
-                        {
-                            <div class="no-image">لا توجد صورة</div>
-                        }
                     </div>
                     <div class="info">
                         <strong>@served.Name</strong>
@@ -38,4 +36,12 @@
     }
 </div>
 
+
+@section Scripts{
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+}
 
