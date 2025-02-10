@@ -1,4 +1,5 @@
-﻿body {
+﻿
+body {
     -webkit-print-color-adjust: exact;
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
@@ -12,75 +13,84 @@
 }
 
 .printable-card {
-    width: 8cm;
-    height: 11cm;
+    width: 8.56cm;
+    height: 5.4cm;
     background-color: #ffffff;
-    border: 1px solid #000; /* Retained previous solid black border */
-    padding: 15px;
+    border-radius: 8px;
+    padding: 10px;
     margin: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: inline-block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     text-align: center;
     box-sizing: border-box;
     page-break-inside: avoid;
+    border: 1px solid #ccc;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
 .scout-logo {
-    width: 50px;
+    width: 30px;
     height: auto;
-    display: block;
-    margin: 0 auto 15px;
 }
 
-.info {
-    margin-bottom: 15px;
+.card-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-    .info h2 {
-        font-size: 1.2em;
-        font-weight: bold;
-        margin: 0 0 10px;
-        color: #333;
-    }
-
-    .info strong {
-        font-size: 1.1em;
-        color: #555;
-        display: block;
-        margin-bottom: 8px;
-    }
-
-    .info p {
-        margin: 5px 0;
-        font-size: 0.9em;
-        color: #777;
-    }
-
-.images {
-    margin-top: 15px;
+.profile-container {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .profile-image {
-    width: 70px;
-    height: 70px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    margin-bottom: 10px;
     border: 2px solid #ddd;
 }
 
+.no-image {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+    border-radius: 50%;
+    font-size: 10px;
+    color: #666;
+}
+
+.info {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+}
+
 .barcode {
-    width: 63px;
-    height: 63px;
-    margin-top: 10px;
+    width: 50px;
+    height: 50px;
 }
 
 @media print {
-    /* Hide unnecessary elements */
-    .navbar, .sidebar, .header, .footer {
-        display: none !important;
-    }
-
     .main-content {
         width: 100%;
         margin: 0;
@@ -92,6 +102,8 @@
 
     .printable-card {
         page-break-inside: avoid;
-        margin: 0.5cm;
+        margin: 0.2cm;
     }
 }
+
+

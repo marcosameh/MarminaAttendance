@@ -2,7 +2,7 @@
 @model App.UI.Pages.Serveds.printModel
 
 @section Styles {
-    <link rel="stylesheet" href="/css/printable-card.css"  asp-append-version="true"/>
+    <link rel="stylesheet" href="/css/printable-card.css" asp-append-version="true" />
 }
 
 <div class="main-content">
@@ -11,20 +11,31 @@
         foreach (var served in Model.Serveds)
         {
             <div class="printable-card">
-                <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
-                <div class="info">
+                <div class="card-header">
+                    <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
                     <h2>كنيسة الشهيد العظيم مارمينا</h2>
-                    <strong>@served.Name</strong>
-                    <p>@served.ClassName</p>
                 </div>
-                <div class="images">
-                    @if (!string.IsNullOrEmpty(served.Photo))
-                    {
-                        <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
-                    }
+                <div class="card-body">
+                    <div class="profile-container">
+                        @if (!string.IsNullOrEmpty(served.Photo))
+                        {
+                            <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
+                        }
+                        else
+                        {
+                            <div class="no-image">لا توجد صورة</div>
+                        }
+                    </div>
+                    <div class="info">
+                        <strong>@served.Name</strong>
+                    </div>
+                </div>
+                <div class="card-footer">
                     <img src="/photos/المخدومين/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
                 </div>
             </div>
         }
     }
 </div>
+
+
