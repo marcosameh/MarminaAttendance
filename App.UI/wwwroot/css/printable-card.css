@@ -1,8 +1,25 @@
-﻿
-body {
+﻿body {
     -webkit-print-color-adjust: exact;
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
+}
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* يجعل الصورة على الشمال */
+    gap: 8px;
+}
+
+.scout-logo {
+    width: 35px; /* تكبير الصورة قليلاً */
+    height: auto;
+}
+
+.card-header h2 {
+    font-size: 16px; /* تصغير العنوان ليتناسب مع الحجم الجديد */
+    margin: 0;
+    flex-grow: 1; /* يضمن عدم انضغاط النص */
+    text-align: right; /* يجعل النص محاذيًا لليمين */
 }
 
 .main-content {
@@ -48,10 +65,7 @@ body {
     gap: 5px;
 }
 
-.scout-logo {
-    width: 30px;
-    height: auto;
-}
+
 
 .card-body {
     display: flex;
@@ -83,20 +97,15 @@ body {
 .card-footer {
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 5px 0;
-}
-
-.barcode-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+    padding-bottom: 5px;
 }
 
 .barcode {
-    width: 40px;
-    height: 40px;
+    width: 65px; 
+    height: 65px;
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
 }
 
 @media print {
@@ -118,5 +127,3 @@ body {
         margin: 0.2cm;
     }
 }
-
-
