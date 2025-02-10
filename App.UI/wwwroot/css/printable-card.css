@@ -96,17 +96,19 @@
 
 .card-footer {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end; /* يجعل الـ QR على اليمين */
+    align-items: flex-end;
+    padding-right: 5px; /* مسافة بسيطة من الحافة */
     padding-bottom: 5px;
 }
 
 .barcode {
-    width: 65px; 
-    height: 65px;
-    max-width: 85%;
-    max-height: 85%;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
 }
+
+
 
 @media print {
     .navbar, .sidebar, .header, .footer, .print-btn {
