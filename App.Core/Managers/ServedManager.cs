@@ -36,10 +36,37 @@ namespace App.Core.Managers
 
 
         }
-
         public List<ServedVM> GetServeds()
         {
-            var Serveds = _context.Served.Include(s => s.Class).Include(x => x.ResponsibleServant).OrderBy(x => x.Name).AsNoTracking().Select(x => new ServedVM
+            var Serveds = _context.Served                
+                .Include(s => s.Class)
+                .Include(x => x.ResponsibleServant)
+                .OrderBy(x => x.Name)
+                .AsNoTracking()
+                .Select(x => new ServedVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Address = x.Address,
+                    Birthday = x.Birthday.HasValue ? x.Birthday.Value.ToString("dd/MM/yyyy") : string.Empty,
+                    ClassName = x.Class.Name,
+                    ResponsibleServant = x.ResponsibleServant.Name,
+                    FatherOfConfession = x.FatherOfConfession,
+                    Phone = x.Phone,
+                    HomePhone = x.HomePhone,
+                    Photo = x.Photo,
+                }).ToList();
+            return Serveds;
+        }
+        public List<ServedVM> GetServeds(int? classId)
+        {
+            var Serveds = _context.Served
+                .Where(x=>!classId.HasValue ||x.ClassId==classId)
+                .Include(s => s.Class)
+                .Include(x => x.ResponsibleServant)
+                .OrderBy(x => x.Name)
+                .AsNoTracking()
+                .Select(x => new ServedVM
             {
                 Id = x.Id,
                 Name = x.Name,

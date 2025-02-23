@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AppCore.Common;
+using Microsoft.AspNetCore.Identity;
+using MarminaAttendance.Identity;
 
 namespace App.UI.Pages.Serveds
 {
@@ -14,16 +16,20 @@ namespace App.UI.Pages.Serveds
     {
         private readonly ServedManager ServedManager;
         private readonly ClassManager classManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public List<ServedVM> ServedsVM { get; private set; }
         public List<ClassVM> Classes { get; private set; }
 
         [BindProperty]
         public Served Served { get; set; }
-        public ListModel(ServedManager ServedManager, ClassManager classManager)
+        public ListModel(ServedManager ServedManager,
+            ClassManager classManager,
+            UserManager<ApplicationUser> userManager)
         {
             this.ServedManager = ServedManager;
             this.classManager = classManager;
+            this.userManager = userManager;
         }
         public void OnGet()
         {
@@ -31,7 +37,8 @@ namespace App.UI.Pages.Serveds
         }
         public IActionResult OnGetDisplayServeds()
         {
-            ServedsVM = ServedManager.GetServeds();
+            var user = userManager.GetUserAsync(User).Result;
+            ServedsVM = ServedManager.GetServeds(user.ClassId);
 
             return new JsonResult(ServedsVM);
         }
@@ -61,7 +68,8 @@ namespace App.UI.Pages.Serveds
 
         public void FillData()
         {
-            Classes = classManager.GetClasses();
+            var user = userManager.GetUserAsync(User).Result;
+            Classes = classManager.GetClasses(user.ClassId);
         }
     }
 }

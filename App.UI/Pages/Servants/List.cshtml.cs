@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AppCore.Common;
+using Microsoft.AspNetCore.Identity;
+using MarminaAttendance.Identity;
 
 namespace App.UI.Pages.Servant
 {
@@ -13,15 +15,16 @@ namespace App.UI.Pages.Servant
     public class ListModel : PageModel
     {
         private readonly ServantManager servantManager;
-
+        private readonly UserManager<ApplicationUser> userManager;
 
         public List<ServantVM> ServantsVM { get; private set; }
 
 
-        public ListModel(ServantManager servantManager)
+        public ListModel(ServantManager servantManager,
+            UserManager<ApplicationUser> userManager)
         {
             this.servantManager = servantManager;
-
+            this.userManager = userManager;
         }
         public void OnGet()
         {
@@ -29,7 +32,8 @@ namespace App.UI.Pages.Servant
         }
         public IActionResult OnGetDisplayServants()
         {
-            ServantsVM = servantManager.GetServants();
+            var user = userManager.GetUserAsync(User).Result;
+            ServantsVM = servantManager.GetServants(user.ClassId);
 
             return new JsonResult(ServantsVM);
         }

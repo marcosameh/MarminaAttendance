@@ -1,14 +1,8 @@
 ﻿using App.Core.Entities;
-using App.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using AppCore.Common;
-using System.Runtime.InteropServices;
-using OfficeOpenXml;
 using App.Core.Enums;
-using AppCore.Utilities;
-using OfficeOpenXml.Style;
-using System.Drawing;
-using Microsoft.AspNetCore.Http;
+using App.Core.Models;
+using AppCore.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Core.Managers
 {
@@ -16,7 +10,7 @@ namespace App.Core.Managers
     {
         private readonly MarminaAttendanceContext _context;
         private int NumberOfWeeksAppearInMarkup = 5;
-        
+
         public ClassManager(MarminaAttendanceContext context)
         {
             _context = context;
@@ -24,13 +18,31 @@ namespace App.Core.Managers
         public List<ClassVM> GetClasses()
         {
 
-            return _context.Classes.Include(x => x.Time).OrderBy(x=>x.Name).Select(x => new ClassVM
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Intercessor = x.Intercessor,
-                Time = x.Time.Time1
-            }).ToList();
+            return _context.Classes               
+                .Include(x => x.Time)
+                .OrderBy(x => x.Name)
+                .Select(x => new ClassVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Intercessor = x.Intercessor,
+                    Time = x.Time.Time1
+                }).ToList();
+        }
+        public List<ClassVM> GetClasses(int? classId)
+        {
+
+            return _context.Classes
+                .Where(x => !classId.HasValue || x.Id == classId.Value)
+                .Include(x => x.Time)
+                .OrderBy(x => x.Name)
+                .Select(x => new ClassVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Intercessor = x.Intercessor,
+                    Time = x.Time.Time1
+                }).ToList();
         }
         public Result AddClass(Classes classData)
         {
@@ -67,11 +79,11 @@ namespace App.Core.Managers
         }
         public Classes GetClass(int id)
         {
-            return _context.Classes.Where(x => x.Id == id).Include(x => x.Servants.OrderBy(x=>x.Name)).ThenInclude(x => x.ServantWeek).
+            return _context.Classes.Where(x => x.Id == id).Include(x => x.Servants.OrderBy(x => x.Name)).ThenInclude(x => x.ServantWeek).
                 Include(x => x.Served.OrderBy(x => x.Name)).ThenInclude(x => x.ServedWeeks).Include(x => x.Time).AsSplitQuery().AsNoTracking().FirstOrDefault();
 
         }
-        
+
         public async Task<Result> UpdateClassAsync(Classes ClassData, List<ServantWeeksDTO> servantWeeksDTOS, List<ServedWeeksDTO> servedWeeksDTOs)
         {
             // Retrieve the existing class and update its properties
@@ -180,7 +192,7 @@ namespace App.Core.Managers
             };
             return FormatedDate;
         }
-     
+
         public List<ReminderEmailModel> GetServedNeedToBeRemembered()
         {
             List<ReminderEmailModel> reminderEmailModels = new List<ReminderEmailModel>();
@@ -255,7 +267,7 @@ namespace App.Core.Managers
             var classesWithServantsAndServed = _context.Classes
                 .Where(c => c.Servants.Any() && c.Served.Any())
                 .Include(c => c.Servants)
-                .Include(c => c.Served)               
+                .Include(c => c.Served)
                 .AsNoTracking();
 
             foreach (var sundaySchoolClass in classesWithServantsAndServed)
@@ -278,17 +290,17 @@ namespace App.Core.Managers
 
 
 
-                    if (servedNeedToBeRemembered.Any())
-                    {
-                        reminderEmailModels.Add(new BithdayEmailModel(servants, servedNeedToBeRemembered));
-                    }
+                if (servedNeedToBeRemembered.Any())
+                {
+                    reminderEmailModels.Add(new BithdayEmailModel(servants, servedNeedToBeRemembered));
                 }
-
-            return reminderEmailModels;
-               
             }
 
-        
+            return reminderEmailModels;
+
+        }
+
+
 
     }
 }

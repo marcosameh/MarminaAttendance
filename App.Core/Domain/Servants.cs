@@ -15,10 +15,16 @@ namespace App.Core.Entities
         [NotMapped]
         public IFormFile PhotoFile { get; set; }
         [NotMapped]
-        public IFormFile Password { get; set; }
+        [Required(ErrorMessage = "كلمة المرور مطلوبة")]
+        [StringLength(100, ErrorMessage = "يجب أن تتراوح كلمة المرور بين {2} و {1} حرفًا.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
         [NotMapped]
-        [Compare("Password")]
-        public IFormFile ConfirmPassword { get; set; }
+        [Required(ErrorMessage = "تأكيد كلمة المرور مطلوب")]
+        [Compare("Password", ErrorMessage = "كلمة المرور وتأكيدها غير متطابقين")]
+        [DataType(DataType.Password)]
+        public string ConfirmPassword { get; set; }
         public string PhotoPath
         {
             get

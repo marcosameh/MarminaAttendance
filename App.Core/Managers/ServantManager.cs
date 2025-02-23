@@ -31,10 +31,15 @@ namespace App.Core.Managers
 
         }
 
-        public List<ServantVM> GetServants()
+        public List<ServantVM> GetServants(int? classId)
         {
 
-            var Servants = _context.Servants.Include(s => s.Class).OrderBy(x=>x.Name).AsNoTracking().Select(x => new ServantVM
+            var Servants = _context.Servants
+                .Where(x=>!classId.HasValue ||x.ClassId==classId)
+                .Include(s => s.Class)
+                .OrderBy(x=>x.Name)
+                .AsNoTracking()
+                .Select(x => new ServantVM
             {
                 Id = x.Id,
                 Name = x.Name,

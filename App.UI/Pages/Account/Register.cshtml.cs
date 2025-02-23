@@ -25,9 +25,9 @@ namespace MarminaAttendance.Pages.Account
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IWebHostEnvironment environment,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger
             )
         {

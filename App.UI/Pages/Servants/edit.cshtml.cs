@@ -3,7 +3,9 @@ using App.Core.Enums;
 using App.Core.Managers;
 using App.Core.Models;
 using App.UI.Ifraustrcuture;
+using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,6 +18,7 @@ namespace App.UI.Pages.Servant
         private readonly ServantManager servantManager;
         private readonly WeekManager weekManager;
         private readonly ClassManager classManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly int NumberOfWeeksAppearInMarkup = 16;
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
@@ -26,11 +29,15 @@ namespace App.UI.Pages.Servant
         public ServantWeeksDTO ServantWeeksDTO { get; set; }
         public SelectList Classes { get; private set; }
 
-        public EditcshtmlModel(ServantManager servantManager, WeekManager weekManager, ClassManager classManager)
+        public EditcshtmlModel(ServantManager servantManager,
+            WeekManager weekManager,
+            ClassManager classManager,
+            UserManager<ApplicationUser> userManager)
         {
             this.servantManager = servantManager;
             this.weekManager = weekManager;
             this.classManager = classManager;
+            this.userManager = userManager;
         }
         public void OnGet()
         {
@@ -41,7 +48,8 @@ namespace App.UI.Pages.Servant
 
             WeeksList = weekManager.GetWeeks(NumberOfWeeksAppearInMarkup);
             Servant = servantManager.GetServant(Id);
-            Classes = new SelectList(classManager.GetClasses(), "Id", "Name");
+            var user = userManager.GetUserAsync(User).Result;
+            Classes = new SelectList(classManager.GetClasses(user.ClassId), "Id", "Name");
         }
         public void OnPost()
         {

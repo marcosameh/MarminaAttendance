@@ -2,7 +2,9 @@
 using App.Core.Infrastrcuture;
 using App.Core.Managers;
 using App.Core.Models;
+using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -15,17 +17,22 @@ namespace App.UI.Pages.Classes
         private readonly ClassManager classManager;
         private readonly TimeManager timeManager;
         private readonly ExcelProcessor excelProcessor;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public List<ClassVM> Classes { get; set; }
         [BindProperty]
         public App.Core.Entities.Classes classData { get; set; }
         public List<Time> TimeList { get; private set; }
 
-        public listModel(ClassManager classManager, TimeManager timeManager,ExcelProcessor excelProcessor)
+        public listModel(ClassManager classManager,
+            TimeManager timeManager,
+            ExcelProcessor excelProcessor,
+            UserManager<ApplicationUser> userManager)
         {
             this.classManager = classManager;
             this.timeManager = timeManager;
             this.excelProcessor = excelProcessor;
+            this.userManager = userManager;
         }
         public void OnGet()
         {
@@ -33,7 +40,8 @@ namespace App.UI.Pages.Classes
         }
         public IActionResult OnGetDisplayClasses()
         {
-            Classes = classManager.GetClasses();
+            var user = userManager.GetUserAsync(User).Result;
+            Classes = classManager.GetClasses(user.ClassId);
 
             return new JsonResult(Classes);
         }
