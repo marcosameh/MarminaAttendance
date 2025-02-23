@@ -82,7 +82,7 @@ namespace MarminaAttendance.Pages.Account
                 string photoname = "user.jpg";
                 if (Input.Photo!= null)
                 {
-                    string folderName = "photos/users";
+                    string folderName = "photos/الخدام";
                     string webRootPath = environment.WebRootPath;
                     string FolderPath = Path.Combine(webRootPath, folderName);
                     photoname = Path.GetFileName(Input.Photo.FileName);

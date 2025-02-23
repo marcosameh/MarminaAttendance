@@ -13,21 +13,19 @@ namespace App.UI.Pages.Servant
     public class ListModel : PageModel
     {
         private readonly ServantManager servantManager;
-        private readonly ClassManager classManager;
+
 
         public List<ServantVM> ServantsVM { get; private set; }
-        public List<ClassVM> Classes { get; private set; }
 
-        [BindProperty]
-        public Servants Servant { get; set; }
-        public ListModel(ServantManager servantManager, ClassManager classManager)
+
+        public ListModel(ServantManager servantManager)
         {
             this.servantManager = servantManager;
-            this.classManager = classManager;
+
         }
         public void OnGet()
         {
-            FillData();
+
         }
         public IActionResult OnGetDisplayServants()
         {
@@ -36,32 +34,16 @@ namespace App.UI.Pages.Servant
             return new JsonResult(ServantsVM);
         }
 
-        public void OnPost()
-        {
-            FillData();
-            if (Servant.PhotoFile != null)
-            {
-                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/الخدام/", 285, 310);
 
-            }
-            var Result = servantManager.AddServant(Servant);
-
-            TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
-            TempData["Message"] = Result.IsSuccess ? "تم اضافة الخادم  بنجاح" : Result.Error;
-          
-        }
         public void OnGetDelete(int id)
         {
             var Result = servantManager.DeleteServant(id);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم مسح الخادم" : Result.Error;
-            FillData();
+
         }
 
-        public void FillData()
-        {
-            Classes = classManager.GetClasses();
-        }
+
     }
 }

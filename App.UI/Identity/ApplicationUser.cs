@@ -5,9 +5,11 @@ namespace MarminaAttendance.Identity
 {
     public class ApplicationUser : IdentityUser
     {
-      
+
         [PersonalData]
         public string Photo { get; set; }
-        
+        [PersonalData]
+        public int? ClassId { get; set; }
+
     }
 }

@@ -1,0 +1,82 @@
+﻿@page
+@model App.UI.Pages.Servant.addModel
+@{
+    ViewData["Title"] = "إضافة خادم جديد";
+}
+<link href="~/css/form-styles.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="card shadow-lg mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">إضافة خادم جديد</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-name">الاسم</label>
+                        <input type="text" class="form-control" asp-for="Servant.Name" id="servant-name" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-phone">رقم التليفون</label>
+                        <input type="text" class="form-control" asp-for="Servant.Phone" id="servant-phone" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-class">الفصل</label>
+                        <select class="form-control" id="servant-class" asp-for="Servant.ClassId" required>
+                            @foreach (var item in Model.Classes)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-address">العنوان</label>
+                        <input type="text" class="form-control" asp-for="Servant.Address" id="servant-address" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-father-name">اب الاعتراف</label>
+                        <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" id="servant-father-name" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-email">الايميل</label>
+                        <input type="email" class="form-control" asp-for="Servant.Email" id="servant-email">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-password">كلمة المرور</label>
+                        <input type="password" class="form-control" asp-for="Servant.Password" id="servant-password" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-confirm-password">تأكيد كلمة المرور</label>
+                        <input type="password" class="form-control" asp-for="Servant.ConfirmPassword" id="servant-confirm-password" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="servant-image">الصورة</label>
+                        <input type="file" class="form-control" asp-for="Servant.PhotoFile" id="servant-image" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" asp-for="Servant.Leader">
+                    <label class="form-check-label">امين الفصل</label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" asp-for="Servant.ReceiveReminderEmails">
+                    <label class="form-check-label">الحصول على ايميل الافتقاد</label>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="/Servants/List" class="btn btn-secondary">العودة للقائمة</a>
+                    <button type="submit" class="btn btn-primary">إضافة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

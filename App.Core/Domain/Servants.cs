@@ -13,7 +13,12 @@ namespace App.Core.Entities
     public partial class Servants
     {
         [NotMapped]
-        public IFormFile PhotoFile { get; set; }     
+        public IFormFile PhotoFile { get; set; }
+        [NotMapped]
+        public IFormFile Password { get; set; }
+        [NotMapped]
+        [Compare("Password")]
+        public IFormFile ConfirmPassword { get; set; }
         public string PhotoPath
         {
             get
