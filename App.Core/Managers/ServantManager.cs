@@ -35,26 +35,47 @@ namespace App.Core.Managers
         {
 
             var Servants = _context.Servants
-                .Where(x=>!classId.HasValue ||x.ClassId==classId)
+                .Where(x => !classId.HasValue || x.ClassId == classId)
                 .Include(s => s.Class)
-                .OrderBy(x=>x.Name)
+                .OrderBy(x => x.Name)
                 .AsNoTracking()
                 .Select(x => new ServantVM
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Address = x.Address,
-                Email = x.Email,
-                ClassName = x.Class.Name,
-                FatherOfConfession = x.FatherOfConfession,
-                Phone = x.Phone,
-                Photo = x.Photo,
-            }).ToList();
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Address = x.Address,
+                    Email = x.Email,
+                    ClassName = x.Class.Name,
+                    FatherOfConfession = x.FatherOfConfession,
+                    Phone = x.Phone,
+                    Photo = x.Photo,
+                }).ToList();
             return Servants;
         }
+        public List<ServantVM> GetServants()
+        {
+
+            var Servants = _context.Servants
+                .Include(s => s.Class)
+                .OrderBy(x => x.Name)
+                .AsNoTracking()
+                .Select(x => new ServantVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Address = x.Address,
+                    Email = x.Email,
+                    ClassName = x.Class.Name,
+                    FatherOfConfession = x.FatherOfConfession,
+                    Phone = x.Phone,
+                    Photo = x.Photo,
+                }).ToList();
+            return Servants;
+        }
+
         public List<ServantVM> GetResponsibleServants(int classId)
         {
-            var Servants = _context.Servants.Where(s => s.ClassId == classId).AsNoTracking().OrderBy(x=>x.Name).Select(x => new ServantVM
+            var Servants = _context.Servants.Where(s => s.ClassId == classId).AsNoTracking().OrderBy(x => x.Name).Select(x => new ServantVM
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -167,24 +188,55 @@ namespace App.Core.Managers
 
             return Result.Ok(MapToServantVM(servant));
         }
-        public Result AttendanceRegistration(int ServantId)
+        
+        public Result<string> AttendanceRegistration(int servedId)
         {
-            var WeekId = _context.Weeks.AsNoTracking().OrderByDescending(w => w.Id).First().Id;
-            var exists = _context.ServantWeek.Any(x => x.ServantId == ServantId && x.WeekId == WeekId);
+            var Week = _context.Weeks.AsNoTracking().OrderByDescending(w => w.Id).First();
+            var exists = _context.ServantWeek.Any(x => x.ServantId == servedId && x.WeekId == Week.Id);
+            var servant = _context.Servants.AsNoTracking()
+                .Include(s => s.Class)
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == servedId);
+
+            var today = DateTime.Now.Date;
             if (exists)
             {
-                return Result.Ok("تم تسجل حضور الخادم من قبل بالفعل");
+                return Result.Fail<string>($"تم تسجل حضور الخادم {servant.Name} من قبل بالفعل");
+            }
+            var daysToAdd = DaysToAdd(servant.Class.TimeId);
+            if (today > Week.Date.AddDays(daysToAdd).Date)
+            {
+                return Result.Fail<string>("يوم الخدمة لم ياتى بعد");
             }
             try
             {
-                _context.ServantWeek.Add(new ServantWeek { ServantId = ServantId, WeekId = WeekId });
+                _context.ServedWeeks.Add(new ServedWeeks { ServedId = servedId, WeekId = Week.Id });
                 _context.SaveChanges();
-                return Result.Ok("تم تسجيل الحضور");
+                return Result.Ok($"{servant.Name} تم تسجيل الحضور");
             }
             catch (Exception ex)
             {
-                return Result.Fail(ex.Message);
+                return Result.Fail<string>(ex.Message);
             }
+        }
+
+        private int DaysToAdd(int timeId)
+        {
+
+            int DaysToAdd = (timeId) switch
+            {
+                /*ServiceTime.الخميس*/
+                1 => 0,
+                /* ServiceTime.الجمعةصباحا*/
+                2 => 1,
+                /* ServiceTime.الجمعةمساء*/
+                3 => 1,
+                /*ServiceTime.السبت*/
+                4 => 2,
+                _ => 0,
+
+            };
+            return DaysToAdd;
         }
 
     }

@@ -58,12 +58,30 @@
     border: 1px solid #ccc;
 }
 
-.card-header {
+.card-footer {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+    justify-content: space-between; /* To space the QR code and Servant ID */
+    align-items: flex-end;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    position: relative; /* Ensure we can position the Servant ID properly */
 }
+
+.barcode {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.servant-id {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px; /* Small font size */
+    color: #666;
+}
+
 
 
 

@@ -2,6 +2,7 @@
 using App.Core.Managers;
 using App.Core.Models;
 using App.UI.Ifraustrcuture;
+using App.UI.InfraStructure;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace App.UI.Pages.Servant
         private readonly ClassManager classManager;
         private readonly ServantManager servantManager;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly QrCodeService qrCodeService;
 
         [BindProperty]
         public Servants Servant { get; set; }
@@ -24,12 +26,14 @@ namespace App.UI.Pages.Servant
         public addModel(ClassManager classManager,
             ServantManager servantManager,
             UserManager<ApplicationUser> userManager,
-             RoleManager<IdentityRole> roleManager)
+             RoleManager<IdentityRole> roleManager,
+             QrCodeService qrCodeService)
 
         {
             this.classManager = classManager;
             this.servantManager = servantManager;
             this.userManager = userManager;
+            this.qrCodeService = qrCodeService;
         }
         public void OnGet()
         {
@@ -77,9 +81,9 @@ namespace App.UI.Pages.Servant
 
             // Assign Role & Sign in User
             await userManager.AddToRoleAsync(user,"Servant");
-         
+            await qrCodeService.GenerateQrCodeForServantsAsync(Servant.Id);
 
-            return LocalRedirect("/classes/list");
+            return LocalRedirect("/Servants/list");
         }
 
 

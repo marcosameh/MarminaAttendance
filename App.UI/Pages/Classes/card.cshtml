@@ -8,8 +8,33 @@
 <button onclick="printPage()" class="print-btn">طباعة / تحويل إلى PDF</button>
 
 <div class="main-content">
-    @if (Model.Serveds.Any())
+    @if (Model.Serveds.Any() ||Model.Servants.Any())
     {
+        foreach (var servant in Model.Servants)
+        {
+            <div class="printable-card">
+                <div class="card-header">
+                    <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
+                    <h2>كنيسة الشهيد العظيم مارمينا</h2>
+                </div>
+                <div class="card-body">
+                    <div class="profile-container">
+                        @if (!string.IsNullOrEmpty(servant.Photo))
+                        {
+                            <img src="@servant.PhotoPath" alt="Profile Photo" class="profile-image" />
+                        }
+                    </div>
+                    <div class="info">
+                        <strong>@servant.Name</strong>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <img src="/photos/الخدام/qr/@string.Concat(servant.Id,".png")" alt="Barcode" class="barcode" />
+                    <div class="servant-id">@servant.Id</div> <!-- Add this for Servant ID -->
+                </div>
+
+            </div>
+        }
         foreach (var served in Model.Serveds)
         {
             <div class="printable-card">
@@ -30,7 +55,9 @@
                 </div>
                 <div class="card-footer">
                     <img src="/photos/المخدومين/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
+                    <div class="servant-id">@served.Id</div> <!-- Add this for Servant ID -->
                 </div>
+
             </div>
         }
     }

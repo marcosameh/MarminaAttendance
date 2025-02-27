@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AppCore.Common;
 using Microsoft.AspNetCore.Identity;
 using MarminaAttendance.Identity;
+using App.UI.InfraStructure;
 
 namespace App.UI.Pages.Serveds
 {
@@ -17,6 +18,7 @@ namespace App.UI.Pages.Serveds
         private readonly ServedManager ServedManager;
         private readonly ClassManager classManager;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly QrCodeService qrCodeService;
 
         public List<ServedVM> ServedsVM { get; private set; }
         public List<ClassVM> Classes { get; private set; }
@@ -25,11 +27,13 @@ namespace App.UI.Pages.Serveds
         public Served Served { get; set; }
         public ListModel(ServedManager ServedManager,
             ClassManager classManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            QrCodeService qrCodeService)
         {
             this.ServedManager = ServedManager;
             this.classManager = classManager;
             this.userManager = userManager;
+            this.qrCodeService = qrCodeService;
         }
         public void OnGet()
         {
@@ -43,7 +47,7 @@ namespace App.UI.Pages.Serveds
             return new JsonResult(ServedsVM);
         }
 
-        public void OnPost()
+        public async void OnPost()
         {
             FillData();
             if (Served.PhotoFile != null)
@@ -52,7 +56,10 @@ namespace App.UI.Pages.Serveds
 
             }
             var Result = ServedManager.AddServed(Served);
-
+            if (Result.IsSuccess)
+            {
+                await qrCodeService.GenerateQrCodeForServedAsync(Served.Id);
+            }
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم اضافة المخدوم بنجاح" : Result.Error;
           

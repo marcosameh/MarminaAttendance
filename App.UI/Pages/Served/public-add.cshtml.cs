@@ -2,6 +2,7 @@
 using App.Core.Managers;
 using App.Core.Models;
 using App.UI.Ifraustrcuture;
+using App.UI.InfraStructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,22 +12,26 @@ namespace App.UI.Pages.Serveds
     {
         private readonly ClassManager classManager;
         private readonly ServedManager servedManager;
+        private readonly QrCodeService qrCodeService;
 
         [BindProperty]
         public Served Served { get; set; }
         public List<ClassVM> Classes { get; private set; }
 
-        public public_addModel(ClassManager classManager,ServedManager servedManager)
+        public public_addModel(ClassManager classManager,
+            ServedManager servedManager,
+            QrCodeService qrCodeService)
         {
             this.classManager = classManager;
             this.servedManager = servedManager;
+            this.qrCodeService = qrCodeService;
         }
 
         public void OnGet()
         {
             Classes = classManager.GetClasses();
         }
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             Classes = classManager.GetClasses();
 
@@ -38,6 +43,7 @@ namespace App.UI.Pages.Serveds
             var Result = servedManager.AddServed(Served);
             if(Result.IsSuccess)
             {
+               await qrCodeService.GenerateQrCodeForServedAsync(Served.Id);
                 return LocalRedirect($"/thank-you?name={Served.Name}");
             }
             TempData["NotificationType"] =  "error";
