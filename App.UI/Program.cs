@@ -70,7 +70,18 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        if (ctx.File.Name.EndsWith(".png")) // Apply only for images (QR codes)
+        {
+            ctx.Context.Response.Headers.Append("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+            ctx.Context.Response.Headers.Append("Pragma", "no-cache");
+            ctx.Context.Response.Headers.Append("Expires", "0");
+        }
+    }
+});
 
 app.UseRouting();
 app.ConfigureResponsibleServantEndpoints();
