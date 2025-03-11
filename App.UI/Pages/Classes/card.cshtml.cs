@@ -13,26 +13,23 @@ namespace App.UI.Pages.Serveds
     {
         private readonly ServedManager _servedManager;
         private readonly ServantManager _servantManager;
-        private readonly UserManager<ApplicationUser> userManager;
 
         [BindProperty(SupportsGet = true)] public int? classId { get; set; }
 
         public List<ServedVM> Serveds { get; set; }
         public List<ServantVM> Servants { get; set; }
         public printModel(ServedManager servedManager,
-            ServantManager servantManager, UserManager<ApplicationUser> userManager)
+            ServantManager servantManager)
 
         {
             _servedManager = servedManager;
             _servantManager = servantManager;
-            this.userManager = userManager;
         }
         public void OnGet()
         {
             if (classId.HasValue && classId.Value > 0)
-            {
-                var user = userManager.GetUserAsync(User).Result;
-                Servants = _servantManager.GetServants(user.ClassId);
+            {               
+                Servants = _servantManager.GetServants(classId.Value);
                 Serveds = _servedManager.GetServeds(classId.Value);
             }
         }
