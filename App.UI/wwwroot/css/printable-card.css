@@ -1,25 +1,9 @@
-﻿body {
-    -webkit-print-color-adjust: exact;
+﻿
+body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
-}
-.card-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* يجعل الصورة على الشمال */
-    gap: 8px;
-}
-
-.scout-logo {
-    width: 35px; /* تكبير الصورة قليلاً */
-    height: auto;
-}
-
-.card-header h2 {
-    font-size: 16px; /* تصغير العنوان ليتناسب مع الحجم الجديد */
-    margin: 0;
-    flex-grow: 1; /* يضمن عدم انضغاط النص */
-    text-align: right; /* يجعل النص محاذيًا لليمين */
+    text-align: center;
+    direction: rtl; /* Right-to-left for Arabic */
 }
 
 .main-content {
@@ -29,9 +13,9 @@
     padding: 20px;
 }
 
-.print-btn {
-    display: block;
-    margin: 20px auto;
+.print-btn, .back-btn {
+    display: inline-block;
+    margin: 10px;
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -39,7 +23,12 @@
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
+    text-decoration: none;
 }
+
+    .print-btn:hover, .back-btn:hover {
+        background-color: #0056b3;
+    }
 
 .printable-card {
     width: 8.56cm;
@@ -58,32 +47,24 @@
     border: 1px solid #ccc;
 }
 
-.card-footer {
+.card-header {
     display: flex;
-    justify-content: space-between; /* To space the QR code and Servant ID */
-    align-items: flex-end;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    position: relative; /* Ensure we can position the Servant ID properly */
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
 }
 
-.barcode {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
+.scout-logo {
+    width: 35px;
+    height: auto;
 }
 
-.servant-id {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px; /* Small font size */
-    color: #666;
+.card-header h2 {
+    font-size: 16px;
+    margin: 0;
+    flex-grow: 1;
+    text-align: right;
 }
-
-
-
 
 .card-body {
     display: flex;
@@ -114,9 +95,9 @@
 
 .card-footer {
     display: flex;
-    justify-content: flex-end; /* يجعل الـ QR على اليمين */
+    justify-content: space-between;
     align-items: flex-end;
-    padding-right: 5px; /* مسافة بسيطة من الحافة */
+    padding-right: 5px;
     padding-bottom: 5px;
 }
 
@@ -126,10 +107,13 @@
     object-fit: contain;
 }
 
-
+.servant-id {
+    font-size: 10px;
+    color: #666;
+}
 
 @media print {
-    .navbar, .sidebar, .header, .footer, .print-btn {
+    .print-btn, .back-btn {
         display: none !important;
     }
 
@@ -147,3 +131,5 @@
         margin: 0.2cm;
     }
 }
+
+
