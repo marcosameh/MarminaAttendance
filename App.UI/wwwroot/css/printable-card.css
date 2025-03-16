@@ -1,5 +1,4 @@
-﻿
-body {
+﻿body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     text-align: center;
@@ -13,6 +12,7 @@ body {
     padding: 20px;
 }
 
+/* Print & Back Buttons */
 .print-btn, .back-btn {
     display: inline-block;
     margin: 10px;
@@ -30,10 +30,11 @@ body {
         background-color: #0056b3;
     }
 
+/* Printable Card */
 .printable-card {
     width: 8.56cm;
     height: 5.4cm;
-    background-color: #ffffff;
+    background-color: #ffffff !important; /* Ensure background prints */
     border-radius: 8px;
     padding: 10px;
     margin: 10px;
@@ -44,34 +45,41 @@ body {
     text-align: center;
     box-sizing: border-box;
     page-break-inside: avoid;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc !important; /* Ensure border is visible in PDF */
 }
 
+/* Header */
 .card-header {
+    background-color: #f1f1f1;
+    padding: 5px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
+    justify-content: center;
 }
 
 .scout-logo {
     width: 35px;
     height: auto;
+    margin-left: 10px; /* Add space between image and text */
 }
 
 .card-header h2 {
-    font-size: 16px;
+    font-size: 14px;
     margin: 0;
     flex-grow: 1;
     text-align: right;
 }
 
+/* Card Body */
 .card-body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 5px;
 }
 
+/* Profile Image */
 .profile-container {
     width: 50px;
     height: 50px;
@@ -88,30 +96,38 @@ body {
     border: 2px solid #ddd;
 }
 
+/* Name Section */
 .info {
     flex-grow: 1;
     text-align: center;
+    font-size: 14px;
 }
 
+/* Footer */
 .card-footer {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    padding-right: 5px;
-    padding-bottom: 5px;
+    align-items: center;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-radius: 6px;
 }
 
+/* QR Code - Increased Size */
 .barcode {
-    width: 60px;
-    height: 60px;
+    width: 65px !important; /* Bigger for easy scanning */
+    height: 65px !important;
     object-fit: contain;
 }
 
+/* Servant ID */
 .servant-id {
-    font-size: 10px;
+    font-size: 11px; /* Make ID smaller */
     color: #666;
+    margin-right: 5px; /* Add space from the right */
 }
 
+/* Print Settings */
 @media print {
     .print-btn, .back-btn {
         display: none !important;
@@ -131,5 +147,3 @@ body {
         margin: 0.2cm;
     }
 }
-
-
