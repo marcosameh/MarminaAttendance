@@ -211,7 +211,7 @@ namespace App.Core.Managers
                 return Result.Fail<string>($"تم تسجل حضور المخدوم {served.Name} من قبل بالفعل");
             }
             var daysToAdd = DaysToAdd(served.Class.TimeId);
-            if (today> Week.Date.AddDays(daysToAdd).Date)
+            if (today!= Week.Date.AddDays(daysToAdd).Date)
             {
                 return Result.Fail<string>("يوم الخدمة لم ياتى بعد");
             }

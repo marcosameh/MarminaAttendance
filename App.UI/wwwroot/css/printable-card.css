@@ -1,6 +1,6 @@
 ﻿body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+   /* background-color: ;*/
     text-align: center;
     direction: rtl; /* Right-to-left for Arabic */
 }
@@ -76,7 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px;
+    padding: 2px;
 }
 
 /* Profile Image */
@@ -124,7 +124,7 @@
 .servant-id {
     font-size: 11px; /* Make ID smaller */
     color: #666;
-    margin-right: 5px; /* Add space from the right */
+    margin-left: 5px; /* Add space from the right */
 }
 
 /* Print Settings */

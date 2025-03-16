@@ -189,14 +189,14 @@ namespace App.Core.Managers
             return Result.Ok(MapToServantVM(servant));
         }
         
-        public Result<string> AttendanceRegistration(int servedId)
+        public Result<string> AttendanceRegistration(int servantId)
         {
             var Week = _context.Weeks.AsNoTracking().OrderByDescending(w => w.Id).First();
-            var exists = _context.ServantWeek.Any(x => x.ServantId == servedId && x.WeekId == Week.Id);
+            var exists = _context.ServantWeek.Any(x => x.ServantId == servantId && x.WeekId == Week.Id);
             var servant = _context.Servants.AsNoTracking()
                 .Include(s => s.Class)
                 .AsNoTracking()
-                .FirstOrDefault(x => x.Id == servedId);
+                .FirstOrDefault(x => x.Id == servantId);
 
             var today = DateTime.Now.Date;
             if (exists)
@@ -204,13 +204,13 @@ namespace App.Core.Managers
                 return Result.Fail<string>($"تم تسجل حضور الخادم {servant.Name} من قبل بالفعل");
             }
             var daysToAdd = DaysToAdd(servant.Class.TimeId);
-            if (today > Week.Date.AddDays(daysToAdd).Date)
+            if (today != Week.Date.AddDays(daysToAdd).Date)
             {
                 return Result.Fail<string>("يوم الخدمة لم ياتى بعد");
             }
             try
             {
-                _context.ServedWeeks.Add(new ServedWeeks { ServedId = servedId, WeekId = Week.Id });
+                _context.ServantWeek.Add(new ServantWeek { ServantId = servantId, WeekId = Week.Id });
                 _context.SaveChanges();
                 return Result.Ok($"{servant.Name} تم تسجيل الحضور");
             }
