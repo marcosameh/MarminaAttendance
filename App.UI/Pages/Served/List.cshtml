@@ -110,7 +110,7 @@
 
                         data: 'id',
                         "render": function (data) {
-                            return '<a href="/Served/edit/' + data + '" ><i class="fas fa-edit"></i></a> &nbsp;<a onclick="confirmDelete(' + data + ')"  > <i class="fas fa-trash" > </i></a > ';
+                            return '<a href="/Served/edit/' + data + '" ><i class="fas fa-edit"></i></a> &nbsp;<a onclick="confirmDelete(' + data + ')"  > <i class="fas fa-trash" > </i></a>&nbsp; <a href="/Served/card?servedId=' + data + '" ><i class="fas fa-print" style="color:black"></i></a>';
                         }
                     },
                     {

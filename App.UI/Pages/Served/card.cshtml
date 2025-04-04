@@ -19,10 +19,9 @@
     <button onclick="goBack()" class="back-btn">الرجوع</button>
 
     <div class="main-content">
-        @if (Model.Serveds.Any() || Model.Servants.Any())
+        @if (Model.Served !=null)
         {
-            foreach (var servant in Model.Servants)
-            {
+           
                 <div class="printable-card">
                     <div class="card-header">
                         <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
@@ -30,46 +29,23 @@
                     </div>
                     <div class="card-body">
                         <div class="info">
-                            <strong>@servant.Name</strong>
+                            <strong>@Model.Served.Name</strong>
                         </div>
                         <div class="profile-container">
-                            @if (!string.IsNullOrEmpty(servant.Photo))
+                            @if (!string.IsNullOrEmpty(Model.Served.Photo))
                             {
-                                <img src="@servant.PhotoPath" alt="Profile Photo" class="profile-image" />
+                                <img src="@Model.Served.PhotoPath" alt="Profile Photo" class="profile-image" />
                             }
                         </div>
                     </div>
                     <div class="card-footer">
-                        <img src="/photos/الخدام/qr/@string.Concat(servant.Id,".png")" alt="Barcode" class="barcode" />
-                        <div class="servant-id">@servant.Id</div>
+                        <img src="/photos/الخدام/qr/@string.Concat(Model.Served.Id,".png")" alt="Barcode" class="barcode" />
+                        <div class="servant-id">@Model.Served.Id</div>
                     </div>
                 </div>
             }
-            foreach (var served in Model.Serveds)
-            {
-                <div class="printable-card">
-                    <div class="card-header">
-                        <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
-                        <h2>كنيسة الشهيد العظيم مارمينا</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="info">
-                            <strong>@served.Name</strong>
-                        </div>
-                        <div class="profile-container">
-                            @if (!string.IsNullOrEmpty(served.Photo))
-                            {
-                                <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
-                            }
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="servant-id">@served.Id</div>
-                        <img src="/photos/المخدومين/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
-                    </div>
-                </div>
-            }
-        }
+
+        
     </div>
 
     <script>
