@@ -48,7 +48,7 @@
                         data: 'id',
                         render: function (data) {
                             return `<a href="/servant/edit/${data}" class="mr-2"><i class="fas fa-edit"></i></a>
-                                    <a href="javascript:void(0)" onclick="confirmDelete(${data})"><i class="fas fa-trash"></i></a>`;
+                                    <a href="javascript:void(0)" onclick="confirmDelete(${data})"><i class="fas fa-trash"></i></a>&nbsp; <a href="/Servants/card?servantId=${data}" ><i class="fas fa-print" style="color:black"></i></a>`;
                         }
                     },
                     { title: 'الخادم', data: 'name' },

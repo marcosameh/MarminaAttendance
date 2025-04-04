@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace App.UI.Pages.Classes
+namespace App.UI.Pages.Serveds
 {
     [Authorize]
     public class printModel : PageModel
