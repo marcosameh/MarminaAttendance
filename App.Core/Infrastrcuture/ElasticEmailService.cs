@@ -20,14 +20,14 @@ public class EmailManager
         fromName = config.GetSection("MailSettings:FromName").Value;
         fromEmail = config.GetSection("MailSettings:FromEmail").Value;
     }
-    public async Task<Result> SendEmail(string subject, string[] msgTo, string html)
+    public async Task<Result> SendEmail(string subject, string[] msgTo, string[] msgCC, string html)
     {
 
 
         ApiKey = apiKey;
         try
         {
-            await ElasticEmailClient.Api.Email.SendAsync(subject, fromEmail, fromName, msgTo: msgTo, bodyHtml: html);
+            await ElasticEmailClient.Api.Email.SendAsync(subject, fromEmail, fromName, msgTo: msgTo, bodyHtml: html,msgCC: msgCC);
             return Result.Ok();
 
         }

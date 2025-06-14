@@ -12,21 +12,26 @@ namespace App.UI.Pages
         private readonly ClassManager classManager;
         private readonly EmailManager _mailManager;
         private readonly IViewRenderService viewRenderService;
+        private readonly IConfiguration configuration;
 
-        public ScheduleTasksModel(WeekManager weekManager, ClassManager classManager, EmailManager mailManager, IViewRenderService viewRenderService)
+        public ScheduleTasksModel(WeekManager weekManager,
+            ClassManager classManager, 
+            EmailManager mailManager, 
+            IViewRenderService viewRenderService,
+            IConfiguration configuration)
         {
 
             this.weekManager = weekManager;
             this.classManager = classManager;
             this._mailManager = mailManager;
             this.viewRenderService = viewRenderService;
+            this.configuration = configuration;
         }
 
 
         public void OnGet()
         {
             RecurringJob.AddOrUpdate(() => AddNewWeek(), Cron.Weekly(DayOfWeek.Thursday, hour: 0, minute: 1));
-            RecurringJob.AddOrUpdate(() => SendReminderEmailsAsync(), Cron.Monthly(1));
             RecurringJob.AddOrUpdate(() => SendReminderEmailsAsync(), Cron.Monthly(1));
             RecurringJob.AddOrUpdate(() => SendBirthdayEmailsAsync(), Cron.Daily());
 
@@ -43,10 +48,15 @@ namespace App.UI.Pages
             foreach (var reminderEmail in reminderEmails)
             {
                 var MsgTo = reminderEmail.ServantsWhoWillRecieveReminderEmails.Select(x => x.Email).ToArray();
+                var MsgCC = new List<string>();
+                if (configuration["AppName"]== "مدارس الاحد")
+                {
+                    MsgCC.Add("Hany.motie@gmail.com");
+                }
                 var emailContent = await viewRenderService.RenderToStringAsync("ReminderEmail", reminderEmail);
                 if (MsgTo != null && MsgTo.Any())
                 {
-                    _mailManager.SendEmail(emailSubject, MsgTo, emailContent);
+                    _mailManager.SendEmail(emailSubject, MsgTo, MsgCC.ToArray(), emailContent);
                 }
 
             }
@@ -60,9 +70,14 @@ namespace App.UI.Pages
             {
                 var MsgTo = birthdayEmail.Servants.Select(x => x.Email).ToArray();
                 var emailContent = await viewRenderService.RenderToStringAsync("BirthdayEmail", birthdayEmail);
+                var MsgCC = new List<string>();
+                if (configuration["AppName"] == "مدارس الاحد")
+                {
+                    MsgCC.Add("Hany.motie@gmail.com");
+                }
                 if (MsgTo != null && MsgTo.Any())
                 {
-                    _mailManager.SendEmail(emailSubject, MsgTo, emailContent);
+                    _mailManager.SendEmail(emailSubject, MsgTo, MsgCC.ToArray(), emailContent);
                 }
 
             }
