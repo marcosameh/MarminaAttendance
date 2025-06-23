@@ -113,69 +113,81 @@ namespace App.Core.Infrastrcuture
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var package = new ExcelPackage())
             {
-                var worksheet = package.Workbook.Worksheets.Add(string.Concat(CurrentClass.Name, " ", CurrentClass.Time.Time1));
+                var worksheet = package.Workbook.Worksheets.Add($"{CurrentClass.Name} {CurrentClass.Time.Time1}");
 
-                // Add header row
-                worksheet.Cells[1, 1].Value = "الاسم";
+                // اتجاه الجدول من اليمين لليسار
+                worksheet.View.RightToLeft = true;
 
-                // Add data rows
-                int row = 1;
-
-                worksheet.Cells[1, 2].Value = "رقم التليفون";
-                worksheet.Cells[1, 2].Style.Font.Size = 14;
-                worksheet.Cells[1, 3].Value = "العنوان";
-                worksheet.Cells[1, 3].Style.Font.Size = 14;
-                worksheet.Cells[1, 4].Value = "اب الاعتراف";
-                worksheet.Cells[1, 4].Style.Font.Size = 14;
-                worksheet.Cells[1, 5].Value = "تاريخ الميلاد";
-                worksheet.Cells[1, 5].Style.Font.Size = 14;               
-                worksheet.Cells[1, 6].Value = "الخادم المسؤال";
-                worksheet.Cells[1, 6].Style.Font.Size = 14;
-
-                row = 2;
-                worksheet.Cells[2, 1].Value = "الخدام";
-                worksheet.Cells[2, 1].Style.Font.Size = 14;
-                worksheet.Cells[2, 1].Style.Font.Color.SetColor(Color.Red);
+                // الصف الأول - رؤوس الأعمدة
+                int headerRow = 1;
                 int col = 1;
-                row = 3;
+
+                worksheet.Cells[headerRow, col++].Value = "الاسم";
+                worksheet.Cells[headerRow, col++].Value = "الكود";
+                worksheet.Cells[headerRow, col++].Value = "رقم التليفون";
+                worksheet.Cells[headerRow, col++].Value = "العنوان";
+                worksheet.Cells[headerRow, col++].Value = "اب الاعتراف";
+                worksheet.Cells[headerRow, col++].Value = "تاريخ الميلاد";
+                worksheet.Cells[headerRow, col++].Value = "تليفون المنزل";
+                worksheet.Cells[headerRow, col++].Value = "الخادم المسئول";
+
+                for (int i = 1; i <= col; i++)
+                {
+                    worksheet.Cells[headerRow, i].Style.Font.Size = 14;
+                    worksheet.Cells[headerRow, i].Style.Font.Bold = true;
+                }
+
+                // الخدام
+                int row = 2;
+                worksheet.Cells[row, 1].Value = "الخدام";
+                worksheet.Cells[row, 1, row, col].Merge = true;
+                worksheet.Cells[row, 1].Style.Font.Size = 14;
+                worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.Red);
+                worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                row++;
+
                 foreach (var servant in ServantList)
                 {
                     col = 1;
-
-                    worksheet.Cells[row, col].Value = servant.Name;
-                    worksheet.Cells[row, col +=1].Value = servant.Phone;
-                    worksheet.Cells[row, col +=1].Value = servant.Address;
-                    worksheet.Cells[row, col +=1].Value = servant.FatherOfConfession;
-
+                    worksheet.Cells[row, col++].Value = servant.Name;
+                    worksheet.Cells[row, col++].Value = servant.Id;  // الكود
+                    worksheet.Cells[row, col++].Value = servant.Phone;
+                    worksheet.Cells[row, col++].Value = servant.Address;
+                    worksheet.Cells[row, col++].Value = servant.FatherOfConfession;
+                    worksheet.Cells[row, col++].Value = ""; // تاريخ الميلاد: لا ينطبق على الخدام
+                    worksheet.Cells[row, col++].Value = ""; // تليفون المنزل: لا ينطبق على الخدام
+                    worksheet.Cells[row, col++].Value = ""; // الخادم المسئول: لا ينطبق على الخدام
                     row++;
-
                 }
 
-                row = 3+ ServantList.Count();
+                // المخدومين
                 worksheet.Cells[row, 1].Value = "المخدومين";
+                worksheet.Cells[row, 1, row, col].Merge = true;
                 worksheet.Cells[row, 1].Style.Font.Size = 14;
                 worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.Red);
+                worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 row++;
+
                 foreach (var served in ServedList)
                 {
                     col = 1;
-
-                    worksheet.Cells[row, col].Value = served.Name;
-                    worksheet.Cells[row, col +=1].Value = served.Phone;
-                    worksheet.Cells[row, col +=1].Value = served.Address;
-                    worksheet.Cells[row, col +=1].Value = served.FatherOfConfession;
-                    worksheet.Cells[row, col +=1].Value = served.Birthday.HasValue? served.Birthday.Value.ToString("dd /MM/ yyyy"):string.Empty;
-                    worksheet.Cells[row, col +=1].Value = served.ResponsibleServant;
-
+                    worksheet.Cells[row, col++].Value = served.Name;
+                    worksheet.Cells[row, col++].Value = served.Id; // الكود
+                    worksheet.Cells[row, col++].Value = served.Phone;
+                    worksheet.Cells[row, col++].Value = served.Address;
+                    worksheet.Cells[row, col++].Value = served.FatherOfConfession;
+                    worksheet.Cells[row, col++].Value = served.Birthday?.ToString("dd / MM / yyyy") ?? "";
+                    worksheet.Cells[row, col++].Value = served.HomePhone ?? ""; // تليفون المنزل
+                    worksheet.Cells[row, col++].Value = served.ResponsibleServant;
                     row++;
-
                 }
 
-                worksheet.Cells.AutoFitColumns();
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                 result = package.GetAsByteArray();
             }
 
-            return ("كشف بيانات الفصل"+" "+CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
+            return ($"كشف بيانات الفصل {CurrentClass.Name}_{CurrentClass.Time.Time1}.xlsx", result);
         }
+
     }
 }
