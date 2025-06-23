@@ -1,8 +1,7 @@
 ﻿body {
     font-family: 'Arial', sans-serif;
-   /* background-color: ;*/
     text-align: center;
-    direction: rtl; /* Right-to-left for Arabic */
+    direction: rtl;
 }
 
 .main-content {
@@ -12,7 +11,6 @@
     padding: 20px;
 }
 
-/* Print & Back Buttons */
 .print-btn, .back-btn {
     display: inline-block;
     margin: 10px;
@@ -23,18 +21,16 @@
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
-    text-decoration: none;
 }
 
     .print-btn:hover, .back-btn:hover {
         background-color: #0056b3;
     }
 
-/* Printable Card */
 .printable-card {
     width: 8.56cm;
     height: 5.4cm;
-    background-color: #ffffff !important; /* Ensure background prints */
+    background-color: #ffffff !important;
     border-radius: 8px;
     padding: 10px;
     margin: 10px;
@@ -45,10 +41,9 @@
     text-align: center;
     box-sizing: border-box;
     page-break-inside: avoid;
-    border: 1px solid #ccc !important; /* Ensure border is visible in PDF */
+    border: 1px solid #ccc !important;
 }
 
-/* Header */
 .card-header {
     background-color: #f1f1f1;
     padding: 5px;
@@ -61,7 +56,7 @@
 .scout-logo {
     width: 35px;
     height: auto;
-    margin-left: 10px; /* Add space between image and text */
+    margin-left: 10px;
 }
 
 .card-header h2 {
@@ -71,7 +66,6 @@
     text-align: right;
 }
 
-/* Card Body */
 .card-body {
     display: flex;
     align-items: center;
@@ -79,13 +73,13 @@
     padding: 2px;
 }
 
-/* Profile Image */
 .profile-container {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
 }
 
 .profile-image {
@@ -96,38 +90,42 @@
     border: 2px solid #ddd;
 }
 
-/* Name Section */
 .info {
     flex-grow: 1;
     text-align: center;
     font-size: 14px;
 }
 
-/* Footer */
 .card-footer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
     padding: 5px;
     background-color: #f1f1f1;
     border-radius: 6px;
+    position: relative;
+    height: 65px;
 }
 
-/* QR Code - Increased Size */
 .barcode {
-    width: 65px !important; /* Bigger for easy scanning */
+    width: 65px !important;
     height: 65px !important;
     object-fit: contain;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }
 
-/* Servant ID */
 .servant-id {
-    font-size: 11px; /* Make ID smaller */
-    color: #666;
-    margin-left: 5px; /* Add space from the right */
+    font-size: 12px;
+    color: #333;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
-/* Print Settings */
 @media print {
     .print-btn, .back-btn {
         display: none !important;

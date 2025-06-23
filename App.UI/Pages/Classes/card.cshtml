@@ -51,12 +51,14 @@
                             }
                         </div>
                     </div>
+
                     <div class="card-footer">
                         <img src="/photos/الخدام/qr/@string.Concat(servant.Id,".png")" alt="Barcode" class="barcode" />
                         <div class="servant-id">@servant.Id</div>
                     </div>
                 </div>
             }
+
             foreach (var served in Model.Serveds)
             {
                 <div class="printable-card">
@@ -74,6 +76,7 @@
                             <h2>كنيسة الشهيد العظيم مارمينا</h2>
                         </div>
                     }
+
                     <div class="card-body">
                         <div class="info">
                             <strong>@served.Name</strong>
@@ -85,9 +88,10 @@
                             }
                         </div>
                     </div>
+
                     <div class="card-footer">
-                        <div class="servant-id">@served.Id</div>
                         <img src="/photos/المخدومين/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
+                        <div class="servant-id">@served.Id</div>
                     </div>
                 </div>
             }
