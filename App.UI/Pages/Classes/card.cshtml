@@ -1,5 +1,6 @@
 ﻿@page
 @model App.UI.Pages.Classes.printModel
+@inject IConfiguration configuration
 @{
     Layout = null;
 }
@@ -24,10 +25,21 @@
             foreach (var servant in Model.Servants)
             {
                 <div class="printable-card">
-                    <div class="card-header">
-                        <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
-                        <h2>كنيسة الشهيد العظيم مارمينا</h2>
-                    </div>
+                    @if (configuration["AppName"] == "كشافة")
+                    {
+                        <div class="card-header">
+                            <img src="/assets/images/scout-logo.jpg" alt="StMina" class="scout-logo" />
+                            <h2>مجموعات افا مينا الكشفية</h2>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-header">
+                            <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
+                            <h2>كنيسة الشهيد العظيم مارمينا</h2>
+                        </div>
+                    }
+
                     <div class="card-body">
                         <div class="info">
                             <strong>@servant.Name</strong>
@@ -48,10 +60,20 @@
             foreach (var served in Model.Serveds)
             {
                 <div class="printable-card">
-                    <div class="card-header">
-                        <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
-                        <h2>كنيسة الشهيد العظيم مارمينا</h2>
-                    </div>
+                    @if (configuration["AppName"] == "كشافة")
+                    {
+                        <div class="card-header">
+                            <img src="/assets/images/scout-logo.jpg" alt="StMina" class="scout-logo" />
+                            <h2>مجموعات افا مينا الكشفية</h2>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-header">
+                            <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
+                            <h2>كنيسة الشهيد العظيم مارمينا</h2>
+                        </div>
+                    }
                     <div class="card-body">
                         <div class="info">
                             <strong>@served.Name</strong>

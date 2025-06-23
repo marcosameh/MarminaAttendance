@@ -1,5 +1,6 @@
 ﻿@page
 @model App.UI.Pages.Serveds.printModel
+@inject IConfiguration configuration
 @{
     Layout = null;
 }
@@ -19,33 +20,44 @@
     <button onclick="goBack()" class="back-btn">الرجوع</button>
 
     <div class="main-content">
-        @if (Model.Served !=null)
+        @if (Model.Served != null)
         {
-           
-                <div class="printable-card">
+
+            <div class="printable-card">
+                @if (configuration["AppName"] == "كشافة")
+                {
+                    <div class="card-header">
+                        <img src="/assets/images/scout-logo.jpg" alt="StMina" class="scout-logo" />
+                        <h2>مجموعات افا مينا الكشفية</h2>
+                    </div>
+                }
+                else
+                {
                     <div class="card-header">
                         <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
                         <h2>كنيسة الشهيد العظيم مارمينا</h2>
                     </div>
-                    <div class="card-body">
-                        <div class="info">
-                            <strong>@Model.Served.Name</strong>
-                        </div>
-                        <div class="profile-container">
-                            @if (!string.IsNullOrEmpty(Model.Served.Photo))
-                            {
-                                <img src="@Model.Served.PhotoPath" alt="Profile Photo" class="profile-image" />
-                            }
-                        </div>
+                }
+
+                <div class="card-body">
+                    <div class="info">
+                        <strong>@Model.Served.Name</strong>
                     </div>
-                    <div class="card-footer">
-                        <img src="/photos/المخدومين/qr/@string.Concat(Model.Served.Id,".png")" alt="Barcode" class="barcode" />
-                        <div class="servant-id">@Model.Served.Id</div>
+                    <div class="profile-container">
+                        @if (!string.IsNullOrEmpty(Model.Served.Photo))
+                        {
+                            <img src="@Model.Served.PhotoPath" alt="Profile Photo" class="profile-image" />
+                        }
                     </div>
                 </div>
-            }
+                <div class="card-footer">
+                    <img src="/photos/المخدومين/qr/@string.Concat(Model.Served.Id,".png")" alt="Barcode" class="barcode" />
+                    <div class="servant-id">@Model.Served.Id</div>
+                </div>
+            </div>
+        }
 
-        
+
     </div>
 
     <script>
