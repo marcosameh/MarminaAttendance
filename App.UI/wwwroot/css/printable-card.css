@@ -88,8 +88,8 @@
 }
 
 .profile-container {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,10 +111,16 @@
     border-radius: 6px;
     padding: 5px;
 }
+.card-wrapper {
+    margin: 0.15cm;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
 
 .barcode {
-    width: 60px;
-    height: 60px;
+    width: 62px;
+    height: 62px;
     position: absolute;
     bottom: 2px;
     right: 5px;
@@ -149,8 +155,15 @@
     }
 
     .printable-card {
-        margin: 0;
+        margin: 0 !important; /* نلغي أي margin */
         break-inside: avoid;
         page-break-inside: avoid;
     }
+
+    .card-wrapper {
+        margin: 0.15cm !important; /* نضيف الفاصل هنا */
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
 }

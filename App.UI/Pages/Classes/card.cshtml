@@ -24,74 +24,78 @@
         {
             foreach (var servant in Model.Servants)
             {
-                <div class="printable-card">
-                    @if (configuration["AppName"] == "كشافة")
-                    {
-                        <div class="card-header">
-                            <img src="/assets/images/scout-logo.jpg" alt="StMina" class="scout-logo" />
-                            <h2>مجموعات افا مينا الكشفية</h2>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="card-header">
-                            <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
-                            <h2>كنيسة الشهيد العظيم مارمينا</h2>
-                        </div>
-                    }
+                <div class="card-wrapper">
+                    <div class="printable-card">
+                        @if (configuration["AppName"] == "كشافة")
+                        {
+                            <div class="card-header">
+                                <img src="/assets/images/scout-logo.jpg" alt="StMina" class="scout-logo" />
+                                <h2>مجموعات افا مينا الكشفية</h2>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="card-header">
+                                <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
+                                <h2>كنيسة الشهيد العظيم مارمينا</h2>
+                            </div>
+                        }
 
-                    <div class="card-body">
-                        <div class="info">
-                            <strong>@servant.Name</strong>
+                        <div class="card-body">
+                            <div class="info">
+                                <strong>@servant.Name</strong>
+                            </div>
+                            <div class="profile-container">
+                                @if (!string.IsNullOrEmpty(servant.Photo))
+                                {
+                                    <img src="@servant.PhotoPath" alt="Profile Photo" class="profile-image" />
+                                }
+                            </div>
                         </div>
-                        <div class="profile-container">
-                            @if (!string.IsNullOrEmpty(servant.Photo))
-                            {
-                                <img src="@servant.PhotoPath" alt="Profile Photo" class="profile-image" />
-                            }
-                        </div>
-                    </div>
 
-                    <div class="card-footer">
-                        <img src="/photos/الخدام/qr/@string.Concat(servant.Id,".png")" alt="Barcode" class="barcode" />
-                        <div class="servant-id">@servant.Id</div>
+                        <div class="card-footer">
+                            <img src="/photos/الخدام/qr/@string.Concat(servant.Id,".png")" alt="Barcode" class="barcode" />
+                            <div class="servant-id">@servant.Id</div>
+                        </div>
                     </div>
                 </div>
             }
 
             foreach (var served in Model.Serveds)
             {
-                <div class="printable-card">
-                    @if (configuration["AppName"] == "كشافة")
-                    {
-                        <div class="card-header">
-                            <img src="/assets/images/scout-logo.jpg" alt="StMina" class="scout-logo" />
-                            <h2>مجموعات افا مينا الكشفية</h2>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="card-header">
-                            <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
-                            <h2>كنيسة الشهيد العظيم مارمينا</h2>
-                        </div>
-                    }
+                <div class="card-wrapper">
+                    <div class="printable-card">
+                        @if (configuration["AppName"] == "كشافة")
+                        {
+                            <div class="card-header">
+                                <img src="/assets/images/scout-logo.jpg" alt="StMina" class="scout-logo" />
+                                <h2>مجموعات افا مينا الكشفية</h2>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="card-header">
+                                <img src="/assets/images/StMina.jpg" alt="StMina" class="scout-logo" />
+                                <h2>كنيسة الشهيد العظيم مارمينا</h2>
+                            </div>
+                        }
 
-                    <div class="card-body">
-                        <div class="info">
-                            <strong>@served.Name</strong>
+                        <div class="card-body">
+                            <div class="info">
+                                <strong>@served.Name</strong>
+                            </div>
+                            <div class="profile-container">
+                                @if (!string.IsNullOrEmpty(served.Photo))
+                                {
+                                    <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
+                                }
+                            </div>
                         </div>
-                        <div class="profile-container">
-                            @if (!string.IsNullOrEmpty(served.Photo))
-                            {
-                                <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
-                            }
-                        </div>
-                    </div>
 
-                    <div class="card-footer">
-                        <img src="/photos/المخدومين/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
-                        <div class="servant-id">@served.Id</div>
+                        <div class="card-footer">
+                            <img src="/photos/المخدومين/qr/@string.Concat(served.Id,".png")" alt="Barcode" class="barcode" />
+                            <div class="servant-id">@served.Id</div>
+                        </div>
                     </div>
                 </div>
             }
