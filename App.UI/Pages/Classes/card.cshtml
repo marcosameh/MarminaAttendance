@@ -41,15 +41,15 @@
                             </div>
                         }
 
-                        <div class="card-body">
-                            <div class="info">
-                                <strong>@servant.Name</strong>
-                            </div>
+                        <div class="card-body">                        
                             <div class="profile-container">
                                 @if (!string.IsNullOrEmpty(servant.Photo))
                                 {
                                     <img src="@servant.PhotoPath" alt="Profile Photo" class="profile-image" />
                                 }
+                            </div>
+                            <div class="info">
+                                <strong>@servant.Name</strong>
                             </div>
                         </div>
 
@@ -81,14 +81,15 @@
                         }
 
                         <div class="card-body">
-                            <div class="info">
-                                <strong>@served.Name</strong>
-                            </div>
+                          
                             <div class="profile-container">
                                 @if (!string.IsNullOrEmpty(served.Photo))
                                 {
                                     <img src="@served.PhotoPath" alt="Profile Photo" class="profile-image" />
                                 }
+                            </div>
+                            <div class="info">
+                                <strong>@served.Name</strong>
                             </div>
                         </div>
 

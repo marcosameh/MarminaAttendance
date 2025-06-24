@@ -39,15 +39,16 @@
                     </div>
                 }
                     <div class="card-body">
-                        <div class="info">
-                            <strong>@Model.Servant.Name</strong>
-                        </div>
+                       
                         <div class="profile-container">
                             @if (!string.IsNullOrEmpty(Model.Servant.Photo))
                             {
                                 <img src="@Model.Servant.PhotoPath" alt="Profile Photo" class="profile-image" />
                             }
                         </div>
+                    <div class="info">
+                        <strong>@Model.Servant.Name</strong>
+                    </div>
                     </div>
                     <div class="card-footer">
                         <div class="servant-id">@Model.Servant.Id</div>
