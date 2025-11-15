@@ -17,6 +17,16 @@
             <input type="text" class="form-control" asp-for="CurrentClass.Intercessor">
         </div>
         <div class="form-group">
+            <label for="serviceId">الخدمة</label>
+            <select class="form-control form-control-lg" asp-for="CurrentClass.ServiceId">
+                <option value="">اختر الخدمة</option>
+                @foreach (var service in Model.ServiceList)
+                {
+                    <option value="@service.Id">@service.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
             <label for="classTime">وقت الخدمة</label>
             <select class="form-control form-control-lg" asp-for="CurrentClass.TimeId">
                 @foreach (var Time in Model.TimeList)

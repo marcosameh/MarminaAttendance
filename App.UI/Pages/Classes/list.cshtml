@@ -28,15 +28,25 @@
         <form method="post" id="toggle-form">
             <div class="p-3">
                 <div class="form-row">
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label for="chapterName">:اسم الفصل</label>
                         <input type="text" class="form-control" asp-for="classData.Name" id="chapterName" required>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label for="patron">:شفيع الفصل</label>
                         <input type="text" class="form-control" asp-for="classData.Intercessor" id="patron" required>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
+                        <label for="serviceId">:الخدمة</label>
+                        <select class="form-control form-control-lg" id="serviceId" asp-for="classData.ServiceId">
+                            <option value="">اختر الخدمة</option>
+                            @foreach (var service in Model.ServiceList)
+                            {
+                                <option value="@service.Id">@service.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
                         <label for="serviceTime">:وقت الخدمة</label>
                         <select class="form-control form-control-lg" id="serviceTime" asp-for="classData.TimeId" required>
                             @foreach (var time in Model.TimeList)

@@ -17,6 +17,7 @@ namespace App.UI.Pages.Classes
         private readonly ClassManager classManager;
         private readonly WeekManager weekManager;
         private readonly TimeManager timeManager;
+        private readonly ServiceManager serviceManager;
         private readonly int NumberOfWeeksAppearInMarkup = 5;
 
         [BindProperty(SupportsGet = true)]
@@ -26,6 +27,7 @@ namespace App.UI.Pages.Classes
 
         public List<Weeks> Weeks { get; set; }
         public List<Time> TimeList { get; set; }
+        public List<Services> ServiceList { get; set; }
         public List<Servants> ServantList { get; set; }
         public List<Served> ServedList { get; private set; }
         [BindProperty(SupportsGet =false)]
@@ -33,11 +35,12 @@ namespace App.UI.Pages.Classes
 
         [BindProperty]
         public List<ServedWeeksDTO> ServedWeeksDTOs { get; set; }
-        public editModel(ClassManager classManager, WeekManager weekManager, TimeManager timeManager)
+        public editModel(ClassManager classManager, WeekManager weekManager, TimeManager timeManager, ServiceManager serviceManager)
         {
             this.classManager = classManager;
             this.weekManager = weekManager;
             this.timeManager = timeManager;
+            this.serviceManager = serviceManager;
         }
 
         public void OnGet()
@@ -70,6 +73,7 @@ namespace App.UI.Pages.Classes
             CurrentClass = classManager.GetClass(Id);
             Weeks = weekManager.GetWeeks(NumberOfWeeksAppearInMarkup);
             TimeList = timeManager.GetTimeList();
+            ServiceList = serviceManager.GetServicesList();
             ServantList = CurrentClass.Servants?.ToList();
             ServedList = CurrentClass.Served?.ToList();
         }

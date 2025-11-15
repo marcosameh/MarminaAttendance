@@ -13,18 +13,29 @@
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
                 <div class="form-row">
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label for="servant-name">الاسم</label>
                         <input type="text" class="form-control" asp-for="Servant.Name" id="servant-name" required>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label for="servant-phone">رقم التليفون</label>
                         <input type="text" class="form-control" asp-for="Servant.Phone" id="servant-phone" required>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label for="servant-class">الفصل</label>
-                        <select class="form-control" id="servant-class" asp-for="Servant.ClassId" required>
+                        <select class="form-control" id="servant-class" asp-for="Servant.ClassId">
+                            <option value="">اختر الفصل</option>
                             @foreach (var item in Model.Classes)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="servant-service">الخدمة</label>
+                        <select class="form-control" id="servant-service" asp-for="Servant.ServiceId">
+                            <option value="">اختر الخدمة</option>
+                            @foreach (var item in Model.Services)
                             {
                                 <option value="@item.Id">@item.Name</option>
                             }

@@ -14,6 +14,7 @@ namespace AppCore
         public static IServiceCollection AddAppCoreServices(this IServiceCollection services)
         {
 
+
             services.AddScoped<ClassManager>();
                        
 

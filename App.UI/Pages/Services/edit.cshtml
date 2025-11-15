@@ -1,0 +1,20 @@
+@page "/services/edit/{id}"
+@model App.UI.Pages.Service.editModel
+@{
+    ViewData["Title"] = "تعديل بيانات الخدمة";
+}
+
+<div class="container">
+    <h1>تعديل بيانات الخدمة</h1>
+    <form method="post">
+        <input type="hidden" asp-for="CurrentService.Id" />
+        <div class="form-group">
+            <label for="serviceName">اسم الخدمة</label>
+            <input type="text" class="form-control" asp-for="CurrentService.Name" required>
+        </div>
+        <br>
+        <div class="d-flex justify-content-end mb-3 mr-3">
+            <button type="submit" class="btn btn-primary">تحديث</button>
+        </div>
+    </form>
+</div>

@@ -9,31 +9,46 @@ namespace App.Core.Managers
     public class ClassManager
     {
         private readonly MarminaAttendanceContext _context;
+        private readonly CurrentUserManager _currentUserManager;
         private int NumberOfWeeksAppearInMarkup = 5;
 
-        public ClassManager(MarminaAttendanceContext context)
+        public ClassManager(MarminaAttendanceContext context,
+            CurrentUserManager currentUserManager)
         {
             _context = context;
+            _currentUserManager = currentUserManager;
+
+        }
+
+
+        public async Task<IQueryable<ClassVM>> GetFilteredClassesQueryAsync()
+        {
+            var query = _context.Classes.Include(x => x.Time).AsQueryable();
+            var currentServant = await _currentUserManager.GetCurrentServantAsync();
+
+            if (currentServant != null && currentServant.ServiceId.HasValue)
+            {
+                query = query.Where(c => c.ServiceId == currentServant.ServiceId);
+            }
+            else if (currentServant != null && currentServant.ClassId.HasValue)
+            {
+                query = query.Where(c => c.Id == currentServant.ClassId);
+            }
+
+            return query
+                .OrderBy(x => x.Name)
+                .Select(x => new ClassVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Intercessor = x.Intercessor,
+                    Time = x.Time.Time1
+                });
         }
         public List<ClassVM> GetClasses()
         {
 
-            return _context.Classes               
-                .Include(x => x.Time)
-                .OrderBy(x => x.Name)
-                .Select(x => new ClassVM
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Intercessor = x.Intercessor,
-                    Time = x.Time.Time1
-                }).ToList();
-        }
-        public List<ClassVM> GetClasses(int? classId)
-        {
-
             return _context.Classes
-                .Where(x => !classId.HasValue || x.Id == classId.Value)
                 .Include(x => x.Time)
                 .OrderBy(x => x.Name)
                 .Select(x => new ClassVM
@@ -44,6 +59,7 @@ namespace App.Core.Managers
                     Time = x.Time.Time1
                 }).ToList();
         }
+
         public Result AddClass(Classes classData)
         {
             try
@@ -100,6 +116,7 @@ namespace App.Core.Managers
             existingClass.Name = ClassData.Name;
             existingClass.Intercessor = ClassData.Intercessor;
             existingClass.TimeId = ClassData.TimeId;
+            existingClass.ServiceId = ClassData.ServiceId;
 
             // Update the ServantWeek records for each servant
             var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);

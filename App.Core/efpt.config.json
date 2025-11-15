@@ -1,5 +1,5 @@
 ﻿{
-   "CodeGenerationMode": 4,
+   "CodeGenerationMode": 5,
    "ContextClassName": "MarminaAttendanceContext",
    "ContextNamespace": null,
    "FilterSchemas": false,
@@ -32,6 +32,10 @@
       },
       {
          "Name": "[dbo].[ServedWeeks]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Services]",
          "ObjectType": 0
       },
       {

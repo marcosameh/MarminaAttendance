@@ -9,14 +9,23 @@ namespace App.Core.Managers
     public class ServantManager
     {
         private readonly MarminaAttendanceContext _context;
+        private readonly CurrentUserManager _currentUserManager;
         private int NumberOfWeeksAppearInMarkup = 16;
 
-        public ServantManager(MarminaAttendanceContext context)
+        public ServantManager(MarminaAttendanceContext context,
+                        CurrentUserManager currentUserManager)
         {
             _context = context;
+            _currentUserManager = currentUserManager;
         }
         public Result AddServant(Servants newServant)
         {
+            // Validate that servant has either ClassId or ServiceId
+            if (!newServant.ClassId.HasValue && !newServant.ServiceId.HasValue)
+            {
+                return Result.Fail("يجب اختيار فصل أو خدمة للخادم");
+            }
+
             try
             {
                 _context.Servants.Add(newServant);
@@ -31,12 +40,22 @@ namespace App.Core.Managers
 
         }
 
-        public List<ServantVM> GetServants(int? classId)
+        public async Task<IQueryable<ServantVM>> GetFilteredServantsQueryAsync()
         {
+            var query = _context.Servants.Include(s => s.Class).AsQueryable();
 
-            var Servants = _context.Servants
-                .Where(x => !classId.HasValue || x.ClassId == classId)
-                .Include(s => s.Class)
+            var currentServant = await _currentUserManager.GetCurrentServantAsync();
+
+           
+            if (currentServant != null && currentServant.ServiceId.HasValue)
+            {
+                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
+            }
+            else if (currentServant != null && currentServant.ClassId.HasValue)
+            {
+                query = query.Where(s => s.ClassId == currentServant.ClassId);
+            }          
+            return query
                 .OrderBy(x => x.Name)
                 .AsNoTracking()
                 .Select(x => new ServantVM
@@ -49,8 +68,7 @@ namespace App.Core.Managers
                     FatherOfConfession = x.FatherOfConfession,
                     Phone = x.Phone,
                     Photo = x.Photo,
-                }).ToList();
-            return Servants;
+                });
         }
         public List<ServantVM> GetServants()
         {
@@ -117,6 +135,13 @@ namespace App.Core.Managers
                 // Return an error if the class does not exist
                 return Result.Fail("الخادم غير موجود");
             }
+
+            // Validate that servant has either ClassId or ServiceId
+            if (!servant.ClassId.HasValue && !servant.ServiceId.HasValue)
+            {
+                return Result.Fail("يجب اختيار فصل أو خدمة للخادم");
+            }
+
             existServant.Address = servant.Address;
             existServant.Email = servant.Email;
             existServant.Phone = servant.Phone;
@@ -126,6 +151,7 @@ namespace App.Core.Managers
             }
             existServant.Name = servant.Name;
             existServant.ClassId = servant.ClassId;
+            existServant.ServiceId = servant.ServiceId;
             existServant.FatherOfConfession = servant.FatherOfConfession;
             existServant.Leader = servant.Leader;
             existServant.ReceiveReminderEmails = servant.ReceiveReminderEmails;

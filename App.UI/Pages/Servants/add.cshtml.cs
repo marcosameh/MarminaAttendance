@@ -7,7 +7,7 @@ using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Threading.Tasks;
 
 namespace App.UI.Pages.Servant
 {
@@ -16,32 +16,36 @@ namespace App.UI.Pages.Servant
     {
         private readonly ClassManager classManager;
         private readonly ServantManager servantManager;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly CustomUserManager userManager;
         private readonly QrCodeService qrCodeService;
+        private readonly ServiceManager serviceManager;
 
         [BindProperty]
         public Servants Servant { get; set; }
-        public List<ClassVM> Classes { get; private set; }
+        public IQueryable<ClassVM> Classes { get; private set; }
+        public List<Services> Services { get; private set; }
 
         public addModel(ClassManager classManager,
             ServantManager servantManager,
-            UserManager<ApplicationUser> userManager,
+            CustomUserManager userManager,
              RoleManager<IdentityRole> roleManager,
-             QrCodeService qrCodeService)
+             QrCodeService qrCodeService,
+             ServiceManager serviceManager)
 
         {
             this.classManager = classManager;
             this.servantManager = servantManager;
             this.userManager = userManager;
             this.qrCodeService = qrCodeService;
+            this.serviceManager = serviceManager;
         }
-        public void OnGet()
+        public async Task OnGet()
         {
-            FillData();
+            await FillData();
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            FillData();
+            await FillData();
 
             // Handle Photo Upload
             if (Servant.PhotoFile != null)
@@ -57,7 +61,7 @@ namespace App.UI.Pages.Servant
 
             if (!servantResult.IsSuccess)
             {
-                return Page(); // Return the page with an error message
+                return Page();
             }
 
             // Create Application User
@@ -65,7 +69,7 @@ namespace App.UI.Pages.Servant
             {
                 UserName = Servant.Name,
                 Photo = Servant.Photo,
-                ClassId = Servant.ClassId
+                ServantId = Servant.Id,
             };
 
             var userCreationResult = await userManager.CreateAsync(user, Servant.Password);
@@ -76,21 +80,21 @@ namespace App.UI.Pages.Servant
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return Page(); 
+                return Page();
             }
 
             // Assign Role & Sign in User
-            await userManager.AddToRoleAsync(user,"Servant");
+            await userManager.AddToRoleAsync(user, "Servant");
             await qrCodeService.GenerateQrCodeForServantsAsync(Servant.Id);
 
             return LocalRedirect("/Servants/list");
         }
 
 
-        private void FillData()
+        private async Task FillData()
         {
-            var user = userManager.GetUserAsync(User).Result;
-            Classes = classManager.GetClasses(user.ClassId);
+            Classes = await classManager.GetFilteredClassesQueryAsync();
+            Services = serviceManager.GetServicesList();
         }
     }
 }

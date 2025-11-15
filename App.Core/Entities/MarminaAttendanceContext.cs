@@ -23,6 +23,8 @@ public partial class MarminaAttendanceContext : DbContext
 
     public virtual DbSet<ServedWeeks> ServedWeeks { get; set; }
 
+    public virtual DbSet<Services> Services { get; set; }
+
     public virtual DbSet<Time> Time { get; set; }
 
     public virtual DbSet<Weeks> Weeks { get; set; }
@@ -37,6 +39,10 @@ public partial class MarminaAttendanceContext : DbContext
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(60);
+
+            entity.HasOne(d => d.Service).WithMany(p => p.Classes)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK_Classes_Services");
 
             entity.HasOne(d => d.Time).WithMany(p => p.Classes)
                 .HasForeignKey(d => d.TimeId)
@@ -71,8 +77,11 @@ public partial class MarminaAttendanceContext : DbContext
 
             entity.HasOne(d => d.Class).WithMany(p => p.Servants)
                 .HasForeignKey(d => d.ClassId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Servants_Classes");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.Servants)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK_Servants_Services");
         });
 
         modelBuilder.Entity<Served>(entity =>
@@ -109,6 +118,13 @@ public partial class MarminaAttendanceContext : DbContext
             entity.HasOne(d => d.Week).WithMany(p => p.ServedWeeks)
                 .HasForeignKey(d => d.WeekId)
                 .HasConstraintName("FK_ServedWeeks_Weeks");
+        });
+
+        modelBuilder.Entity<Services>(entity =>
+        {
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
         });
 
         modelBuilder.Entity<Time>(entity =>

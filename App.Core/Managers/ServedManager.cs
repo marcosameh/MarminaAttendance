@@ -15,11 +15,13 @@ namespace App.Core.Managers
     public class ServedManager
     {
         private readonly MarminaAttendanceContext _context;
+        private readonly CurrentUserManager _currentUserManager;
         private int NumberOfWeeksAppearInMarkup = 16;
 
-        public ServedManager(MarminaAttendanceContext context)
+        public ServedManager(MarminaAttendanceContext context,CurrentUserManager currentUserManager)
         {
             _context = context;
+            _currentUserManager = currentUserManager;
         }
         public Result AddServed(Served newServed)
         {
@@ -58,47 +60,43 @@ namespace App.Core.Managers
                 }).ToList();
             return Serveds;
         }
-        public List<ServedVM> GetServeds(int? classId)
+        public async Task<IQueryable<ServedVM>> GetFilteredServedsQueryAsync()
         {
-            var Serveds = _context.Served
-                .Where(x=>!classId.HasValue ||x.ClassId==classId)
+            var query = _context.Served
                 .Include(s => s.Class)
                 .Include(x => x.ResponsibleServant)
+                .AsQueryable();
+
+            var currentServant = await _currentUserManager.GetCurrentServantAsync();
+
+            if (currentServant != null && currentServant.ServiceId.HasValue)
+            {
+                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
+            }
+            else if (currentServant != null && currentServant.ClassId.HasValue)
+            {
+                query = query.Where(s => s.ClassId == currentServant.ClassId);
+            }
+            
+            return query
                 .OrderBy(x => x.Name)
                 .AsNoTracking()
                 .Select(x => new ServedVM
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Address = x.Address,
-                Birthday = x.Birthday.HasValue ? x.Birthday.Value.ToString("dd/MM/yyyy") : string.Empty,
-                ClassName = x.Class.Name,
-                ResponsibleServant = x.ResponsibleServant.Name,
-                FatherOfConfession = x.FatherOfConfession,
-                Phone = x.Phone,
-                HomePhone = x.HomePhone,
-                Photo = x.Photo,
-            }).ToList();
-            return Serveds;
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Address = x.Address,
+                    Birthday = x.Birthday.HasValue ? x.Birthday.Value.ToString("dd/MM/yyyy") : string.Empty,
+                    ClassName = x.Class.Name,
+                    ResponsibleServant = x.ResponsibleServant.Name,
+                    FatherOfConfession = x.FatherOfConfession,
+                    Phone = x.Phone,
+                    HomePhone = x.HomePhone,
+                    Photo = x.Photo,
+                });
         }
 
-        public List<ServedVM> GetServeds(int classId)
-        {
-            var Serveds = _context.Served.Where(x=>x.ClassId==classId).Include(s => s.Class).Include(x => x.ResponsibleServant).OrderBy(x => x.Name).AsNoTracking().Select(x => new ServedVM
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Address = x.Address,
-                Birthday = x.Birthday.HasValue ? x.Birthday.Value.ToString("dd/MM/yyyy") : string.Empty,
-                ClassName = x.Class.Name,
-                ResponsibleServant = x.ResponsibleServant.Name,
-                FatherOfConfession = x.FatherOfConfession,
-                Phone = x.Phone,
-                HomePhone = x.HomePhone,
-                Photo = x.Photo,
-            }).ToList();
-            return Serveds;
-        }
+       
         public Result DeleteServed(int ServedId)
         {
             try

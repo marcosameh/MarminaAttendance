@@ -2,13 +2,12 @@
 using App.Core.Managers;
 using App.Core.Models;
 using App.UI.Ifraustrcuture;
+using App.UI.InfraStructure;
+using AppCore.Common;
+using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using AppCore.Common;
-using Microsoft.AspNetCore.Identity;
-using MarminaAttendance.Identity;
-using App.UI.InfraStructure;
 
 namespace App.UI.Pages.Serveds
 {
@@ -17,39 +16,36 @@ namespace App.UI.Pages.Serveds
     {
         private readonly ServedManager ServedManager;
         private readonly ClassManager classManager;
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly QrCodeService qrCodeService;
 
-        public List<ServedVM> ServedsVM { get; private set; }
-        public List<ClassVM> Classes { get; private set; }
+        public IQueryable<ServedVM> ServedsVM { get; private set; }
+        public IQueryable<ClassVM> Classes { get; private set; }
 
         [BindProperty]
         public Served Served { get; set; }
         public ListModel(ServedManager ServedManager,
             ClassManager classManager,
-            UserManager<ApplicationUser> userManager,
+            CustomUserManager userManager,
             QrCodeService qrCodeService)
         {
             this.ServedManager = ServedManager;
             this.classManager = classManager;
-            this.userManager = userManager;
             this.qrCodeService = qrCodeService;
         }
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            FillData();
+            await FillDataAsync();
         }
-        public IActionResult OnGetDisplayServeds()
+        public async Task<IActionResult> OnGetDisplayServedsAsync()
         {
-            var user = userManager.GetUserAsync(User).Result;
-            ServedsVM = ServedManager.GetServeds(user.ClassId);
+            ServedsVM = await ServedManager.GetFilteredServedsQueryAsync();
 
             return new JsonResult(ServedsVM);
         }
 
         public async void OnPost()
         {
-            FillData();
+            await FillDataAsync();
             if (Served.PhotoFile != null)
             {
                 Served.Photo = FileManager.UploadPhoto(Served.PhotoFile, "/wwwroot/photos/المخدومين/", 285, 310);
@@ -62,7 +58,7 @@ namespace App.UI.Pages.Serveds
             }
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم اضافة المخدوم بنجاح" : Result.Error;
-          
+
         }
         public void OnGetDelete(int id)
         {
@@ -70,13 +66,12 @@ namespace App.UI.Pages.Serveds
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم مسح المخدوم " : Result.Error;
-            FillData();
+            FillDataAsync();
         }
 
-        public void FillData()
+        public async Task FillDataAsync()
         {
-            var user = userManager.GetUserAsync(User).Result;
-            Classes = classManager.GetClasses(user.ClassId);
+            Classes = await classManager.GetFilteredClassesQueryAsync();
         }
     }
 }

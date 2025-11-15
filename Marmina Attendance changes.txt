@@ -1,0 +1,16 @@
+Marmina Attendance changes
+
+1) migrate old data 
+
+2) change template 
+
+4) add table services 
+
+5) relation between class and service 
+
+6) service admins
+
+7) add page for birthdays
+
+8) multi-tenants
+

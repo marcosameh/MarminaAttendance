@@ -9,6 +9,8 @@ public partial class Classes
 {
     public int Id { get; set; }
 
+    public int? ServiceId { get; set; }
+
     public string Name { get; set; }
 
     public string Intercessor { get; set; }
@@ -18,6 +20,8 @@ public partial class Classes
     public virtual ICollection<Servants> Servants { get; set; } = new List<Servants>();
 
     public virtual ICollection<Served> Served { get; set; } = new List<Served>();
+
+    public virtual Services Service { get; set; }
 
     public virtual Time Time { get; set; }
 }

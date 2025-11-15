@@ -1,8 +1,6 @@
 using App.Core.Managers;
 using App.Core.Models;
-using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,8 +14,8 @@ namespace App.UI.Pages.Classes
 
         [BindProperty(SupportsGet = true)] public int? classId { get; set; }
 
-        public List<ServedVM> Serveds { get; set; }
-        public List<ServantVM> Servants { get; set; }
+        public IQueryable<ServedVM> Serveds { get; set; }
+        public IQueryable<ServantVM> Servants { get; set; }
         public printModel(ServedManager servedManager,
             ServantManager servantManager)
 
@@ -25,12 +23,12 @@ namespace App.UI.Pages.Classes
             _servedManager = servedManager;
             _servantManager = servantManager;
         }
-        public void OnGet()
+        public async Task OnGet()
         {
             if (classId.HasValue && classId.Value > 0)
-            {               
-                Servants = _servantManager.GetServants(classId.Value);
-                Serveds = _servedManager.GetServeds(classId.Value);
+            {
+                Servants = await _servantManager.GetFilteredServantsQueryAsync();
+                Serveds =await _servedManager.GetFilteredServedsQueryAsync();
             }
         }
     }

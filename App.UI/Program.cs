@@ -29,7 +29,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = false;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+أبتثجحخدذرزسشصضطظعغفقكلمنهويىئءآإةؤا ";
     options.ClaimsIdentity.UserIdClaimType = "UserID";
-}).AddEntityFrameworkStores<IdentityContext>().AddDefaultUI().AddDefaultTokenProviders();
+}).AddEntityFrameworkStores<IdentityContext>()
+.AddDefaultUI()
+.AddUserManager<CustomUserManager>()
+.AddDefaultTokenProviders();
 
 builder.Services.Configure<FormOptions>(options =>
 {
@@ -47,9 +50,11 @@ builder.Services.AddScoped<WeekManager>();
 builder.Services.AddScoped<ServantManager>();
 builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<ServedManager>();
+builder.Services.AddScoped<ServiceManager>();
 builder.Services.AddScoped<EmailManager>();
 builder.Services.AddScoped<ExcelProcessor>();
 builder.Services.AddScoped<QrCodeService>();
+builder.Services.AddScoped<CurrentUserManager>();
 builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
 builder.Services.AddHangfire(configuration => configuration

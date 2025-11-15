@@ -21,6 +21,11 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="service">الخدمة</label>
+                    <select class="form-control form-control-lg" asp-items="Model.Services" asp-for="Servant.ServiceId" id="service">
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="phone">رقم التليفون </label>
                     <input type="text" class="form-control" id="phone" asp-for="Servant.Phone">
                 </div>

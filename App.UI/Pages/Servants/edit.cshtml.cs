@@ -18,7 +18,8 @@ namespace App.UI.Pages.Servant
         private readonly ServantManager servantManager;
         private readonly WeekManager weekManager;
         private readonly ClassManager classManager;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly CustomUserManager userManager;
+        private readonly ServiceManager serviceManager;
         private readonly int NumberOfWeeksAppearInMarkup = 16;
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
@@ -28,28 +29,31 @@ namespace App.UI.Pages.Servant
         [BindProperty]
         public ServantWeeksDTO ServantWeeksDTO { get; set; }
         public SelectList Classes { get; private set; }
+        public SelectList Services { get; private set; }
 
         public EditcshtmlModel(ServantManager servantManager,
             WeekManager weekManager,
             ClassManager classManager,
-            UserManager<ApplicationUser> userManager)
+            CustomUserManager userManager,
+            ServiceManager serviceManager)
         {
             this.servantManager = servantManager;
             this.weekManager = weekManager;
             this.classManager = classManager;
             this.userManager = userManager;
+            this.serviceManager = serviceManager;
         }
         public void OnGet()
         {
-            FillData();
+            FillDataAsync();
         }
-        public void FillData()
+        public async Task FillDataAsync()
         {
 
             WeeksList = weekManager.GetWeeks(NumberOfWeeksAppearInMarkup);
             Servant = servantManager.GetServant(Id);
-            var user = userManager.GetUserAsync(User).Result;
-            Classes = new SelectList(classManager.GetClasses(user.ClassId), "Id", "Name");
+            Classes = new SelectList(await classManager.GetFilteredClassesQueryAsync(), "Id", "Name");
+            Services = new SelectList(serviceManager.GetServicesList(), "Id", "Name");
         }
         public void OnPost()
         {
@@ -62,7 +66,7 @@ namespace App.UI.Pages.Servant
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
-            FillData();
+            FillDataAsync();
 
         }
         public string GetFormattedWeekDate(DateTime week, string Time)

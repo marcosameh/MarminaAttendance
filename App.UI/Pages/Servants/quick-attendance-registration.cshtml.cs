@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AppCore.Common;
 using App.UI.Ifraustrcuture;
+using MarminaAttendance.Identity;
 
 namespace App.UI.Pages.Servant
 {
@@ -12,11 +13,16 @@ namespace App.UI.Pages.Servant
     public class quick_attendance_registrationModel : PageModel
     {
         private readonly ServantManager servantManager;
+        private readonly CustomUserManager customUserManager;
+
         [BindProperty(SupportsGet =true)]
         public int ServantId { get; set; }
-        public quick_attendance_registrationModel(ServantManager servantManager)
+        public quick_attendance_registrationModel(ServantManager servantManager,
+            CustomUserManager customUserManager)
+
         {
             this.servantManager = servantManager;
+            this.customUserManager = customUserManager;
         }
  
         public void OnGet()
