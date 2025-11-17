@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using MarminaAttendance.Identity;
 @using Microsoft.AspNetCore.Identity;
 @model App.UI.Pages.Classes.listModel
@@ -10,107 +10,146 @@
 @{
     var user = UserManager.GetUserAsync(User).Result;
 }
-<link href="~/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
 
-<link href="~/datatables/css/jquery.dataTables.css" rel="stylesheet" />
+@section Styles {
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/form-styles.css" rel="stylesheet" />
+    <style>
+        .dataTables_wrapper .dataTables_filter input,
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+        }
 
+        .btn .material-symbols-rounded {
+            vertical-align: middle;
+            font-size: 18px;
+        }
 
-<div class="container">
-    <if is-true='User.IsInRole("SuperAdmin")'>
-    <div class="border mb-4">
-       <div class="d-flex justify-content-between align-items-center bg-primary p-3" id="toggle-button">
-            <h5 class="text-right m-0 text-white">اضافة فصل جديد</h5>
-            <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#servant-form" aria-expanded="false" aria-controls="servant-form">
-                <span id="toggle-arrow" class="fa fa-angle-down float-left"></span>
-            </button>
-        </div>
+        table.dataTable td {
+            vertical-align: middle;
+        }
 
-        <form method="post" id="toggle-form">
-            <div class="p-3">
-                <div class="form-row">
-                    <div class="col-md-3 mb-3">
-                        <label for="chapterName">:اسم الفصل</label>
-                        <input type="text" class="form-control" asp-for="classData.Name" id="chapterName" required>
+        #ClassListDatatable_wrapper {
+            direction: rtl;
+            text-align: right;
+        }
+
+        #ClassListDatatable thead th {
+            text-align: right;
+        }
+
+        /* Enhanced form styling */
+        #class-form {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #class-form .form-control,
+        #class-form .form-select {
+            border: 1px solid #d2d6da !important;
+            background-color: #fff !important;
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <if is-true='User.IsInRole("SuperAdmin")'>
+                    <div class="card-header p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 text-dark fw-bold">اضافة فصل جديد</h6>
+                            <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#class-form" aria-expanded="false">
+                                <span id="toggle-arrow" class="fa fa-angle-down"></span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="patron">:شفيع الفصل</label>
-                        <input type="text" class="form-control" asp-for="classData.Intercessor" id="patron" required>
+                    <div class="collapse" id="class-form">
+                        <form method="post" class="p-3">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="chapterName" class="form-label">اسم الفصل</label>
+                                    <input type="text" class="form-control" asp-for="classData.Name" id="chapterName" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="patron" class="form-label">شفيع الفصل</label>
+                                    <input type="text" class="form-control" asp-for="classData.Intercessor" id="patron" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="serviceId" class="form-label">الخدمة</label>
+                                    <select class="form-control" id="serviceId" asp-for="classData.ServiceId">
+                                        <option value="">اختر الخدمة</option>
+                                        @foreach (var service in Model.ServiceList)
+                                        {
+                                            <option value="@service.Id">@service.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="serviceTime" class="form-label">وقت الخدمة</label>
+                                    <select class="form-control" id="serviceTime" asp-for="classData.TimeId" required>
+                                        @foreach (var time in Model.TimeList)
+                                        {
+                                            <option value="@time.Id">@time.Time1</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="submit" class="btn btn-primary">اضافة</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="serviceId">:الخدمة</label>
-                        <select class="form-control form-control-lg" id="serviceId" asp-for="classData.ServiceId">
-                            <option value="">اختر الخدمة</option>
-                            @foreach (var service in Model.ServiceList)
-                            {
-                                <option value="@service.Id">@service.Name</option>
-                            }
-                        </select>
+                </if>
+
+                <div class="card-body px-3 pb-4">
+                    <h6 class="mb-3 text-dark fw-bold">قائمة الفصول</h6>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle mb-0" id="ClassListDatatable" style="width:100%">
+                            <thead class="bg-light text-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>اسم الفصل</th>
+                                    <th>شفيع الفصل</th>
+                                    <th>وقت الخدمة</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="serviceTime">:وقت الخدمة</label>
-                        <select class="form-control form-control-lg" id="serviceTime" asp-for="classData.TimeId" required>
-                            @foreach (var time in Model.TimeList)
-                            {
-                                <option value="@time.Id">@time.Time1</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-primary">اضافة</button>
                 </div>
             </div>
-        </form>
-    </div>
-    </if>
-    <div class="table-responsive">
-        <table id="ClassListDatatable" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>اسم الفصل</th>
-                    <th>شفيع الفصل</th>
-                    <th>وقت الخدمة</th>
-                </tr>
-            </thead>
-        </table>
+        </div>
     </div>
 </div>
 
-
-
-
-
-
-
-
-
 @section scripts{
-
-    <script src="~/datatables/js/jquery.dataTables.js"></script>
-    <script src="~/datatables/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#ClassListDatatable").DataTable({
-                //"processing": true,
-                //"serverSide": true,
-                "filter": true,
-                /*pageLength:2,*/
-                "ajax": {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                dom: '<"row mx-2 mt-2 mb-3"<"col-md-6 text-start"l><"col-md-6 text-end"f>>t<"row mx-2 mt-3 mb-2"<"col-md-6"i><"col-md-6"p>>',
+                ajax: {
                     url: "?handler=displayClasses",
                     dataSrc: ""
                 },
-
-
                 columns: [
-                   {
-
+                    {
                         data: 'id',
-                        "render": function (data) {
-                                    return '<a href="/class/edit/' + data + '" ><i class="fas fa-edit"></i></a> &nbsp;<a onclick="confirmDelete(' + data + ')"  > <i class="fas fa-trash" > </i></a> &nbsp; <a href="?handler=downloadexcelattendance&classId=' + data + '"> <i class="fa-solid fa-file-excel" style="color:green" data-toggle="tooltip" data-placement="top" title="كشف حضور وغياب"></i></a>&nbsp;<a href="?handler=downloadexcelclassdetails&classId=' + data + '"> <i class="fa-solid fa-file-arrow-down" data-toggle="tooltip" data-placement="top" title="بيانات الفصل"></i></a>&nbsp; <a href="/Classes/card?classId=' + data + '" ><i class="fas fa-print" style="color:black"></i></a>';
+                        render: function (data) {
+                            return '<a href="/class/edit/' + data + '" class="btn btn-sm btn-outline-primary me-1" title="تعديل"><i class="fas fa-edit"></i></a> ' +
+                                '<a onclick="confirmDelete(' + data + ')" class="btn btn-sm btn-outline-danger me-1" title="حذف"><i class="fas fa-trash"></i></a> ' +
+                                '<a href="?handler=downloadexcelattendance&classId=' + data + '" class="btn btn-sm btn-outline-success me-1" title="كشف حضور وغياب"><i class="fa-solid fa-file-excel"></i></a>' +
+                                '<a href="?handler=downloadexcelclassdetails&classId=' + data + '" class="btn btn-sm btn-outline-info me-1" title="بيانات الفصل"><i class="fa-solid fa-file-arrow-down"></i></a>' +
+                                '<a href="/Classes/card?classId=' + data + '" class="btn btn-sm btn-outline-dark" title="طباعة"><i class="fas fa-print"></i></a>';
                         }
                     },
-
                     {
                         title: 'الفصل',
                         data: 'name'
@@ -118,36 +157,26 @@
                     {
                         title: 'شفيع الفصل',
                         data: 'intercessor',
-
                     },
-
-
                     {
                         title: 'وقت الخدمة',
                         data: 'time'
                     },
-                 
                 ]
-
             });
         });
     </script>
     <script>
         function confirmDelete(id) {
             if (confirm("هل متاكد انك تريد مسح الفصل")) {
-
                 window.location.href = `?handler=Delete&id=${id}`;
             }
         }
     </script>
-      <script>
+    <script>
         $(document).ready(function () {
-            // Hide the form initially
-            $('#toggle-form').hide();
-
             // Toggle form and arrow icon on click
-            $('#toggle-button').click(function () {
-                $('#toggle-form').toggle();
+            $('[data-bs-target="#class-form"]').click(function () {
                 $('#toggle-arrow').toggleClass('fa-angle-down fa-angle-up');
             });
         });

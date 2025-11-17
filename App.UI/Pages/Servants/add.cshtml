@@ -5,89 +5,93 @@
 }
 <link href="~/css/form-styles.css" rel="stylesheet" />
 
-<div class="container">
-    <div class="card shadow-lg mt-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">إضافة خادم جديد</h5>
-        </div>
-        <div class="card-body">
-            <form method="post" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="col-md-3 mb-3">
-                        <label for="servant-name">الاسم</label>
-                        <input type="text" class="form-control" asp-for="Servant.Name" id="servant-name" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="servant-phone">رقم التليفون</label>
-                        <input type="text" class="form-control" asp-for="Servant.Phone" id="servant-phone" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="servant-class">الفصل</label>
-                        <select class="form-control" id="servant-class" asp-for="Servant.ClassId">
-                            <option value="">اختر الفصل</option>
-                            @foreach (var item in Model.Classes)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="servant-service">الخدمة</label>
-                        <select class="form-control" id="servant-service" asp-for="Servant.ServiceId">
-                            <option value="">اختر الخدمة</option>
-                            @foreach (var item in Model.Services)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
-                    </div>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header p-3">
+                    <h6 class="mb-0 text-dark fw-bold">إضافة خادم جديد</h6>
                 </div>
+                <div class="card-body px-3 pb-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-name" class="form-label">الاسم</label>
+                                <input type="text" class="form-control" asp-for="Servant.Name" id="servant-name" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-phone" class="form-label">رقم التليفون</label>
+                                <input type="text" class="form-control" asp-for="Servant.Phone" id="servant-phone" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-class" class="form-label">الفصل</label>
+                                <select class="form-control" id="servant-class" asp-for="Servant.ClassId">
+                                    <option value="">اختر الفصل</option>
+                                    @foreach (var item in Model.Classes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-service" class="form-label">الخدمة</label>
+                                <select class="form-control" id="servant-service" asp-for="Servant.ServiceId">
+                                    <option value="">اختر الخدمة</option>
+                                    @foreach (var item in Model.Services)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                        <label for="servant-address">العنوان</label>
-                        <input type="text" class="form-control" asp-for="Servant.Address" id="servant-address" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="servant-father-name">اب الاعتراف</label>
-                        <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" id="servant-father-name" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="servant-email">الايميل</label>
-                        <input type="email" autocomplete="off" class="form-control" asp-for="Servant.Email" id="servant-email">
-                    </div>
-                </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-address" class="form-label">العنوان</label>
+                                <input type="text" class="form-control" asp-for="Servant.Address" id="servant-address" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-father-name" class="form-label">اب الاعتراف</label>
+                                <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" id="servant-father-name" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-email" class="form-label">الايميل</label>
+                                <input type="email" autocomplete="off" class="form-control" asp-for="Servant.Email" id="servant-email">
+                            </div>
+                        </div>
 
-                <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                        <label for="servant-password">كلمة المرور</label>
-                        <input type="password" autocomplete="off" class="form-control" asp-for="Servant.Password" id="servant-password" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="servant-confirm-password">تأكيد كلمة المرور</label>
-                        <input type="password" autocomplete="off" class="form-control" asp-for="Servant.ConfirmPassword" id="servant-confirm-password" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="servant-image">الصورة</label>
-                        <input type="file" class="form-control" asp-for="Servant.PhotoFile" id="servant-image" accept="image/*">
-                    </div>
-                </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-password" class="form-label">كلمة المرور</label>
+                                <input type="password" autocomplete="off" class="form-control" asp-for="Servant.Password" id="servant-password" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-confirm-password" class="form-label">تأكيد كلمة المرور</label>
+                                <input type="password" autocomplete="off" class="form-control" asp-for="Servant.ConfirmPassword" id="servant-confirm-password" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-image" class="form-label">الصورة</label>
+                                <input type="file" class="form-control" asp-for="Servant.PhotoFile" id="servant-image" accept="image/*">
+                            </div>
+                        </div>
 
-                <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" asp-for="Servant.Leader">
-                    <label class="form-check-label">امين الفصل</label>
-                </div>
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" asp-for="Servant.Leader">
+                            <label class="form-check-label">امين الفصل</label>
+                        </div>
 
-                <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" asp-for="Servant.ReceiveReminderEmails">
-                    <label class="form-check-label">الحصول على ايميل الافتقاد</label>
-                </div>
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" asp-for="Servant.ReceiveReminderEmails">
+                            <label class="form-check-label">الحصول على ايميل الافتقاد</label>
+                        </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="/Servants/List" class="btn btn-secondary">العودة للقائمة</a>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="/Servants/List" class="btn btn-outline-secondary">العودة للقائمة</a>
+                            <button type="submit" class="btn btn-primary">إضافة</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

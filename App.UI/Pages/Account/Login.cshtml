@@ -6,18 +6,20 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="shortcut icon" href="/assets/images/favicon.png" />
+    <link rel="shortcut icon" href="/assets/img/favicon.png" />
     <!-- Custom CSS -->
     <style>
         body {
             background-color: #007bff;
+            direction: rtl;
+            text-align: right;
         }
 
         .form-container {
@@ -26,6 +28,8 @@
             padding: 30px;
             border-radius: 5px;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+            direction: rtl;
+            text-align: right;
         }
 
             .form-container h2 {
@@ -39,6 +43,27 @@
                 margin-bottom: 30px;
                 max-width: 150px;
             }
+
+        .form-group label {
+            text-align: right;
+            display: block;
+        }
+
+        .form-control {
+            text-align: right;
+            direction: rtl;
+        }
+
+        .form-check {
+            text-align: right;
+            padding-right: 1.25rem;
+            padding-left: 0;
+        }
+
+        .form-check-input {
+            margin-right: -1.25rem;
+            margin-left: 0;
+        }
 
         @@media (max-width: 576px) {
             .form-container {
@@ -70,7 +95,7 @@
             <div class="col-lg-6 col-md-8 col-sm-10 mx-auto">
                 <form method="post">
                     <div class="form-container">
-                        <img src="/assets/images/StMina.jpg" alt="StMina">
+                        <img src="/assets/img/StMina.jpg" alt="StMina">
                         <h2>تسجيل الدخول</h2>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">

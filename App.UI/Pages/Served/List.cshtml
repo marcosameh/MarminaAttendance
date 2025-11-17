@@ -3,177 +3,200 @@
 @{
     ViewData["Title"] = "المخدومين";
 }
-<link href="~/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
 
-<link href="~/datatables/css/jquery.dataTables.css" rel="stylesheet" />
-<div class="container">
-    <div class="border mb-4">
-        <div class="d-flex justify-content-between align-items-center bg-primary p-3" id="toggle-button">
-            <h5 class="text-right m-0 text-white">اضافة مخدوم جديد</h5>
-            <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#Served-form" aria-expanded="false" aria-controls="Served-form">
-                <span id="toggle-arrow" class="fa fa-angle-down float-left"></span>
-            </button>
-        </div>
+@section Styles {
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/form-styles.css" rel="stylesheet" />
+    <style>
+        .dataTables_wrapper .dataTables_filter input,
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+        }
 
-        <form method="post" id="toggle-form" enctype="multipart/form-data">
-            <div class="p-3">
-                <div class="form-row">
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-name">الاسم</label>
-                        <input type="text" class="form-control" asp-for="Served.Name" id="Served-name" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-phone">رقم التليفون</label>
-                        <input type="text" class="form-control" asp-for="Served.Phone" id="Served-phone" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Guardian-phone">تليفون ولي الأمر</label>
-                        <input type="text" class="form-control" asp-for="Served.HomePhone" id="Guardian-phone">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-class">الفصل</label>
-                        <select class="form-control form-control-lg" id="Served-class" asp-for="Served.ClassId" required>
-                            @foreach (var item in Model.Classes)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-address">العنوان</label>
-                        <input type="text" class="form-control" asp-for="Served.Address" id="Served-address" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-father-name">اب الاعتراف</label>
-                        <input type="text" class="form-control" asp-for="Served.FatherOfConfession" id="Served-father-name">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-birthdate">تاريخ الميلاد</label>
-                        <input type="date" class="form-control" asp-for="Served.Birthday" id="Served-birthdate" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-image">الصورة</label>
-                        <input type="file" class="form-control" asp-for="Served.PhotoFile" id="Served-image" accept="image/*">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="Served-class">الخادم المسوؤل</label>
-                        <select class="form-control form-control-lg" id="responsible-Servant" asp-for="Served.ResponsibleServantId">
-                        </select>
+        .btn .material-symbols-rounded {
+            vertical-align: middle;
+            font-size: 18px;
+        }
+
+        table.dataTable td {
+            vertical-align: middle;
+        }
+
+        #ServedsDatatable_wrapper {
+            direction: rtl;
+            text-align: right;
+        }
+
+        #ServedsDatatable thead th {
+            text-align: right;
+        }
+
+        /* Enhanced form styling */
+        #Served-form {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #Served-form .form-control,
+        #Served-form .form-select {
+            border: 1px solid #d2d6da !important;
+            background-color: #fff !important;
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 text-dark fw-bold">اضافة مخدوم جديد</h6>
+                        <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#Served-form" aria-expanded="false">
+                            <span id="toggle-arrow" class="fa fa-angle-down"></span>
+                        </button>
                     </div>
                 </div>
-                <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-primary">اضافة</button>
+                <div class="collapse" id="Served-form">
+
+                    <form method="post" class="p-3" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="Served-name" class="form-label">الاسم</label>
+                                <input type="text" class="form-control" asp-for="Served.Name" id="Served-name" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Served-phone" class="form-label">رقم التليفون</label>
+                                <input type="text" class="form-control" asp-for="Served.Phone" id="Served-phone" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Guardian-phone" class="form-label">تليفون ولي الأمر</label>
+                                <input type="text" class="form-control" asp-for="Served.HomePhone" id="Guardian-phone">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Served-class" class="form-label">الفصل</label>
+                                <select class="form-control" id="Served-class" asp-for="Served.ClassId" required>
+                                    @foreach (var item in Model.Classes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Served-address" class="form-label">العنوان</label>
+                                <input type="text" class="form-control" asp-for="Served.Address" id="Served-address" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Served-father-name" class="form-label">اب الاعتراف</label>
+                                <input type="text" class="form-control" asp-for="Served.FatherOfConfession" id="Served-father-name">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Served-birthdate" class="form-label">تاريخ الميلاد</label>
+                                <input type="date" class="form-control" asp-for="Served.Birthday" id="Served-birthdate" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="Served-image" class="form-label">الصورة</label>
+                                <input type="file" class="form-control" asp-for="Served.PhotoFile" id="Served-image" accept="image/*">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="responsible-Servant" class="form-label">الخادم المسوؤل</label>
+                                <select class="form-control" id="responsible-Servant" asp-for="Served.ResponsibleServantId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary">اضافة</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
 
-        
-
-
-    </div>
-    <div class="table-responsive">
-        <table id="ServedsDatatable" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>الخادم</th>
-                    <th>الكود</th>
-                    <th>الصورة</th>
-                    <th>الفصل</th>
-                    <th>التليفون</th>
-                    @*<th>العنوان</th>*@
-                    <th>اب الاعتراف</th>
-                   <th>تاريخ الميلاد</th>
-                   <th>الخادم المسوؤل</th>
-
-                </tr>
-            </thead>
-        </table>
+            <div class="card shadow">
+                <div class="card-body px-3 pb-4">
+                    <h6 class="mb-3 text-dark fw-bold">قائمة المخدومين</h6>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle mb-0" id="ServedsDatatable" style="width:100%">
+                            <thead class="bg-light text-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>المخدوم</th>
+                                    <th>الكود</th>
+                                    <th>الصورة</th>
+                                    <th>الفصل</th>
+                                    <th>التليفون</th>
+                                    <th>اب الاعتراف</th>
+                                    <th>تاريخ الميلاد</th>
+                                    <th>الخادم المسوؤل</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
-@section scripts{
-
-    <script src="~/datatables/js/jquery.dataTables.js"></script>
-    <script src="~/datatables/js/dataTables.bootstrap4.js"></script>
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#ServedsDatatable").DataTable({
-                "filter": true,
-                "ajax": {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                dom: '<"row mx-2 mt-2 mb-3"<"col-md-6 text-start"l><"col-md-6 text-end"f>>t<"row mx-2 mt-3 mb-2"<"col-md-6"i><"col-md-6"p>>',
+                ajax: {
                     url: "?handler=displayServeds",
                     dataSrc: ""
                 },
                 columns: [
                     {
-
                         data: 'id',
-                        "render": function (data) {
-                            return '<a href="/Served/edit/' + data + '" ><i class="fas fa-edit"></i></a> &nbsp;<a onclick="confirmDelete(' + data + ')"  > <i class="fas fa-trash" > </i></a>&nbsp; <a href="/Served/card?servedId=' + data + '" ><i class="fas fa-print" style="color:black"></i></a>';
+                        render: function (data) {
+                            return `
+                                <a href="/Served/edit/${data}" class="btn btn-sm btn-outline-primary me-1" title="تعديل">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="javascript:void(0)" onclick="confirmDelete(${data})" class="btn btn-sm btn-outline-danger me-1" title="حذف">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <a href="/Served/card?servedId=${data}" class="btn btn-sm btn-outline-dark" title="طباعة">
+                                    <i class="fas fa-print"></i>
+                                </a>
+                            `;
                         }
                     },
+                    { data: 'name' },
+                    { data: 'id' },
                     {
-                        title: 'المخدوم',
-                        data: 'name'
-                    },
-                    {
-                        title: 'الكود',
-                        data: 'id'
-                    },
-                    {
-                        title: 'الصورة',
                         data: 'photoPath',
-                        "render": function (data) { return '<img src="' + data + '" style="width:80px;height:80px"/>'; }
+                        render: function (data) {
+                            return `<img src="${data}" alt="صورة المخدوم" class="rounded" style="width:60px;height:60px;object-fit:cover"/>`;
+                        }
                     },
-
-
-                    {
-                        title: 'الفصل',
-                        data: 'className'
-                    },
-                    {
-                        title: 'التليفون',
-                        data: 'phone'
-                    },
-                    //{
-                    //    title: 'العنوان',
-                    //    data: 'address'
-                    //},
-                    {
-                        title: 'اب الاعتراف',
-                        data: 'fatherOfConfession'
-                    },
-                    {
-                        title: 'تاريخ الميلاد',
-                        data: 'birthday'
-                    },
-                    {
-                        title: 'الخادم المسوؤل',
-                        data: 'responsibleServant'
-                    },
-
+                    { data: 'className' },
+                    { data: 'phone' },
+                    { data: 'fatherOfConfession' },
+                    { data: 'birthday' },
+                    { data: 'responsibleServant' }
                 ]
-
             });
         });
-    </script>
-    <script>
-        function confirmDelete(id) {
-            if (confirm("هل متاكد انك تريد مسح المخدوم")) {
 
+        function confirmDelete(id) {
+            if (confirm("هل متأكد أنك تريد حذف هذا المخدوم؟")) {
                 window.location.href = `?handler=Delete&id=${id}`;
             }
         }
-    </script>
-    <script>
-        $(document).ready(function () {
-            // Hide the form initially
-            $('#toggle-form').hide();
 
+        $(document).ready(function () {
             // Toggle form and arrow icon on click
-            $('#toggle-button').click(function () {
-                $('#toggle-form').toggle();
+            $('[data-bs-target="#Served-form"]').click(function () {
                 $('#toggle-arrow').toggleClass('fa-angle-down fa-angle-up');
             });
         });

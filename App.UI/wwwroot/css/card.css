@@ -1,0 +1,249 @@
+﻿
+#printButton {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+
+    select {
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 10mm;
+    box-sizing: border-box;
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 5mm;
+}
+
+.card {
+    width: 85.6mm;
+    height: 53.98mm;
+    background: white;
+    border-radius: 3.18mm;
+    padding: 3mm;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    page-break-inside: avoid;
+    border: 1px solid #ddd;
+}
+.servant-meta {
+    font-size: 7pt;
+    color: #555;
+    line-height: 1.2;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+    .card::before,
+    .card::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        width: 100%;
+        height: 3mm;
+        background-color: #2c3e50;
+    }
+
+    .card::before {
+        top: 0;
+    }
+
+    .card::after {
+        bottom: 0;
+    }
+
+.verse {
+    font-size: 7pt;
+    text-align: center;
+    color: #333;
+    line-height: 1.4;
+    margin: 4mm 0 1mm 0;
+}
+
+.servant-meta {
+    font-size: 6.5pt;
+    color: #555;
+    line-height: 1.2;
+    word-break: break-word;
+    max-height: 18pt; /* تقريبا سطرين */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* سطرين */
+    -webkit-box-orient: vertical;
+}
+
+
+
+/*.card-content {
+    display: flex;
+    flex-direction: row-reverse;*/ /* rtl اتجاه الصورة شمال */
+    /*align-items: center;
+    height: 30mm;
+    margin-top: 2mm;
+}*/
+.card-content {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    gap: 2mm;
+    height: 30mm;
+    margin-top: 2mm;
+}
+
+
+
+.left-image {
+    width: 25mm;
+    height: 30mm;
+    margin-left: 2mm;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+    .left-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.middle {
+    max-width: calc(100% - 27mm); /* نخصم عرض صورة الخادم + margin */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1mm;
+    text-align: center;
+    overflow: hidden;
+}
+
+
+.servant-name {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 2mm;
+    direction: rtl;
+    unicode-bidi: isolate;
+    letter-spacing: 0pt;
+    word-spacing: 1pt;
+    text-align: center;
+}
+
+.servant-title {
+    font-size: 8pt;
+    color: #2c3e50;
+    margin-bottom: 3mm;
+    font-weight: bold;
+}
+
+.code {
+    position: absolute;
+    bottom: 4mm;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 7pt;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    z-index: 2;
+}
+
+.barcode-wrapper {
+    position: absolute;
+    bottom: 4mm;
+    right: 2mm; /* مكانه يمين */
+    width: 20mm;
+    height: 20mm;
+    padding: 0.5mm;
+}
+    .barcode-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+.logo {
+    position: absolute;
+    top: 5mm;
+    left: 2mm;
+    width: 10mm;
+    height: 10mm;
+}
+
+
+    .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+@media print {
+    body {
+        background: none;
+        padding: 0;
+    }
+
+    #printButton {
+        display: none;
+    }
+
+    .page {
+        box-shadow: none;
+        margin: 0;
+        padding: 10mm;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .page {
+        width: 100%;
+        padding: 5mm;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+        gap: 3mm;
+    }
+
+    .card {
+        width: 100%;
+        height: 54mm;
+        margin-bottom: 3mm;
+    }
+
+    #printButton {
+        top: 10px;
+        left: 10px;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}

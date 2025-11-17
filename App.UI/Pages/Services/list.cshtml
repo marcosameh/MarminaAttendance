@@ -10,94 +10,139 @@
 @{
     var user = UserManager.GetUserAsync(User).Result;
 }
-<link href="~/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
 
-<link href="~/datatables/css/jquery.dataTables.css" rel="stylesheet" />
+@section Styles {
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/form-styles.css" rel="stylesheet" />
+    <style>
+        .dataTables_wrapper .dataTables_filter input,
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+        }
 
+        .btn .material-symbols-rounded {
+            vertical-align: middle;
+            font-size: 18px;
+        }
 
-<div class="container">
-    <if is-true='User.IsInRole("SuperAdmin")'>
-    <div class="border mb-4">
-       <div class="d-flex justify-content-between align-items-center bg-primary p-3" id="toggle-button">
-            <h5 class="text-right m-0 text-white">اضافة خدمة جديدة</h5>
-            <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#service-form" aria-expanded="false" aria-controls="service-form">
-                <span id="toggle-arrow" class="fa fa-angle-down float-left"></span>
-            </button>
-        </div>
+        table.dataTable td {
+            vertical-align: middle;
+        }
 
-        <form method="post" id="toggle-form">
-            <div class="p-3">
-                <div class="form-row">
-                    <div class="col-md-12 mb-3">
-                        <label for="serviceName">:اسم الخدمة</label>
-                        <input type="text" class="form-control" asp-for="serviceData.Name" id="serviceName" required>
+        #ServiceListDatatable_wrapper {
+            direction: rtl;
+            text-align: right;
+        }
+
+        #ServiceListDatatable thead th {
+            text-align: right;
+        }
+
+        /* Enhanced form styling */
+        #service-form {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #service-form .form-control {
+            border: 1px solid #d2d6da !important;
+            background-color: #fff !important;
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <if is-true='User.IsInRole("SuperAdmin")'>
+                <div class="card shadow mb-4">
+                    <div class="card-header p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 text-dark fw-bold">اضافة خدمة جديدة</h6>
+                            <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#service-form" aria-expanded="false">
+                                <span id="toggle-arrow" class="fa fa-angle-down"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapse" id="service-form">
+                        <form method="post" class="p-3">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="serviceName" class="form-label">اسم الخدمة</label>
+                                    <input type="text" class="form-control" asp-for="serviceData.Name" id="serviceName" required>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="submit" class="btn btn-primary">اضافة</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-primary">اضافة</button>
+            </if>
+
+            <div class="card shadow">
+                <div class="card-body px-3 pb-4">
+                    <h6 class="mb-3 text-dark fw-bold">قائمة الخدمات</h6>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle mb-0" id="ServiceListDatatable" style="width:100%">
+                            <thead class="bg-light text-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>اسم الخدمة</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </form>
-    </div>
-    </if>
-    <div class="table-responsive">
-        <table id="ServiceListDatatable" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>اسم الخدمة</th>
-                </tr>
-            </thead>
-        </table>
+        </div>
     </div>
 </div>
 
-
-@section scripts{
-
-    <script src="~/datatables/js/jquery.dataTables.js"></script>
-    <script src="~/datatables/js/dataTables.bootstrap4.js"></script>
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#ServiceListDatatable").DataTable({
-                "filter": true,
-                "ajax": {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                dom: '<"row mx-2 mt-2 mb-3"<"col-md-6 text-start"l><"col-md-6 text-end"f>>t<"row mx-2 mt-3 mb-2"<"col-md-6"i><"col-md-6"p>>',
+                ajax: {
                     url: "?handler=displayServices",
                     dataSrc: ""
                 },
-
                 columns: [
-                   {
+                    {
                         data: 'id',
-                        "render": function (data) {
-                            return '<a href="/services/edit/' + data + '" ><i class="fas fa-edit"></i></a> &nbsp;<a onclick="confirmDelete(' + data + ')"  > <i class="fas fa-trash" > </i></a>';
+                        render: function (data) {
+                            return `
+                                <a href="/services/edit/${data}" class="btn btn-sm btn-outline-primary me-1" title="تعديل">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="javascript:void(0)" onclick="confirmDelete(${data})" class="btn btn-sm btn-outline-danger" title="حذف">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            `;
                         }
                     },
-
-                    {
-                        title: 'الخدمة',
-                        data: 'name'
-                    }
+                    { data: 'name' }
                 ]
-
             });
         });
-    </script>
-    <script>
+
         function confirmDelete(id) {
-            if (confirm("هل متاكد انك تريد مسح الخدمة")) {
+            if (confirm("هل متأكد أنك تريد حذف هذه الخدمة؟")) {
                 window.location.href = `?handler=Delete&id=${id}`;
             }
         }
-    </script>
-    <script>
-        $(document).ready(function () {
-            // Hide the form initially
-            $('#toggle-form').hide();
 
+        $(document).ready(function () {
             // Toggle form and arrow icon on click
-            $('#toggle-button').click(function () {
-                $('#toggle-form').toggle();
+            $('[data-bs-target="#service-form"]').click(function () {
                 $('#toggle-arrow').toggleClass('fa-angle-down fa-angle-up');
             });
         });

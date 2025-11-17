@@ -1,0 +1,150 @@
+/* Enhanced Form Styles for MarminaAttendance */
+
+/* Form inputs with borders and better styling */
+.form-control,
+.form-select {
+    border: 1px solid #d2d6da !important;
+    border-radius: 0.5rem !important;
+    padding: 0.625rem 0.75rem !important;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: #fff !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #e91e63 !important;
+    box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.15) !important;
+    outline: 0;
+}
+
+/* Form labels */
+.form-label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #344767;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Form sections with subtle background */
+.form-section {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.form-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #344767;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e91e63;
+}
+
+/* Checkbox styling */
+.form-check-input {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #d2d6da;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #e91e63;
+    border-color: #e91e63;
+}
+
+.form-check-label {
+    font-size: 0.875rem;
+    color: #344767;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+/* File input styling */
+input[type="file"].form-control {
+    padding: 0.5rem 0.75rem;
+}
+
+/* Select dropdown styling */
+select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23344767' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 0.75rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+}
+
+/* Textarea styling */
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Required field indicator */
+.form-label.required::after {
+    content: " *";
+    color: #e91e63;
+}
+
+/* Form row spacing */
+.row.form-row-spacing {
+    margin-bottom: 1rem;
+}
+
+/* Input groups */
+.input-group {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Disabled inputs */
+.form-control:disabled,
+.form-select:disabled {
+    background-color: #e9ecef !important;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Validation states */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: #28a745 !important;
+}
+
+/* Image preview */
+.image-preview {
+    max-width: 200px;
+    border: 2px solid #e9ecef;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+}
+
+.image-preview img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-section {
+        padding: 1rem;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 1rem;
+    }
+}
