@@ -32,6 +32,30 @@
         #ServantsDatatable thead th {
             text-align: right;
         }
+
+        /* Enhanced action buttons */
+        .action-btn {
+            min-width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .action-btn-text {
+            font-size: 12px;
+            margin-right: 4px;
+        }
     </style>
 }
 
@@ -71,17 +95,27 @@
         </div>
     </div>
 </div>
-
+@* // <a href="/Servants/card?servantId=${data}" class="btn btn-sm btn-outline-dark action-btn" data-bs-toggle="tooltip" title="طباعة كارت الخادم">
+    //            <i class="fas fa-print"></i>
+    //            <span class="action-btn-text d-none d-lg-inline">طباعة</span>
+    //
+</a> *@
 @section Scripts {
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#ServantsDatatable").DataTable({
+            var table = $("#ServantsDatatable").DataTable({
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
                 },
                 dom: '<"row mx-2 mt-2 mb-3"<"col-md-6 text-start"l><"col-md-6 text-end"f>>t<"row mx-2 mt-3 mb-2"<"col-md-6"i><"col-md-6"p>>',
+                drawCallback: function() {
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
+                },
                 ajax: {
                     url: "?handler=displayServants",
                     dataSrc: ""
@@ -91,16 +125,19 @@
                         data: 'id',
                         render: function (data) {
                             return `
-                                <a href="/servants/edit/${data}" class="btn btn-sm btn-outline-primary me-1" title="تعديل">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="javascript:void(0)" onclick="confirmDelete(${data})" class="btn btn-sm btn-outline-danger me-1" title="حذف">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                                <a href="/Servants/card?servantId=${data}" class="btn btn-sm btn-outline-dark" title="طباعة">
-                                    <i class="fas fa-print"></i>
-                                </a>
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <a href="/servants/edit/${data}" class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="tooltip" title="تعديل بيانات الخادم">
+                                        <i class="fas fa-edit"></i>
+                                        <span class="action-btn-text d-none d-lg-inline">تعديل</span>
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="confirmDelete(${data})" class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="tooltip" title="حذف الخادم">
+                                        <i class="fas fa-trash"></i>
+                                        <span class="action-btn-text d-none d-lg-inline">حذف</span>
+                                    </a>
+                                    
+                                </div>
                             `;
+                             
                         }
                     },
                     { data: 'name' },
