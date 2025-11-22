@@ -215,110 +215,110 @@ namespace App.Core.Managers
 
         public List<ReminderEmailModel> GetServedNeedToBeRemembered()
         {
-            List<ReminderEmailModel> reminderEmailModels = new List<ReminderEmailModel>();
+            var reminderEmailModels = new List<ReminderEmailModel>();
+            var lastMonth = DateTime.Now.AddMonths(-1);
+            var lastMonthWeekIds = _context.Weeks
+                .Where(w => w.Date.Month == lastMonth.Month)
+                .Select(w => w.Id)
+                .ToList();
 
-            // Get Classes with Servants and Served relationships
-            var classesWithServantsAndServed = _context.Classes
-                .Where(c => c.Servants.Any() && c.Served.Any())
-                .Include(c => c.Servants)
-                .Include(c => c.Served)
-                .ThenInclude(s => s.ServedWeeks)
-                .ThenInclude(sw => sw.Week)
-                .AsNoTracking();
+            var classes = GetClassesWithServantsAndServed(includeServedWeeks: true);
 
-            foreach (var sundaySchoolClass in classesWithServantsAndServed)
+            foreach (var sundaySchoolClass in classes)
             {
-                // Get Servants who receive reminder emails for the class
-                List<Servants> servants = sundaySchoolClass.Servants
-                    .Where(s => !string.IsNullOrEmpty(s.Email))
+                var (classServants, serviceAdminEmails) = GetClassServantsAndAdminEmails(sundaySchoolClass);
+
+                var absentServed = sundaySchoolClass.Served
+                    .Where(served => CountMissedWeeks(served, lastMonthWeekIds) >= 2)
                     .ToList();
 
-                // If no Servants are found, add the first Servant as fallback
-                if (!servants.Any())
+                if (absentServed.Any() && classServants.Any())
                 {
-                    servants.Add(sundaySchoolClass.Servants.FirstOrDefault());
-                }
-
-                var lastMonth = DateTime.Now.AddMonths(-1);
-
-                // Get weeks from the last month
-                var lastMonthWeeks = _context.Weeks
-                    .Where(w => w.Date.Month == lastMonth.Month)
-                    .AsNoTracking();
-
-                List<Served> servedNeedToBeRemembered = new List<Served>();
-
-                foreach (var served in sundaySchoolClass.Served)
-                {
-                    int missedWeeksCount = 0;
-
-                    // Count missed weeks for the served person
-                    foreach (var week in lastMonthWeeks)
-                    {
-                        if (!served.ServedWeeks.Any(sw => sw.WeekId == week.Id))
-                        {
-                            missedWeeksCount++;
-                        }
-                    }
-
-                    if (missedWeeksCount >= 2)
-                    {
-                        servedNeedToBeRemembered.Add(served);
-                    }
-                }
-
-                if (servedNeedToBeRemembered.Any())
-                {
-                    reminderEmailModels.Add(new ReminderEmailModel(servants, servedNeedToBeRemembered));
+                    reminderEmailModels.Add(new ReminderEmailModel(classServants, absentServed, serviceAdminEmails));
                 }
             }
 
             return reminderEmailModels;
         }
-
-
 
         public List<BithdayEmailModel> GetServedNeedToBeRememberedforBithday()
         {
             var today = DateTime.Now;
-            List<BithdayEmailModel> reminderEmailModels = new List<BithdayEmailModel>();
+            var birthdayEmailModels = new List<BithdayEmailModel>();
 
-            // Get Classes with Servants and Served relationships
-            var classesWithServantsAndServed = _context.Classes
-                .Where(c => c.Servants.Any() && c.Served.Any())
-                .Include(c => c.Servants)
-                .Include(c => c.Served)
-                .AsNoTracking();
+            var classes = GetClassesWithServantsAndServed(includeServedWeeks: false);
 
-            foreach (var sundaySchoolClass in classesWithServantsAndServed)
+            foreach (var sundaySchoolClass in classes)
             {
-                // Get Servants who receive reminder emails for the class
-                List<Servants> servants = sundaySchoolClass.Servants
-                    .Where(s => !string.IsNullOrEmpty(s.Email))
+                var (classServants, serviceAdminEmails) = GetClassServantsAndAdminEmails(sundaySchoolClass, addFallback: true);
+
+                var birthdayServed = sundaySchoolClass.Served
+                    .Where(s => s.Birthday?.Month == today.Month && s.Birthday?.Day == today.Day)
                     .ToList();
 
-                // If no Servants are found, add the first Servant as fallback
-                if (!servants.Any())
+                if (birthdayServed.Any() && classServants.Any())
                 {
-                    servants.Add(sundaySchoolClass.Servants.FirstOrDefault());
-                }
-
-
-
-                List<Served> servedNeedToBeRemembered = sundaySchoolClass.Served
-                    .Where(x => x.Birthday?.Month == today.Month && x.Birthday?.Day == today.Day).ToList();
-
-
-
-                if (servedNeedToBeRemembered.Any())
-                {
-                    reminderEmailModels.Add(new BithdayEmailModel(servants, servedNeedToBeRemembered));
+                    birthdayEmailModels.Add(new BithdayEmailModel(classServants, birthdayServed, serviceAdminEmails));
                 }
             }
 
-            return reminderEmailModels;
-
+            return birthdayEmailModels;
         }
+
+        #region Private Helper Methods
+
+        private IEnumerable<Classes> GetClassesWithServantsAndServed(bool includeServedWeeks)
+        {
+            IQueryable<Classes> query = _context.Classes
+                .Where(c => c.Servants.Any() && c.Served.Any())
+                .Include(c => c.Servants)
+                .Include(c => c.Service);
+
+            if (includeServedWeeks)
+            {
+                query = query
+                    .Include(c => c.Served)
+                    .ThenInclude(s => s.ServedWeeks);
+            }
+            else
+            {
+                query = query.Include(c => c.Served);
+            }
+
+            return query.AsNoTracking().ToList();
+        }
+
+        private (List<Servants> classServants, List<string> serviceAdminEmails) GetClassServantsAndAdminEmails(
+            Classes sundaySchoolClass,
+            bool addFallback = false)
+        {
+            var classServants = sundaySchoolClass.Servants
+                .Where(s => !string.IsNullOrEmpty(s.Email) && s.ServiceId == null)
+                .ToList();
+
+            var serviceAdminEmails = sundaySchoolClass.Servants
+                .Where(s => s.ServiceId != null && !string.IsNullOrEmpty(s.Email))
+                .Select(s => s.Email)
+                .ToList();
+
+            if (addFallback && !classServants.Any())
+            {
+                var fallbackServant = sundaySchoolClass.Servants.FirstOrDefault();
+                if (fallbackServant != null)
+                {
+                    classServants.Add(fallbackServant);
+                }
+            }
+
+            return (classServants, serviceAdminEmails);
+        }
+
+        private int CountMissedWeeks(Served served, List<int> weekIds)
+        {
+            return weekIds.Count(weekId => !served.ServedWeeks.Any(sw => sw.WeekId == weekId));
+        }
+
+        #endregion
 
 
 

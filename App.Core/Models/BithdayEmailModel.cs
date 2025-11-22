@@ -7,10 +7,12 @@ namespace App.Core.Models
         public List<Servants> Servants { get; set; }
         public List<Served> BirthdayServed { get; set; }
 
-        public BithdayEmailModel(List<Servants> servants, List<Served> serveds)
+        public List<string> ServiceAdminEmails { get; set; }
+        public BithdayEmailModel(List<Servants> servants, List<Served> serveds, List<string> serviceadminemails)
         {
             Servants = servants;
             BirthdayServed = serveds;
+            ServiceAdminEmails = serviceadminemails;
         }
 
     }

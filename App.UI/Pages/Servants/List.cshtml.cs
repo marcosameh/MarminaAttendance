@@ -60,7 +60,7 @@ namespace App.UI.Pages.Servant
             // Handle Photo Upload
             if (Servant.PhotoFile != null)
             {
-                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/الخدام/", 285, 310);
+                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/servant/", 285, 310);
             }
 
             // Add Servant to the system

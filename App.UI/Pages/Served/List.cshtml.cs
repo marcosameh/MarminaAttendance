@@ -8,30 +8,25 @@ using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 
 namespace App.UI.Pages.Serveds
 {
     [Authorize]
-    public class ListModel : PageModel
+    public class ListModel(ServedManager ServedManager,
+        ClassManager classManager,
+        QrCodeService qrCodeService) : PageModel
     {
-        private readonly ServedManager ServedManager;
-        private readonly ClassManager classManager;
-        private readonly QrCodeService qrCodeService;
+        private readonly ServedManager ServedManager = ServedManager;
+        private readonly ClassManager classManager = classManager;
+        private readonly QrCodeService qrCodeService = qrCodeService;
 
         public IQueryable<ServedVM> ServedsVM { get; private set; }
         public IQueryable<ClassVM> Classes { get; private set; }
 
         [BindProperty]
         public Served Served { get; set; }
-        public ListModel(ServedManager ServedManager,
-            ClassManager classManager,
-            CustomUserManager userManager,
-            QrCodeService qrCodeService)
-        {
-            this.ServedManager = ServedManager;
-            this.classManager = classManager;
-            this.qrCodeService = qrCodeService;
-        }
+
         public async Task OnGetAsync()
         {
             await FillDataAsync();
@@ -48,7 +43,7 @@ namespace App.UI.Pages.Serveds
             await FillDataAsync();
             if (Served.PhotoFile != null)
             {
-                Served.Photo = FileManager.UploadPhoto(Served.PhotoFile, "/wwwroot/photos/المخدومين/", 285, 310);
+                Served.Photo = FileManager.UploadPhoto(Served.PhotoFile, "/wwwroot/photos/Served/", 285, 310);
 
             }
             var Result = ServedManager.AddServed(Served);
@@ -60,13 +55,13 @@ namespace App.UI.Pages.Serveds
             TempData["Message"] = Result.IsSuccess ? "تم اضافة المخدوم بنجاح" : Result.Error;
 
         }
-        public void OnGetDelete(int id)
+        public async Task OnGetDelete(int id)
         {
             var Result = ServedManager.DeleteServed(id);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم مسح المخدوم " : Result.Error;
-            FillDataAsync();
+            await FillDataAsync();
         }
 
         public async Task FillDataAsync()

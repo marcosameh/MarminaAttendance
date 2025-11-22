@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace App.UI.Pages.Serveds
 {
     [Authorize]
-    public class EditcshtmlModel : PageModel
+    public class EditcshtmlModel(ServedManager ServedManager, WeekManager weekManager, ClassManager classManager) : PageModel
     {
-        private readonly ServedManager ServedManager;
-        private readonly WeekManager weekManager;
-        private readonly ClassManager classManager;
+        private readonly ServedManager ServedManager = ServedManager;
+        private readonly WeekManager weekManager = weekManager;
+        private readonly ClassManager classManager = classManager;
         private readonly int NumberOfWeeksAppearInMarkup = 16;
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
@@ -25,12 +25,6 @@ namespace App.UI.Pages.Serveds
         public ServedWeeksDTO ServedWeeksDTO { get; set; }
         public SelectList Classes { get; private set; }
 
-        public EditcshtmlModel(ServedManager ServedManager, WeekManager weekManager, ClassManager classManager)
-        {
-            this.ServedManager = ServedManager;
-            this.weekManager = weekManager;
-            this.classManager = classManager;
-        }
         public void OnGet()
         {
             FillData();
@@ -46,7 +40,7 @@ namespace App.UI.Pages.Serveds
         {
             if (Served.PhotoFile != null)
             {
-                Served.Photo = FileManager.UploadPhoto(Served.PhotoFile, "/wwwroot/photos/المخدومين/", 285, 310);
+                Served.Photo = FileManager.UploadPhoto(Served.PhotoFile, "/wwwroot/photos/Served/", 285, 310);
 
             }
             var Result = ServedManager.UpdateServed(Served, ServedWeeksDTO);

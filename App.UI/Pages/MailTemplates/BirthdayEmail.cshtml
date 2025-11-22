@@ -1,18 +1,20 @@
-﻿@using App.Core.Models;
+@using App.Core.Models;
 @using AppCore.Utilities;
 @model BithdayEmailModel
 
 @{
     Layout = null;
-    string[] Bible = {
-        "ٱلْمَحَبَّةُ تَتَأَنَّى وَتَرْفُقُ. ٱلْمَحَبَّةُ لَا تَحْسِدُ. ٱلْمَحَبَّةُ لَا تَتَفَاخَرُ وَلَا تَنْتَفِخُ.",
-        "لِيَكُنْ كُلُّ شَيْءٍ عِنْدَكُمْ بِمَحَبَّةٍ.",
-        "هَذِهِ هِيَ وَصِيَّتِي أَنْ تُحِبُّوا بَعْضُكُمْ بَعْضًا كَمَا أَحْبَبْتُكُمْ.",
-        "وَٱلرَّبُّ يُنْمِي لَكُمُ ٱلْمَحَبَّةَ بَعْضَكُمْ لِبَعْضٍ وَلِلْجَمِيعِ.",
-        "فَوْقَ كُلِّ شَيْءٍ، ٱلْمَحَبَّةُ تَرْبِطُ ٱلْكُلَّ فِي كَمَالٍ.",
-        "ٱلْمَحَبَّةُ لَا تَسْقُطُ أَبَدًا.",
-        "إِنْ كَانَ أَحَدٌ فِيكُمْ يَسْتَطِيعُ أَنْ يُحِبَّ بِلاَ غَايَةٍ فَلْيَفْعَلْ ذَلِكَ بِإِخْلَاصٍ."
+    string[] egyptianBibleVerses = {
+        "المحبة بتصبر وبترفق، المحبة مش بتحسد، المحبة مش بتتفاخر ولا بتتكبر.",
+        "خلي كل حاجة عندكم تبقى بمحبة.",
+        "دي وصيتي إنكم تحبوا بعض زي ما أنا حبيتكم.",
+        "والرب يكتّر محبتكم لبعض وللناس كلها.",
+        "وفوق ده كله البسوا المحبة اللي هي رباط الكمال.",
+        "المحبة مش بتقع أبداً.",
+        "أحبوا بعض من قلب طاهر بشدة."
     };
+
+    
 }
 
 <!DOCTYPE html>
@@ -20,84 +22,171 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>أعياد الميلاد</title>
+    <title>عيد ميلاد سعيد</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             direction: rtl;
             text-align: center;
-            background-color: lightgray;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
 
         .email-container {
             max-width: 600px;
-            margin: 50px auto; /* إضافة مسافة من الأعلى */
+            margin: 30px auto;
             background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .cake-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
         }
 
         .header {
-            font-size: 24px;
-            color: #d9534f;
-            margin-bottom: 20px;
+            font-size: 28px;
+            color: #e91e63;
+            margin-bottom: 15px;
             font-weight: bold;
-            text-align: center; /* محاذاة النص في المنتصف */
+            text-align: center;
         }
 
         .verse {
-            font-size: 18px;
-            color: #007bff; /* لون مميز للآية */
-            margin: 15px 0;
+            font-size: 16px;
+            color: #7c4dff;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            border-radius: 10px;
             font-style: italic;
-            font-weight: bold;
-            text-align: center; /* محاذاة النص في المنتصف */
+            text-align: center;
         }
 
         .message {
-            font-size: 16px;
-            color: #555;
+            font-size: 18px;
+            color: #333;
             margin-bottom: 20px;
-            text-align: right; /* محاذاة النص لليمين */
+            text-align: right;
+            line-height: 1.8;
         }
 
         .birthday-list {
+            background: #fff3e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .birthday-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .birthday-item:hover {
+            transform: translateX(-5px);
+        }
+
+        .birthday-name {
+            font-weight: bold;
+            color: #e91e63;
             font-size: 16px;
-            color: #444;
-            text-align: right; /* محاذاة النص لليمين */
+        }
+
+        .birthday-name a {
+            color: #e91e63;
+            text-decoration: none;
+        }
+
+        .birthday-name a:hover {
+            text-decoration: underline;
+        }
+
+        .birthday-phone {
+            color: #666;
+            font-size: 14px;
+            direction: ltr;
+        }
+
+        .action-text {
+            font-size: 18px;
+            color: #4caf50;
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .servant-names {
+            color: #1976d2;
+            font-weight: bold;
         }
 
         .footer {
             font-size: 14px;
             color: #888;
-            margin-top: 20px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
             text-align: center;
+        }
+
+        .heart {
+            color: #e91e63;
         }
     </style>
 </head>
 <body>
     <div class="email-container">
-        <div class="header">@Bible.GetRandomElement()</div>
-        <div class="verse">🎉 أعياد ميلاد النهاردة 🎉</div>
-        <div class="message">
-            النهاردة عيد ميلاد:
-            <br />
-            <div class="birthday-list">
-                @foreach (var birthdayPerson in Model.BirthdayServed)
-                {
-                    <div>- <a href="https://marmina.innovix.site/Served/edit/@birthdayPerson.Id" target="_blank">@birthdayPerson.Name</a> - @birthdayPerson.Phone</div>
-                }
-            </div>
-            <br />
-            من فضلك يا @string.Join(", ", Model.Servants.Select(x => x.Name)) قم بمعايدتهم وادخل السرور إلى قلوبهم. 🌹
+        <div class="cake-icon">🎂</div>
+        <div class="header">عيد ميلاد سعيد! 🎉🎈</div>
+
+        <div class="verse">
+            ✨ @egyptianBibleVerses.GetRandomElement() ✨
         </div>
-        <div class="footer">
-            شكرًا لخدمتك الرائعة! ❤️
+
+        <div class="message">
+            ازيكم يا خدام! 👋
+            <br /><br />
+            النهارده عندنا أعياد ميلاد في الفصل، ومحتاجين نفرّح ولادنا ونعايدهم! 🥳
+        </div>
+
+        <div class="birthday-list">
+            <div style="font-size: 20px; color: #ff6f00; margin-bottom: 15px; font-weight: bold;">
+                🎁 اللي عيد ميلادهم النهارده:
+            </div>
+            @foreach (var birthdayPerson in Model.BirthdayServed)
+            {
+                <div class="birthday-item">
+                    <span class="birthday-name">
+                        🎈 <a href="https://marmina.innovix.site/Served/edit/@birthdayPerson.Id" target="_blank">@birthdayPerson.Name</a>
+                    </span>
+                    <span class="birthday-phone">📱 @birthdayPerson.Phone</span>
+                </div>
+            }
+        </div>
+
+        <div class="action-text">
+            يلا يا <span class="servant-names">@string.Join(" و ", Model.Servants.Select(x => x.Name))</span> 💪
             <br />
-            <small>برجاء عدم الرد على هذا الإيميل، حيث أنه رسالة مُرسلة آليًا.</small>
+            كلمهم وعايدهم وادخل الفرحة على قلوبهم! 🌹❤️
+        </div>
+
+        <div class="footer">           
+            ربنا يبارك تعبكم ويعوضكم خير 🙏
+            <br /><br />
+            <small style="color: #aaa;">Please don't reply directly to this email, this is a system generated message.</small>
         </div>
     </div>
 </body>

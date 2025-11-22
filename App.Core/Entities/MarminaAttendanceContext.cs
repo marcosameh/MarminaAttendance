@@ -42,6 +42,7 @@ public partial class MarminaAttendanceContext : DbContext
 
             entity.HasOne(d => d.Service).WithMany(p => p.Classes)
                 .HasForeignKey(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Classes_Services");
 
             entity.HasOne(d => d.Time).WithMany(p => p.Classes)

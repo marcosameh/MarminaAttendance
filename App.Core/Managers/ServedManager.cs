@@ -338,5 +338,58 @@ namespace App.Core.Managers
             };
             return DaysToAdd;
         }
+
+        public async Task<List<BirthdayServedVM>> GetServedByBirthdayMonthAsync(int month)
+        {
+            var today = DateTime.Now.Date;
+            var yesterday = today.AddDays(-1);
+            var tomorrow = today.AddDays(1);
+
+            var query = _context.Served
+                .Include(s => s.Class)
+                .Where(s => s.Birthday.HasValue && s.Birthday.Value.Month == month)
+                .AsQueryable();
+
+            var currentServant = await _currentUserManager.GetCurrentServantAsync();
+
+            if (currentServant != null && currentServant.ServiceId.HasValue)
+            {
+                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
+            }
+            else if (currentServant != null && currentServant.ClassId.HasValue)
+            {
+                query = query.Where(s => s.ClassId == currentServant.ClassId);
+            }
+
+            var served = await query
+                .OrderBy(s => s.Birthday.Value.Day)
+                .AsNoTracking()
+                .Select(s => new BirthdayServedVM
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    ClassName = s.Class.Name,
+                    Phone = s.Phone,
+                    Photo = s.Photo,
+                    Birthday = s.Birthday,
+                    Day = s.Birthday.Value.Day,
+                    Age = today.Year - s.Birthday.Value.Year
+                })
+                .ToListAsync();
+
+            // Set day status flags
+            foreach (var item in served)
+            {
+                if (item.Birthday.HasValue)
+                {
+                    var birthdayThisYear = new DateTime(today.Year, item.Birthday.Value.Month, item.Birthday.Value.Day);
+                    item.IsToday = birthdayThisYear.Date == today;
+                    item.IsYesterday = birthdayThisYear.Date == yesterday;
+                    item.IsTomorrow = birthdayThisYear.Date == tomorrow;
+                }
+            }
+
+            return served;
+        }
     }
 }

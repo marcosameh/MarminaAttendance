@@ -1,0 +1,294 @@
+@page
+@model App.UI.Pages.Serveds.BirthdaysModel
+@{
+    ViewData["Title"] = "اعياد ميلاد شهر " + Model.MonthName;
+}
+
+@section Styles {
+    <style>
+        .birthday-card {
+            transition: all 0.3s ease;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .birthday-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .birthday-photo {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .month-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .month-header h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .month-header .cake-icon {
+            font-size: 50px;
+        }
+
+        .badge-today {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .badge-yesterday {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .badge-tomorrow {
+            background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        @@keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+
+        .card-today {
+            border: 2px solid #ff6b6b !important;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+        }
+
+        .card-yesterday {
+            border: 2px solid #a29bfe !important;
+            background: linear-gradient(135deg, #f8f7ff 0%, #e8e6ff 100%);
+        }
+
+        .card-tomorrow {
+            border: 2px solid #55efc4 !important;
+            background: linear-gradient(135deg, #f0fff9 0%, #d5fff1 100%);
+        }
+
+        .day-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .age-badge {
+            background: #f8f9fa;
+            color: #666;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .month-filter {
+            background: white;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+
+        .month-filter select {
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: bold;
+            color: #667eea;
+            cursor: pointer;
+        }
+
+        .month-filter select:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .phone-link {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .phone-link:hover {
+            text-decoration: underline;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        .stats-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stats-label {
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header -->
+            <div class="month-header shadow">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <span class="cake-icon">🎂</span>
+                    </div>
+                    <div class="col">
+                        <h2>اعياد ميلاد شهر @Model.MonthName 🎉</h2>
+                        <p class="mb-0 opacity-75">عدد المخدومين: @Model.BirthdayServed.Count</p>
+                    </div>
+                    <div class="col-auto">
+                        <div class="month-filter shadow-sm">
+                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                            <select id="monthSelect" onchange="changeMonth(this.value)">
+                                @foreach (var month in Model.Months)
+                                {
+                                    <option value="@month.Value" selected="@(month.Value == Model.Month)">@month.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            @if (Model.BirthdayServed.Any())
+            {
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stats-card shadow-sm">
+                            <div class="stats-number">@Model.BirthdayServed.Count(x => x.IsToday)</div>
+                            <div class="stats-label">🎈 النهارده</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card shadow-sm">
+                            <div class="stats-number">@Model.BirthdayServed.Count(x => x.IsYesterday)</div>
+                            <div class="stats-label">امبارح</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card shadow-sm">
+                            <div class="stats-number">@Model.BirthdayServed.Count(x => x.IsTomorrow)</div>
+                            <div class="stats-label">بكره</div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Birthday Cards -->
+            @if (Model.BirthdayServed.Any())
+            {
+                <div class="row">
+                    @foreach (var served in Model.BirthdayServed)
+                    {
+                        var cardClass = served.IsToday ? "card-today" : (served.IsYesterday ? "card-yesterday" : (served.IsTomorrow ? "card-tomorrow" : ""));
+
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card birthday-card shadow-sm @cardClass">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="day-number">@served.Day</div>
+                                        <img src="@served.PhotoPath" alt="@served.Name" class="birthday-photo mx-3" />
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 fw-bold">
+                                                <a href="/Served/edit/@served.Id" class="text-dark text-decoration-none">@served.Name</a>
+                                                @if (!string.IsNullOrEmpty(served.DayStatus))
+                                                {
+                                                    <span class="badge-@served.DayStatus ms-2">@served.DayStatusText</span>
+                                                }
+                                            </h6>
+                                            <p class="text-muted mb-1 small">
+                                                <i class="fas fa-users me-1"></i> @served.ClassName
+                                            </p>
+                                            @if (!string.IsNullOrEmpty(served.Phone))
+                                            {
+                                                <p class="mb-1 small">
+                                                    <a href="tel:@served.Phone" class="phone-link">
+                                                        <i class="fas fa-phone me-1"></i> @served.Phone
+                                                    </a>
+                                                </p>
+                                            }
+                                            <span class="age-badge">
+                                                <i class="fas fa-calendar me-1"></i> @served.BirthdayFormatted
+                                            </span>
+                                            <span class="age-badge ms-1">
+                                                <i class="fas fa-birthday-cake me-1"></i> @served.Age سنة
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body empty-state">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h4>مفيش اعياد ميلاد في شهر @Model.MonthName</h4>
+                        <p>جرب تختار شهر تاني من القائمة</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function changeMonth(month) {
+            window.location.href = '?month=' + month;
+        }
+
+        // Set the selected month in dropdown
+        $(document).ready(function() {
+            $('#monthSelect').val(@Model.Month);
+        });
+    </script>
+}

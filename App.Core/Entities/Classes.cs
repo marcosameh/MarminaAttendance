@@ -9,7 +9,7 @@ public partial class Classes
 {
     public int Id { get; set; }
 
-    public int? ServiceId { get; set; }
+    public int ServiceId { get; set; }
 
     public string Name { get; set; }
 

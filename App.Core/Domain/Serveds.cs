@@ -18,9 +18,9 @@ namespace App.Core.Entities
             {
                 if (string.IsNullOrEmpty(Photo))
                 {
-                    return "/photos/المخدومين/default.jpg";
+                    return "/photos/Served/default.jpg";
                 }
-                return "/photos/المخدومين/" + Photo;
+                return "/photos/Served/" + Photo;
             }
 
         }
