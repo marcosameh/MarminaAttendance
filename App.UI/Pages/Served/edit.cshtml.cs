@@ -1,8 +1,7 @@
 ﻿using App.Core.Entities;
-using App.Core.Enums;
 using App.Core.Managers;
 using App.Core.Models;
-using App.UI.Ifraustrcuture;
+using App.UI.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

@@ -12,6 +12,8 @@ namespace App.Core.Models
 
         public string ClassName { get; set; }
 
+        public string ServiceName { get; set; }
+
         public string Name { get; set; }
 
         public string Photo {  get; set; }

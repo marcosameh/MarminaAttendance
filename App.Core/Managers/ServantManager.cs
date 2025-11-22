@@ -18,23 +18,23 @@ namespace App.Core.Managers
             _context = context;
             _currentUserManager = currentUserManager;
         }
-        public Result AddServant(Servants newServant)
+        public Result<int> AddServant(Servants newServant)
         {
             // Validate that servant has either ClassId or ServiceId
             if (!newServant.ClassId.HasValue && !newServant.ServiceId.HasValue)
             {
-                return Result.Fail("يجب اختيار فصل أو خدمة للخادم");
+                return Result.Fail<int>("يجب اختيار فصل أو خدمة للخادم");
             }
 
             try
             {
                 _context.Servants.Add(newServant);
                 _context.SaveChanges();
-                return Result.Ok();
+                return Result.Ok(newServant.Id);
             }
             catch (Exception ex)
             {
-                return Result.Fail($"{ex.Message}{(ex.InnerException != null ? $" Inner Exception: {ex.InnerException.Message}" : "")}");
+                return Result.Fail<int>($"{ex.Message}{(ex.InnerException != null ? $" Inner Exception: {ex.InnerException.Message}" : "")}");
             }
 
 
@@ -105,6 +105,28 @@ namespace App.Core.Managers
                 Photo = x.Photo,
             }).ToList();
             return Servants;
+        }
+
+        public List<ServantVM> GetServiceAdmins()
+        {
+            // Get servants who have ServiceId (service-level servants / أمين خدمة)
+            var serviceAdmins = _context.Servants
+                .Include(s => s.Service)
+                .Where(s => s.ServiceId.HasValue)
+                .AsNoTracking()
+                .OrderBy(x => x.Name)
+                .Select(x => new ServantVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Address = x.Address,
+                    Email = x.Email,
+                    ServiceName = x.Service.Name,
+                    FatherOfConfession = x.FatherOfConfession,
+                    Phone = x.Phone,
+                    Photo = x.Photo,
+                }).ToList();
+            return serviceAdmins;
         }
         public Result DeleteServant(int servantId)
         {

@@ -1,14 +1,13 @@
 ﻿using App.Core.Entities;
 using App.Core.Managers;
 using App.Core.Models;
-using App.UI.Ifraustrcuture;
+using App.UI.Infrastructure;
 using App.UI.InfraStructure;
 using AppCore.Common;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
 
 namespace App.UI.Pages.Servant
 {
@@ -25,9 +24,9 @@ namespace App.UI.Pages.Servant
         public ClassManager ClassManager { get; }
         public List<ClassVM> Classes { get; private set; }
 
-       
+
         public public_addModel(ClassManager classManager,
-            ServantManager servantManager, 
+            ServantManager servantManager,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             QrCodeService qrCodeService,

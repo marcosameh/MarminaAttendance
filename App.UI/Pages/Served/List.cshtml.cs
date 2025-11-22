@@ -1,7 +1,7 @@
 ﻿using App.Core.Entities;
 using App.Core.Managers;
 using App.Core.Models;
-using App.UI.Ifraustrcuture;
+using App.UI.Infrastructure;
 using App.UI.InfraStructure;
 using AppCore.Common;
 using MarminaAttendance.Identity;

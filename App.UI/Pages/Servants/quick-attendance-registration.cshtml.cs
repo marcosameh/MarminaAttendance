@@ -1,11 +1,9 @@
 ﻿using App.Core.Managers;
-using App.Core.Models;
+using AppCore.Common;
+using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using AppCore.Common;
-using App.UI.Ifraustrcuture;
-using MarminaAttendance.Identity;
 
 namespace App.UI.Pages.Servant
 {
@@ -15,7 +13,7 @@ namespace App.UI.Pages.Servant
         private readonly ServantManager servantManager;
         private readonly CustomUserManager customUserManager;
 
-        [BindProperty(SupportsGet =true)]
+        [BindProperty(SupportsGet = true)]
         public int ServantId { get; set; }
         public quick_attendance_registrationModel(ServantManager servantManager,
             CustomUserManager customUserManager)
@@ -24,7 +22,7 @@ namespace App.UI.Pages.Servant
             this.servantManager = servantManager;
             this.customUserManager = customUserManager;
         }
- 
+
         public void OnGet()
         {
         }
@@ -37,15 +35,15 @@ namespace App.UI.Pages.Servant
             {
                 return new JsonResult(result.Value);
             }
-            return BadRequest(result.Error);         
+            return BadRequest(result.Error);
         }
         public void OnPost()
         {
-                     
+
             var Result = servantManager.AttendanceRegistration(ServantId);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
-            TempData["Message"] = Result.IsSuccess? "تم تسحيل حضور الخادم" : Result.Error;
+            TempData["Message"] = Result.IsSuccess ? "تم تسحيل حضور الخادم" : Result.Error;
 
         }
 

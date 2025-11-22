@@ -1,10 +1,8 @@
 ﻿using App.Core.Managers;
-using App.Core.Models;
+using AppCore.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using AppCore.Common;
-using App.UI.Ifraustrcuture;
 
 namespace App.UI.Pages.Serveds
 {
@@ -12,13 +10,13 @@ namespace App.UI.Pages.Serveds
     public class quick_attendance_registrationModel : PageModel
     {
         private readonly ServedManager ServedManager;
-        [BindProperty(SupportsGet =true)]
+        [BindProperty(SupportsGet = true)]
         public int ServedId { get; set; }
         public quick_attendance_registrationModel(ServedManager ServedManager)
         {
             this.ServedManager = ServedManager;
         }
- 
+
         public void OnGet()
         {
         }
@@ -31,11 +29,11 @@ namespace App.UI.Pages.Serveds
             {
                 return new JsonResult(result.Value);
             }
-            return BadRequest(result.Error);         
+            return BadRequest(result.Error);
         }
         public void OnPost()
         {
-                     
+
             var Result = ServedManager.AttendanceRegistration(ServedId);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";

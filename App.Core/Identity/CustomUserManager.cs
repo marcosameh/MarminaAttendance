@@ -54,5 +54,12 @@ namespace MarminaAttendance.Identity
                 .Include(u => u.Servant)
                 .ToListAsync();
         }
+
+        // Find user by ServantId
+        public async Task<ApplicationUser> FindByServantIdAsync(int servantId)
+        {
+            return await Users
+                .FirstOrDefaultAsync(u => u.ServantId == servantId);
+        }
     }
 }

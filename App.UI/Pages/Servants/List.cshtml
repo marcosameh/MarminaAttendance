@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model App.UI.Pages.Servant.ListModel
 @{
     ViewData["Title"] = "الخدام";
@@ -56,25 +56,197 @@
             font-size: 12px;
             margin-right: 4px;
         }
+
+        /* Enhanced form styling */
+        #Servant-form {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #Servant-form .form-control,
+        #Servant-form .form-select {
+            border: 1px solid #d2d6da !important;
+            background-color: #fff !important;
+        }
+
+        /* Assignment type hints */
+        .assignment-hint {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .assignment-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .badge-class-only {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-service-only {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-both {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .hint-box {
+            background-color: #fff8e1;
+            border: 1px solid #ffe082;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        .hint-box h6 {
+            color: #f57c00;
+            margin-bottom: 8px;
+        }
+
+        .hint-box ul {
+            margin-bottom: 0;
+            padding-right: 20px;
+        }
+
+        .hint-box li {
+            font-size: 13px;
+            color: #5d4037;
+            margin-bottom: 4px;
+        }
+
+        .username-display {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #495057;
+            font-weight: 500;
+        }
     </style>
 }
 
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header p-3 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 text-dark fw-bold">الخدام</h6>
-
-                    <div class="d-flex align-items-center me-auto">
-                        <a href="/Servants/Add" class="btn btn-outline-dark btn-sm">
-                            <span class="material-symbols-rounded align-middle">person_add</span>
-                            <span class="align-middle">إضافة خادم</span>
-                        </a>
+            <!-- Add Servant Form Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header p-3" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#Servant-form" aria-expanded="false">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 text-dark fw-bold">إضافة خادم جديد</h6>
+                        <span id="toggle-arrow-servant" class="fa fa-angle-down text-dark"></span>
                     </div>
                 </div>
+                <div class="collapse" id="Servant-form">
+                    <form method="post" class="p-3" enctype="multipart/form-data">
+                        <!-- Assignment Hint Box -->
+                        <div class="hint-box">
+                            <h6><i class="fas fa-info-circle me-1"></i> تلميح: نوع التعيين</h6>
+                            <ul>
+                                <li><strong>فصل فقط:</strong> الخادم يخدم في فصل محدد ويحضر مع المخدومين</li>
+                                <li><strong>خدمة فقط (أمين خدمة):</strong> الخادم مسؤول عن خدمة كاملة ويشرف على الفصول</li>
+                                <li><strong>فصل + خدمة:</strong> الخادم يخدم في فصل وأيضاً له صلاحيات أمين خدمة</li>
+                            </ul>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-name" class="form-label">الاسم <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" asp-for="Servant.Name" id="servant-name" required>
+                            </div>
+                          
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-phone" class="form-label">رقم التليفون <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" asp-for="Servant.Phone" id="servant-phone" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-email" class="form-label">الايميل</label>
+                                <input type="email" autocomplete="off" class="form-control" asp-for="Servant.Email" id="servant-email">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-class" class="form-label">الفصل</label>
+                                <select class="form-control" id="servant-class" asp-for="Servant.ClassId">
+                                    <option value="">-- بدون فصل --</option>
+                                    @foreach (var item in Model.Classes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                                <small class="assignment-hint">اختر الفصل إذا كان الخادم يخدم في فصل معين</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="servant-service" class="form-label">الخدمة (أمين خدمة)</label>
+                                <select class="form-control" id="servant-service" asp-for="Servant.ServiceId">
+                                    <option value="">-- بدون خدمة --</option>
+                                    @foreach (var item in Model.Services)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                                <small class="assignment-hint">اختر الخدمة إذا كان الخادم أمين خدمة</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">نوع التعيين</label>
+                                <div id="assignment-type-badge">
+                                    <span class="assignment-badge" style="background-color: #ffebee; color: #c62828;">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        يجب اختيار فصل أو خدمة
+                                    </span>
+                                </div>
+                            </div>
+                           
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-address" class="form-label">العنوان <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" asp-for="Servant.Address" id="servant-address" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-father-name" class="form-label">اب الاعتراف <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" asp-for="Servant.FatherOfConfession" id="servant-father-name" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-image" class="form-label">الصورة</label>
+                                <input type="file" class="form-control" asp-for="Servant.PhotoFile" id="servant-image" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-password" class="form-label">كلمة المرور <span class="text-danger">*</span></label>
+                                <input type="password" autocomplete="new-password" class="form-control" asp-for="Servant.Password" id="servant-password" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="servant-confirm-password" class="form-label">تأكيد كلمة المرور <span class="text-danger">*</span></label>
+                                <input type="password" autocomplete="new-password" class="form-control" asp-for="Servant.ConfirmPassword" id="servant-confirm-password" required>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
+                                <i class="fas fa-plus me-1"></i> إضافة
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Servants List Card -->
+            <div class="card shadow">
                 <div class="card-body px-3 pb-4">
+                    <h6 class="mb-3 text-dark fw-bold">قائمة الخدام</h6>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped align-middle mb-0" id="ServantsDatatable" style="width:100%">
                             <thead class="bg-light text-dark">
@@ -95,16 +267,13 @@
         </div>
     </div>
 </div>
-@* // <a href="/Servants/card?servantId=${data}" class="btn btn-sm btn-outline-dark action-btn" data-bs-toggle="tooltip" title="طباعة كارت الخادم">
-    //            <i class="fas fa-print"></i>
-    //            <span class="action-btn-text d-none d-lg-inline">طباعة</span>
-    //
-</a> *@
+
 @section Scripts {
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
+            // DataTable initialization
             var table = $("#ServantsDatatable").DataTable({
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
@@ -134,10 +303,8 @@
                                         <i class="fas fa-trash"></i>
                                         <span class="action-btn-text d-none d-lg-inline">حذف</span>
                                     </a>
-                                    
                                 </div>
                             `;
-                             
                         }
                     },
                     { data: 'name' },
@@ -152,6 +319,58 @@
                     { data: 'phone' },
                     { data: 'fatherOfConfession' }
                 ]
+            });
+
+            // Toggle arrow icon when collapse is shown/hidden
+            $('#Servant-form').on('show.bs.collapse', function () {
+                $('#toggle-arrow-servant').removeClass('fa-angle-down').addClass('fa-angle-up');
+            });
+            $('#Servant-form').on('hide.bs.collapse', function () {
+                $('#toggle-arrow-servant').removeClass('fa-angle-up').addClass('fa-angle-down');
+            });
+
+           
+
+            // Update assignment type badge when class or service changes
+            function updateAssignmentBadge() {
+                var hasClass = $('#servant-class').val() !== '';
+                var hasService = $('#servant-service').val() !== '';
+                var badgeHtml = '';
+
+                if (hasClass && hasService) {
+                    badgeHtml = '<span class="assignment-badge badge-both"><i class="fas fa-check-double me-1"></i>خادم فصل + أمين خدمة</span>';
+                } else if (hasClass) {
+                    badgeHtml = '<span class="assignment-badge badge-class-only"><i class="fas fa-users me-1"></i>خادم فصل فقط</span>';
+                } else if (hasService) {
+                    badgeHtml = '<span class="assignment-badge badge-service-only"><i class="fas fa-user-tie me-1"></i>أمين خدمة فقط</span>';
+                } else {
+                    badgeHtml = '<span class="assignment-badge" style="background-color: #ffebee; color: #c62828;"><i class="fas fa-exclamation-triangle me-1"></i>يجب اختيار فصل أو خدمة</span>';
+                }
+
+                $('#assignment-type-badge').html(badgeHtml);
+            }
+
+            $('#servant-class, #servant-service').on('change', updateAssignmentBadge);
+
+            // Form validation before submit
+            $('form').on('submit', function(e) {
+                var hasClass = $('#servant-class').val() !== '';
+                var hasService = $('#servant-service').val() !== '';
+
+                if (!hasClass && !hasService) {
+                    e.preventDefault();
+                    alert('يجب اختيار فصل أو خدمة للخادم');
+                    return false;
+                }
+
+                var password = $('#servant-password').val();
+                var confirmPassword = $('#servant-confirm-password').val();
+
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    alert('كلمة المرور وتأكيد كلمة المرور غير متطابقين');
+                    return false;
+                }
             });
         });
 

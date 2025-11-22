@@ -1,14 +1,13 @@
 ﻿using App.Core.Entities;
-using App.Core.Enums;
 using App.Core.Managers;
 using App.Core.Models;
-using App.UI.Ifraustrcuture;
+using App.UI.Infrastructure;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace App.UI.Pages.Servant
 {
@@ -18,7 +17,6 @@ namespace App.UI.Pages.Servant
         private readonly ServantManager servantManager;
         private readonly WeekManager weekManager;
         private readonly ClassManager classManager;
-        private readonly CustomUserManager userManager;
         private readonly ServiceManager serviceManager;
         private readonly int NumberOfWeeksAppearInMarkup = 16;
         [BindProperty(SupportsGet = true)]
@@ -34,18 +32,16 @@ namespace App.UI.Pages.Servant
         public EditcshtmlModel(ServantManager servantManager,
             WeekManager weekManager,
             ClassManager classManager,
-            CustomUserManager userManager,
             ServiceManager serviceManager)
         {
             this.servantManager = servantManager;
             this.weekManager = weekManager;
             this.classManager = classManager;
-            this.userManager = userManager;
             this.serviceManager = serviceManager;
         }
-        public void OnGet()
+        public async Task OnGet()
         {
-            FillDataAsync();
+           await FillDataAsync();
         }
         public async Task FillDataAsync()
         {
@@ -55,7 +51,7 @@ namespace App.UI.Pages.Servant
             Classes = new SelectList(await classManager.GetFilteredClassesQueryAsync(), "Id", "Name");
             Services = new SelectList(serviceManager.GetServicesList(), "Id", "Name");
         }
-        public void OnPost()
+        public async Task OnPost()
         {
             if (Servant.PhotoFile != null)
             {
@@ -66,13 +62,13 @@ namespace App.UI.Pages.Servant
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم تحديث البيانات بنجاح" : Result.Error;
-            FillDataAsync();
+           await FillDataAsync();
 
         }
         public string GetFormattedWeekDate(DateTime week, string Time)
         {
-            
-            return classManager.GetFormattedWeekDate(week,Time);
+
+            return classManager.GetFormattedWeekDate(week, Time);
         }
     }
 }

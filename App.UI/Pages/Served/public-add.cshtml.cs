@@ -1,7 +1,7 @@
 ﻿using App.Core.Entities;
 using App.Core.Managers;
 using App.Core.Models;
-using App.UI.Ifraustrcuture;
+using App.UI.Infrastructure;
 using App.UI.InfraStructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -41,12 +41,12 @@ namespace App.UI.Pages.Serveds
 
             }
             var Result = servedManager.AddServed(Served);
-            if(Result.IsSuccess)
+            if (Result.IsSuccess)
             {
-               await qrCodeService.GenerateQrCodeForServedAsync(Served.Id);
+                await qrCodeService.GenerateQrCodeForServedAsync(Served.Id);
                 return LocalRedirect($"/thank-you?name={Served.Name}");
             }
-            TempData["NotificationType"] =  "error";
+            TempData["NotificationType"] = "error";
             TempData["Message"] = Result.Error;
             return Page();
         }
