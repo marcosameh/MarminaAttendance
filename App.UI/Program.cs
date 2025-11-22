@@ -43,7 +43,14 @@ builder.Services.Configure<FormOptions>(options =>
 });
 
 
-builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.ExpireTimeSpan = TimeSpan.FromDays(30); // Cookie valid for 30 days
+    options.SlidingExpiration = true; // Reset expiry on each request
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddScoped<ClassManager>();
 builder.Services.AddScoped<WeekManager>();
