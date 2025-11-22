@@ -3,6 +3,7 @@ using AppCore.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 
 namespace App.UI.Pages.Serveds
 {
@@ -31,10 +32,10 @@ namespace App.UI.Pages.Serveds
             }
             return BadRequest(result.Error);
         }
-        public void OnPost()
+        public async Task OnPost()
         {
 
-            var Result = ServedManager.AttendanceRegistration(ServedId);
+            var Result =await ServedManager.AttendanceRegistrationAsync(ServedId);
 
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? Result.Value : Result.Error;

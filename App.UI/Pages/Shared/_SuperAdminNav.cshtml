@@ -1,0 +1,47 @@
+<!-- SuperAdmin Navigation Links -->
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/classes/list">
+        <i class="fa-solid fa-church me-2"></i>
+        <span class="nav-link-text me-1">الفصول</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/servants/list">
+        <i class="fa-solid fa-hand-holding-heart me-2"></i>
+        <span class="nav-link-text me-1">الخدام</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/servants/quick-attendance-registration">
+        <i class="fa-solid fa-user-check me-2"></i>
+        <span class="nav-link-text me-1">تسجيل حضور سريع للخدام</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/served/list">
+        <i class="fa-solid fa-hands-holding-child me-2"></i>
+        <span class="nav-link-text me-1">المخدومين</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/served/quick-attendance-registration">
+        <i class="fa-solid fa-user-check me-2"></i>
+        <span class="nav-link-text me-1">تسجيل حضور سريع للمخدومين</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/services/list">
+        <i class="fa-solid fa-hands-praying me-2"></i>
+        <span class="nav-link-text me-1">الخدمات</span>
+    </a>
+</li>
+<if is-true='User.IsInRole("SuperAdmin")'>
+
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/users/list">
+        <i class="fa-solid fa-users-gear me-2"></i>
+        <span class="nav-link-text me-1">المستخدمين</span>
+    </a>
+</li>
+
+</if>

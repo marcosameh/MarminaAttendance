@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.UI.Pages.Servant
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin,Admin,ServiceAdmin")]
     public class generate_QrModel : PageModel
     {
         private readonly ServantManager _ServantManager;

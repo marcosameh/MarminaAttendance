@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.UI.Pages.Servant
 {
-    [Authorize(Roles ="Admin,SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Admin,ServiceAdmin")]
     public class qr_attendance_registrationModel : PageModel
     {
         private readonly ServantManager _ServantManager;

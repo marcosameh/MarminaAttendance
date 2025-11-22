@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.UI.Pages.Servant
 {
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin,ServiceAdmin")]
     public class quick_attendance_registrationModel : PageModel
     {
         private readonly ServantManager servantManager;

@@ -9,6 +9,7 @@ using System.Formats.Asn1;
 using System.Globalization;
 using CsvHelper;
 using App.Core.Enums;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace App.Core.Managers
 {
@@ -18,7 +19,7 @@ namespace App.Core.Managers
         private readonly CurrentUserManager _currentUserManager;
         private int NumberOfWeeksAppearInMarkup = 16;
 
-        public ServedManager(MarminaAttendanceContext context,CurrentUserManager currentUserManager)
+        public ServedManager(MarminaAttendanceContext context, CurrentUserManager currentUserManager)
         {
             _context = context;
             _currentUserManager = currentUserManager;
@@ -40,7 +41,7 @@ namespace App.Core.Managers
         }
         public List<ServedVM> GetServeds()
         {
-            var Serveds = _context.Served                
+            var Serveds = _context.Served
                 .Include(s => s.Class)
                 .Include(x => x.ResponsibleServant)
                 .OrderBy(x => x.Name)
@@ -77,7 +78,7 @@ namespace App.Core.Managers
             {
                 query = query.Where(s => s.ClassId == currentServant.ClassId);
             }
-            
+
             return query
                 .OrderBy(x => x.Name)
                 .AsNoTracking()
@@ -96,13 +97,13 @@ namespace App.Core.Managers
                 });
         }
 
-       
+
         public Result DeleteServed(int ServedId)
         {
             try
             {
                 var existServed = _context.Served.Find(ServedId);
-                if(existServed == null)
+                if (existServed == null)
                 {
                     return Result.Fail("تم مسح المخدوم بالفعل");
                 }
@@ -129,7 +130,7 @@ namespace App.Core.Managers
             existServed.Birthday = Served.Birthday;
             existServed.Phone = Served.Phone;
             existServed.HomePhone = Served.HomePhone;
-            existServed.ResponsibleServantId= Served.ResponsibleServantId;
+            existServed.ResponsibleServantId = Served.ResponsibleServantId;
             if (!string.IsNullOrEmpty(Served.Photo))
             {
                 existServed.Photo = Served.Photo;
@@ -195,14 +196,30 @@ namespace App.Core.Managers
 
             return Result.Ok(MapToServedVM(Served));
         }
-        public Result<string> AttendanceRegistration(int servedId)
+        public async Task<Result<string>> AttendanceRegistrationAsync(int servedId)
         {
             var Week = _context.Weeks.AsNoTracking().OrderByDescending(w => w.Id).First();
             var exists = _context.ServedWeeks.Any(x => x.ServedId == servedId && x.WeekId == Week.Id);
-            var served = _context.Served.AsNoTracking()
-                .Include(s=>s.Class)
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Id == servedId);
+
+
+            var currentServant = await _currentUserManager.GetCurrentServantAsync();
+
+            var query = _context.Served.AsNoTracking()
+             .Include(s => s.Class)
+             .AsNoTracking()
+               .AsQueryable();
+
+
+            if (currentServant != null && currentServant.ServiceId.HasValue)
+            {
+                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
+            }
+            else if (currentServant != null && currentServant.ClassId.HasValue)
+            {
+                query = query.Where(s => s.ClassId == currentServant.ClassId);
+            }
+
+            var served = query.FirstOrDefault(x => x.Id == servedId);
 
             var today = DateTime.Now.Date;
             if (exists)
@@ -210,7 +227,7 @@ namespace App.Core.Managers
                 return Result.Fail<string>($"تم تسجل حضور المخدوم {served.Name} من قبل بالفعل");
             }
             var daysToAdd = DaysToAdd(served.Class.TimeId);
-            if (today!= Week.Date.AddDays(daysToAdd).Date)
+            if (today != Week.Date.AddDays(daysToAdd).Date)
             {
                 return Result.Fail<string>("يوم الخدمة لم ياتى بعد");
             }
@@ -267,7 +284,7 @@ namespace App.Core.Managers
                 return Result.Fail<List<Served>>("Unsupported file extension. Please upload .xlsx or .csv files only.");
             }
 
-            
+
 
             try
             {
@@ -275,7 +292,7 @@ namespace App.Core.Managers
                 using (var reader = new StreamReader(formFile.OpenReadStream()))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                  
+
                     csv.Read();
                     csv.ReadHeader();
                     while (csv.Read())
@@ -283,11 +300,11 @@ namespace App.Core.Managers
                         var record = new Served
                         {
                             Name = csv.GetField<string>("الاسم"),
-                            Phone= csv.GetField<string>("رقم التليفون"),
-                            Address=csv.GetField<string>("العنوان"),
-                            FatherOfConfession=csv.GetField<string>("اب الاعتراف"),
-                            ClassId=classId,
-                            Birthday=csv.GetField<DateTime>("تاريخ الميلاد")
+                            Phone = csv.GetField<string>("رقم التليفون"),
+                            Address = csv.GetField<string>("العنوان"),
+                            FatherOfConfession = csv.GetField<string>("اب الاعتراف"),
+                            ClassId = classId,
+                            Birthday = csv.GetField<DateTime>("تاريخ الميلاد")
 
                         };
                         records.Add(record);
@@ -301,17 +318,21 @@ namespace App.Core.Managers
                 return Result.Fail<List<Served>>(ex.Message);
             }
 
-          
+
         }
         private int DaysToAdd(int timeId)
         {
-           
+
             int DaysToAdd = (timeId) switch
             {
-                /*ServiceTime.الخميس*/ 1=> 0,
-               /* ServiceTime.الجمعةصباحا*/ 2=> 1,
-               /* ServiceTime.الجمعةمساء*/ 3=> 1,
-                /*ServiceTime.السبت*/ 4=> 2,
+                /*ServiceTime.الخميس*/
+                1 => 0,
+                /* ServiceTime.الجمعةصباحا*/
+                2 => 1,
+                /* ServiceTime.الجمعةمساء*/
+                3 => 1,
+                /*ServiceTime.السبت*/
+                4 => 2,
                 _ => 0,
 
             };

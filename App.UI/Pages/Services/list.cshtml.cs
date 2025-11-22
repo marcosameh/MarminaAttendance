@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.UI.Pages.Service
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class listModel : PageModel
     {
         private readonly ServiceManager serviceManager;

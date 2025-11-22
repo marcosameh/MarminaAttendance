@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 
 namespace App.UI.Pages.Serveds
 {
@@ -14,11 +15,11 @@ namespace App.UI.Pages.Serveds
         {
             servedManager = ServedManager;
         }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
             if (servedId.HasValue && servedId.Value > 0)
-            {              
-                var Result = servedManager.AttendanceRegistration(servedId.Value);
+            {
+                var Result = await servedManager.AttendanceRegistrationAsync(servedId.Value);
 
                 TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
                 TempData["Message"] = Result.IsSuccess ? Result.Value : Result.Error;

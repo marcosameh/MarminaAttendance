@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace App.UI.Pages.Servant
 {
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin,ServiceAdmin")]
     public class EditcshtmlModel : PageModel
     {
         private readonly ServantManager servantManager;

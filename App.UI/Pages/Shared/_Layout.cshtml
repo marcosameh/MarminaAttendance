@@ -37,52 +37,20 @@
         <hr class="horizontal dark mt-0 mb-2">
         <div class="collapse navbar-collapse px-0 w-auto" id="sidenav-collapse-main">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="/classes/list">
-                        <i class="fa-solid fa-church me-2"></i>
-                        <span class="nav-link-text me-1">الفصول</span>
-                    </a>
-                </li>
-                <if is-true='!User.IsInRole("Servant")'>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/servants/list">
-                            <i class="fa-solid fa-hand-holding-heart me-2"></i>
-                            <span class="nav-link-text me-1">الخدام</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/servants/quick-attendance-registration">
-                            <i class="fa-solid fa-user-check me-2"></i>
-                            <span class="nav-link-text me-1">تسجيل حضور سريع للخدام</span>
-                        </a>
-                    </li>
-                </if>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="/served/list">
-                        <i class="fa-solid fa-hands-holding-child me-2"></i>
-                        <span class="nav-link-text me-1">المخدومين</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="/served/quick-attendance-registration">
-                        <i class="fa-solid fa-user-check me-2"></i>
-                        <span class="nav-link-text me-1">تسجيل حضور سريع للمخدومين</span>
-                    </a>
-                </li>
-                <if is-true='User.IsInRole("SuperAdmin")'>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/services/list">
-                            <i class="fa-solid fa-hands-praying me-2"></i>
-                            <span class="nav-link-text me-1">الخدمات</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/users/list">
-                            <i class="fa-solid fa-users-gear me-2"></i>
-                            <span class="nav-link-text me-1">المستخدمين</span>
-                        </a>
-                    </li>
-                </if>
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <partial name="_SuperAdminNav" />
+                }
+                else if (User.IsInRole("Admin") || User.IsInRole("ServiceAdmin"))
+                {
+                    <partial name="_ServiceAdminNav" />
+                }
+                else if (User.IsInRole("Servant"))
+                {
+                    <partial name="_ServantNav" />
+                }
+
+                <!-- Common Links for All Users -->
                 <li class="nav-item mt-3">
                     <a class="nav-link text-dark" href="/Account/ChangePassword">
                         <i class="fas fa-key me-2"></i>
