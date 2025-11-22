@@ -52,11 +52,25 @@
     border: 2px solid #d2d6da;
     border-radius: 0.25rem;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .form-check-input:checked {
-    background-color: #e91e63;
-    border-color: #e91e63;
+    background-color: #28a745;
+    border-color: #28a745;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.form-check-input:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.form-check-input:hover {
+    border-color: #28a745;
 }
 
 .form-check-label {

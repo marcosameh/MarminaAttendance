@@ -1,57 +1,226 @@
-﻿@page
+@page
 @model App.UI.Pages.Serveds.quick_attendance_registrationModel
 @{
     ViewData["Title"] = "تسجيل حضور سريع للمخدومين";
 }
-<div class="container">
-    <h1 class="text-center">تسجيل حضور سريع للمخدومين</h1>
-    <form id="searchForm">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="searchInput" placeholder="اكتب اسم الخدوم او الكود الخاص بة" required>
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" id="search" type="submit">ابحث</button>
+
+@section Styles {
+    <style>
+        .search-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 2rem;
+        }
+
+        .search-card h1 {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .search-input-group {
+            background: white;
+            border-radius: 50px;
+            padding: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-input-group input {
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+        }
+
+        .search-input-group input:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .search-btn {
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .search-icon {
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Enhanced Modal Styling */
+        .modal-content {
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 1rem 1rem 0 0;
+            padding: 1.5rem;
+        }
+
+        .modal-header .modal-title {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .modal-header .close {
+            color: white;
+            opacity: 1;
+            text-shadow: none;
+            font-size: 2rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .served-photo-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .served-photo {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #f093fb;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .served-info {
+            text-align: center;
+        }
+
+        .served-info h4 {
+            color: #344767;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .served-info p {
+            color: #7b809a;
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .served-info .badge {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .modal-footer .btn {
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+        }
+
+        .btn-attendance {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+        }
+
+        .btn-attendance:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+    </style>
+}
+
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="search-card text-center">
+                <h1>
+                    <i class="fas fa-child me-3"></i>
+                    تسجيل حضور سريع للمخدومين
+                </h1>
+                <form id="searchForm">
+                    <div class="search-input-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchInput" placeholder="ابحث بالاسم أو الكود..." required autofocus>
+                            <button class="btn btn-primary search-btn" id="search" type="submit">
+                                <i class="fas fa-search search-icon"></i>
+                                ابحث
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 
-<!-- Popup Modal -->
+<!-- Enhanced Popup Modal -->
 <div class="modal fade" id="attendance-modal" tabindex="-1" role="dialog" aria-labelledby="attendance-modal-label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <form method="post">
-        <div class="modal-content">
-            <div class="modal-header">
-                    <h5 class="modal-title" id="attendance-modal-label">تسجيل حضور</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img id="Served-photo" src="" class="img-fluid">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attendance-modal-label">
+                        <i class="fas fa-check-circle me-2"></i>
+                        تسجيل حضور
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="served-photo-container">
+                        <img id="Served-photo" src="" class="served-photo" alt="صورة المخدوم">
                     </div>
-                    <div class="col-md-8">
+                    <div class="served-info">
                         <h4 id="Served-name"></h4>
-                        <p id="class-name"></p>
+                        <p>
+                            <i class="fas fa-church me-2"></i>
+                            <span id="class-name"></span>
+                        </p>
+                        <span class="badge bg-success mt-2">
+                            <i class="fas fa-user-check me-1"></i>
+                            جاهز لتسجيل الحضور
+                        </span>
                         <input type="hidden" id="Served-id" asp-for="ServedId" />
                     </div>
                 </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>
+                        إلغاء
+                    </button>
+                    <button type="submit" class="btn btn-attendance">
+                        <i class="fas fa-check-double me-2"></i>
+                        تسجيل الحضور
+                    </button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
-                <button type="submit" class="btn btn-primary">تسجيل حضور</button>
-            </div>
-        </div>
-
         </form>
     </div>
 </div>
+
 @section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
             $('#attendance-modal').modal('hide'); // hide the modal initially
@@ -60,20 +229,25 @@
                 event.preventDefault(); //prevent the form from submitting
                 var searchInput = $("#searchInput").val();
                 $.ajax({
-                    url: "?handler=searchServeds", // change the name of the handler
+                    url: "?handler=searchServeds",
                     method: "GET",
                     data: { searchInput: searchInput },
                     success: function (data) {
-                                             
-                            $("#Served-name").text(data.name)
-                            $("#class-name").text(`${data.className}`)
-                            $("#Served-photo").attr("src", `/photos/المخدومين/${data.photo}`);
-                            $("#Served-id").val(data.id)
-                            $('#attendance-modal').modal('show');
-                                                                        
+                        $("#Served-name").text(data.name)
+                        $("#class-name").text(`${data.className}`)
+                        $("#Served-photo").attr("src", `/photos/المخدومين/${data.photo}`);
+                        $("#Served-id").val(data.id)
+                        $('#attendance-modal').modal('show');
                     },
                     error: function (xhr, status, error) {
-                        alert("مخدوم غير موجود")
+                        // Show beautiful error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'غير موجود',
+                            text: 'المخدوم غير موجود في النظام',
+                            confirmButtonText: 'حسناً',
+                            confirmButtonColor: '#f5576c'
+                        });
                     }
                 });
             });

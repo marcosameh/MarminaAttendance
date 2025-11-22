@@ -82,12 +82,10 @@
         <div class="col-12">
             <if is-true='User.IsInRole("SuperAdmin")'>
                 <div class="card shadow mb-4">
-                    <div class="card-header p-3">
+                    <div class="card-header p-3" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#service-form" aria-expanded="false">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-0 text-dark fw-bold">اضافة خدمة جديدة</h6>
-                            <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#service-form" aria-expanded="false">
-                                <span id="toggle-arrow" class="fa fa-angle-down"></span>
-                            </button>
+                            <span id="toggle-arrow-service" class="fa fa-angle-down text-dark"></span>
                         </div>
                     </div>
                     <div class="collapse" id="service-form">
@@ -174,11 +172,12 @@
             }
         }
 
-        $(document).ready(function () {
-            // Toggle form and arrow icon on click
-            $('[data-bs-target="#service-form"]').click(function () {
-                $('#toggle-arrow').toggleClass('fa-angle-down fa-angle-up');
-            });
+        // Toggle arrow icon when collapse is shown/hidden
+        $('#service-form').on('show.bs.collapse', function () {
+            $('#toggle-arrow-service').removeClass('fa-angle-down').addClass('fa-angle-up');
+        });
+        $('#service-form').on('hide.bs.collapse', function () {
+            $('#toggle-arrow-service').removeClass('fa-angle-up').addClass('fa-angle-down');
         });
     </script>
 }
