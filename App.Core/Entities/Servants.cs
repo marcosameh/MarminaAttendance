@@ -25,10 +25,6 @@ public partial class Servants
 
     public string FatherOfConfession { get; set; }
 
-    public bool Leader { get; set; }
-
-    public bool ReceiveReminderEmails { get; set; }
-
     public string Notes { get; set; }
 
     public virtual Classes Class { get; set; }

@@ -128,6 +128,7 @@ namespace App.Core.Managers
             existServed.Address = Served.Address;
             existServed.Birthday = Served.Birthday;
             existServed.Phone = Served.Phone;
+            existServed.HomePhone = Served.HomePhone;
             existServed.ResponsibleServantId= Served.ResponsibleServantId;
             if (!string.IsNullOrEmpty(Served.Photo))
             {

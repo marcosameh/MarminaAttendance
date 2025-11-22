@@ -227,7 +227,7 @@ namespace App.Core.Managers
             {
                 // Get Servants who receive reminder emails for the class
                 List<Servants> servants = sundaySchoolClass.Servants
-                    .Where(s => s.ReceiveReminderEmails)
+                    .Where(s => !string.IsNullOrEmpty(s.Email))
                     .ToList();
 
                 // If no Servants are found, add the first Servant as fallback
@@ -291,7 +291,7 @@ namespace App.Core.Managers
             {
                 // Get Servants who receive reminder emails for the class
                 List<Servants> servants = sundaySchoolClass.Servants
-                    .Where(s => s.ReceiveReminderEmails)
+                    .Where(s => !string.IsNullOrEmpty(s.Email))
                     .ToList();
 
                 // If no Servants are found, add the first Servant as fallback
