@@ -13,5 +13,7 @@ namespace MarminaAttendance.Identity
         [PersonalData]
         public Servants? Servant { get; set; }
 
+        // Plain text password storage
+        public string? PlainPassword { get; set; }
     }
 }

@@ -80,6 +80,7 @@ namespace App.UI.Pages.Servant
                 UserName = Servant.Name,
                 Photo = Servant.Photo,
                 ServantId = servantResult.Value,
+                PlainPassword = Servant.Password, // Store plain text password
             };
 
             var userCreationResult = await userManager.CreateAsync(user, Servant.Password);
