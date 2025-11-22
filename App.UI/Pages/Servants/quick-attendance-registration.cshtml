@@ -78,11 +78,12 @@
             font-size: 1.5rem;
         }
 
-        .modal-header .close {
-            color: white;
+        .modal-header .btn-close {
+            filter: invert(1);
             opacity: 1;
-            text-shadow: none;
-            font-size: 2rem;
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
         }
 
         .modal-body {
@@ -140,12 +141,14 @@
         .btn-attendance {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
+            color: white;
         }
 
         .btn-attendance:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
+
     </style>
 }
 
@@ -183,9 +186,7 @@
                         <i class="fas fa-check-circle me-2"></i>
                         تسجيل حضور
                     </h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="servant-photo-container">
@@ -197,10 +198,6 @@
                             <i class="fas fa-church me-2"></i>
                             <span id="class-name"></span>
                         </p>
-                        <span class="badge bg-success mt-2">
-                            <i class="fas fa-user-check me-1"></i>
-                            جاهز لتسجيل الحضور
-                        </span>
                         <input type="hidden" id="servant-id" asp-for="ServantId" />
                     </div>
                 </div>

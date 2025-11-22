@@ -13,7 +13,6 @@ namespace App.Core.Models
         public string Name { get; set; }
         public string Intercessor { get; set; }
         public string Time { get; set; }
-
-        
+        public string ServiceName { get; set; }
     }
 }

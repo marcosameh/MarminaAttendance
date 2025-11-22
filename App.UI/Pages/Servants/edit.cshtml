@@ -28,11 +28,13 @@
                 <div class="form-group">
                     <label for="class">الفصل</label>
                     <select class="form-control form-control-lg" asp-items="Model.Classes" asp-for="Servant.ClassId" id="class">
+                        <option value="">-- بدون فصل --</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="service">الخدمة</label>
+                    <label for="service">الخدمة (أمين خدمة)</label>
                     <select class="form-control form-control-lg" asp-items="Model.Services" asp-for="Servant.ServiceId" id="service">
+                        <option value="">-- بدون خدمة --</option>
                     </select>
                 </div>
                 <div class="form-group">

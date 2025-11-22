@@ -1,0 +1,241 @@
+@page
+@model App.UI.Pages.Users.ListModel
+@{
+    ViewData["Title"] = "المستخدمين";
+}
+
+@section Styles {
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/css/form-styles.css" rel="stylesheet" />
+    <style>
+        .dataTables_wrapper .dataTables_filter input,
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+        }
+
+        .btn .material-symbols-rounded {
+            vertical-align: middle;
+            font-size: 18px;
+        }
+
+        table.dataTable td {
+            vertical-align: middle;
+        }
+
+        #UsersDatatable_wrapper {
+            direction: rtl;
+            text-align: right;
+        }
+
+        #UsersDatatable thead th {
+            text-align: right;
+        }
+
+        /* Enhanced form styling */
+        #user-form {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #user-form .form-control,
+        #user-form .form-select {
+            border: 1px solid #d2d6da !important;
+            background-color: #fff !important;
+        }
+
+        /* Enhanced action buttons */
+        .action-btn {
+            min-width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .action-btn-text {
+            font-size: 12px;
+            margin-right: 4px;
+        }
+
+        .role-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .role-superadmin {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .role-admin {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .role-servant {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .role-serviceadmin {
+            background-color: #ff9800;
+            color: white;
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <!-- Add User Form -->
+                <div class="card-header p-3" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#user-form" aria-expanded="false">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 text-dark fw-bold">إضافة مستخدم جديد</h6>
+                        <span id="toggle-arrow" class="fa fa-angle-down text-dark"></span>
+                    </div>
+                </div>
+                <div class="collapse" id="user-form">
+                    <form method="post" class="p-3">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="userName" class="form-label">اسم المستخدم <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" asp-for="Input.UserName" id="userName" required>
+                                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="password" class="form-label">كلمة المرور <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" asp-for="Input.Password" id="password" required>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="confirmPassword" class="form-label">تأكيد كلمة المرور <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" asp-for="Input.ConfirmPassword" id="confirmPassword" required>
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="role" class="form-label">الدور <span class="text-danger">*</span></label>
+                                <select class="form-control" asp-for="Input.Role" id="role" required>
+                                    <option value="">-- اختر الدور --</option>
+                                    <option value="SuperAdmin">مدير النظام (SuperAdmin)</option>
+                                    <option value="Admin">مشرف (Admin)</option>
+                                </select>
+                                <span asp-validation-for="Input.Role" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i> إضافة
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Users List -->
+                <div class="card-body px-3 pb-4">
+                    <h6 class="mb-3 text-dark fw-bold">قائمة المستخدمين</h6>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle mb-0" id="UsersDatatable" style="width:100%">
+                            <thead class="bg-light text-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>اسم المستخدم</th>
+                                    <th>الدور</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $("#UsersDatatable").DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                dom: '<"row mx-2 mt-2 mb-3"<"col-md-6 text-start"l><"col-md-6 text-end"f>>t<"row mx-2 mt-3 mb-2"<"col-md-6"i><"col-md-6"p>>',
+                order: [], // Disable default ordering to preserve server-side order
+                drawCallback: function() {
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
+                },
+                ajax: {
+                    url: "?handler=displayUsers",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            if (row.isSuperAdmin) {
+                                return `
+                                    <span class="text-muted" data-bs-toggle="tooltip" title="لا يمكن حذف مدير النظام">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                `;
+                            }
+                            return `
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <a href="javascript:void(0)" onclick="confirmDelete('${row.id}')" class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="tooltip" title="حذف المستخدم">
+                                        <i class="fas fa-trash"></i>
+                                        <span class="action-btn-text d-none d-lg-inline">حذف</span>
+                                    </a>
+                                </div>
+                            `;
+                        }
+                    },
+                    { data: 'userName' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var badgeClass = 'role-admin';
+                            if (row.role === 'SuperAdmin') badgeClass = 'role-superadmin';
+                            else if (row.role === 'Servant') badgeClass = 'role-servant';
+                            else if (row.role === 'ServiceAdmin') badgeClass = 'role-serviceadmin';
+
+                            return `<span class="role-badge ${badgeClass}">${row.roleArabic}</span>`;
+                        }
+                    }
+                ]
+            });
+
+            // Toggle arrow icon when collapse is shown/hidden
+            $('#user-form').on('show.bs.collapse', function () {
+                $('#toggle-arrow').removeClass('fa-angle-down').addClass('fa-angle-up');
+            });
+            $('#user-form').on('hide.bs.collapse', function () {
+                $('#toggle-arrow').removeClass('fa-angle-up').addClass('fa-angle-down');
+            });
+        });
+
+        function confirmDelete(id) {
+            if (confirm("هل متأكد أنك تريد حذف هذا المستخدم؟")) {
+                window.location.href = `?handler=Delete&id=${id}`;
+            }
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

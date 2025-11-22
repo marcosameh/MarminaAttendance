@@ -23,7 +23,7 @@ namespace App.Core.Managers
 
         public async Task<IQueryable<ClassVM>> GetFilteredClassesQueryAsync()
         {
-            var query = _context.Classes.Include(x => x.Time).AsQueryable();
+            var query = _context.Classes.Include(x => x.Time).Include(x => x.Service).AsQueryable();
             var currentServant = await _currentUserManager.GetCurrentServantAsync();
 
             if (currentServant != null && currentServant.ServiceId.HasValue)
@@ -42,7 +42,8 @@ namespace App.Core.Managers
                     Id = x.Id,
                     Name = x.Name,
                     Intercessor = x.Intercessor,
-                    Time = x.Time.Time1
+                    Time = x.Time.Time1,
+                    ServiceName = x.Service != null ? x.Service.Name : ""
                 });
         }
         public List<ClassVM> GetClasses()
@@ -50,13 +51,15 @@ namespace App.Core.Managers
 
             return _context.Classes
                 .Include(x => x.Time)
+                .Include(x => x.Service)
                 .OrderBy(x => x.Name)
                 .Select(x => new ClassVM
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Intercessor = x.Intercessor,
-                    Time = x.Time.Time1
+                    Time = x.Time.Time1,
+                    ServiceName = x.Service != null ? x.Service.Name : ""
                 }).ToList();
         }
 

@@ -42,11 +42,11 @@ namespace App.Core.Managers
 
         public async Task<IQueryable<ServantVM>> GetFilteredServantsQueryAsync()
         {
-            var query = _context.Servants.Include(s => s.Class).AsQueryable();
+            var query = _context.Servants.Include(s => s.Class).Include(s => s.Service).AsQueryable();
 
             var currentServant = await _currentUserManager.GetCurrentServantAsync();
 
-           
+
             if (currentServant != null && currentServant.ServiceId.HasValue)
             {
                 query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
@@ -54,7 +54,7 @@ namespace App.Core.Managers
             else if (currentServant != null && currentServant.ClassId.HasValue)
             {
                 query = query.Where(s => s.ClassId == currentServant.ClassId);
-            }          
+            }
             return query
                 .OrderBy(x => x.Name)
                 .AsNoTracking()
@@ -65,6 +65,7 @@ namespace App.Core.Managers
                     Address = x.Address,
                     Email = x.Email,
                     ClassName = x.Class.Name,
+                    ServiceName = x.ServiceId.HasValue ? x.Service.Name : null,
                     FatherOfConfession = x.FatherOfConfession,
                     Phone = x.Phone,
                     Photo = x.Photo,

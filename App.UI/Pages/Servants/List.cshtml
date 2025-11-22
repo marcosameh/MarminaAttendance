@@ -295,7 +295,7 @@
                         render: function (data) {
                             return `
                                 <div class="d-flex gap-1 flex-wrap">
-                                    <a href="/servants/edit/${data}" class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="tooltip" title="تعديل بيانات الخادم">
+                                    <a href="/servant/edit/${data}" class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="tooltip" title="تعديل بيانات الخادم">
                                         <i class="fas fa-edit"></i>
                                         <span class="action-btn-text d-none d-lg-inline">تعديل</span>
                                     </a>
@@ -307,7 +307,16 @@
                             `;
                         }
                     },
-                    { data: 'name' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            var html = row.name;
+                            if (row.serviceName) {
+                                html += ' <span class="badge bg-warning text-dark" style="font-size: 10px;">أمين خدمة (' + row.serviceName + ')</span>';
+                            }
+                            return html;
+                        }
+                    },
                     { data: 'id' },
                     {
                         data: 'photoPath',
