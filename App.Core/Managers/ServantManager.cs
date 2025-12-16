@@ -177,24 +177,27 @@ namespace App.Core.Managers
             existServant.ServiceId = servant.ServiceId;
             existServant.FatherOfConfession = servant.FatherOfConfession;
             existServant.Notes = servant.Notes;
-            var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
-            foreach (var week in allWeeks)
+            if (servantWeeksDTO.IsWeekSelected.Any())
             {
-                var weekChecked = servantWeeksDTO.IsWeekSelected[week.Id];
-                var existingServantWeek = existServant.ServantWeek.FirstOrDefault(x => x.WeekId == week.Id);
-                if (weekChecked && existingServantWeek == null)
+                var allWeeks = _context.Weeks.OrderByDescending(x => x.Id).Take(NumberOfWeeksAppearInMarkup);
+                foreach (var week in allWeeks)
                 {
-                    // Checkbox was checked and there is no existing ServantWeek object, so create a new one
-                    var newServantWeek = new ServantWeek { ServantId = servant.Id, WeekId = week.Id };
-                    _context.ServantWeek.Add(newServantWeek);
-                }
-                else if (!weekChecked && existingServantWeek != null)
-                {
-                    // Checkbox was unchecked and there is an existing ServantWeek object, so delete it
-                    _context.ServantWeek.Remove(existingServantWeek);
-                }
-                // Save changes to the database
+                    var weekChecked = servantWeeksDTO.IsWeekSelected[week.Id];
+                    var existingServantWeek = existServant.ServantWeek.FirstOrDefault(x => x.WeekId == week.Id);
+                    if (weekChecked && existingServantWeek == null)
+                    {
+                        // Checkbox was checked and there is no existing ServantWeek object, so create a new one
+                        var newServantWeek = new ServantWeek { ServantId = servant.Id, WeekId = week.Id };
+                        _context.ServantWeek.Add(newServantWeek);
+                    }
+                    else if (!weekChecked && existingServantWeek != null)
+                    {
+                        // Checkbox was unchecked and there is an existing ServantWeek object, so delete it
+                        _context.ServantWeek.Remove(existingServantWeek);
+                    }
+                    // Save changes to the database
 
+                }
             }
             _context.SaveChanges();
             return Result.Ok("Class updated successfully");

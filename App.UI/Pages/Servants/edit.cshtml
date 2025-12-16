@@ -69,27 +69,37 @@
                     </div>
                     <div class="mt-3">
                         <input type="file" class="form-control-file" id="photo" asp-for="Servant.PhotoFile">
-                        <small class="form-text text-muted">. من فضلك قم برفع صورة جديدة لتحديث الصورة الحالية</small>
+                        <small class="form-text text-muted" style="white-space: nowrap;">من فضلك قم برفع صورة جديدة لتحديث الصورة الحالية ثم اضغط على تحديث.</small>
                     </div>
                 </div>
             </div>
 
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="servantWeek">الحضور الاسبوعى</label>
-                    @foreach (var week in Model.WeeksList)
-                    {
-                        var isChecked = @Model.Servant.ServantWeek.Where(x => x.WeekId == week.Id).Any();
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="week-@week.Id" asp-for="@Model.ServantWeeksDTO.IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true">
-                            <label class="form-check-label" for="week-@week.Id">
-                                @Model.GetFormattedWeekDate(week.Date,Model.Servant.Class.Time.Time1)
-                            </label>
-                        </div>
-                    }
+            @if (Model.Servant?.ClassId != null && Model.Servant.ClassId > 0)
+            {
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="servantWeek">الحضور الاسبوعى</label>
+                        @foreach (var week in Model.WeeksList)
+                        {
+                                            var isChecked = @Model.Servant?.ServantWeek?.Any(x => x.WeekId == week.Id) ?? false;
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="week-@week.Id" asp-for="@Model.ServantWeeksDTO.IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true">
+                                <label class="form-check-label" for="week-@week.Id">
+                                    @if (Model.Servant?.Class?.Time?.Time1 != null)
+                                    {
+                                        @Model.GetFormattedWeekDate(week.Date, Model.Servant.Class.Time.Time1)
+                                    }
+                                    else
+                                    {
+                                        @week.Date.ToString("dd/MM/yyyy")
+                                    }
+                                </label>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            }
                         </div>
                         <div class="d-flex justify-content-between mt-3">
                             <a href="/Servants/List" class="btn btn-outline-secondary">العودة للقائمة</a>
