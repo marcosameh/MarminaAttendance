@@ -19,9 +19,9 @@ namespace App.Core.Models
             {
                 if (string.IsNullOrEmpty(Photo))
                 {
-                    return "/photos/المخدومين/default.jpg";
+                    return "/photos/served/default.jpg";
                 }
-                return "/photos/المخدومين/" + Photo;
+                return "/photos/served/" + Photo;
             }
         }
 

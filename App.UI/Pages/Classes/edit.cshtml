@@ -6,105 +6,275 @@
 
 @section Styles {
     <link href="~/css/form-styles.css" rel="stylesheet" />
+    <style>
+        .attendance-table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #e9ecef;
+            border-radius: 0.5rem;
+            background: white;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.85rem;
+        }
+
+        .attendance-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #fff;
+        }
+
+        .attendance-table th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border: 1px solid #1e3c72;
+            white-space: nowrap;
+        }
+
+        .attendance-table th:first-child {
+            position: sticky;
+            right: 0;
+            z-index: 11;
+            min-width: 200px;
+            text-align: right;
+        }
+
+        .attendance-table td {
+            padding: 0.5rem;
+            border: 1px solid #e9ecef;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .attendance-table td:first-child {
+            position: sticky;
+            right: 0;
+            background: #f8f9fa;
+            text-align: right;
+            font-weight: 500;
+            z-index: 5;
+            border-left: 2px solid #dee2e6;
+        }
+
+        .person-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .person-photo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+            flex-shrink: 0;
+        }
+
+        .person-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            text-align: center;
+        }
+
+        .attendance-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #28a745;
+        }
+
+        .attendance-table tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        .attendance-table tbody tr:nth-child(even) td:not(:first-child) {
+            background-color: #f8f9fa;
+        }
+
+        .class-info-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e9ecef;
+            margin-bottom: 1.5rem;
+        }
+
+        .class-info-section h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #344767;
+            border-bottom: 2px solid #1e3c72;
+            padding-bottom: 0.5rem;
+        }
+
+        .week-header-compact {
+            font-size: 0.75rem;
+            line-height: 1.2;
+        }
+
+        @@media (max-width: 768px) {
+            .attendance-table {
+                font-size: 0.75rem;
+            }
+
+            .person-photo {
+                width: 25px;
+                height: 25px;
+            }
+
+            .attendance-checkbox {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
 }
 
-<div class="container">
+<div class="container-fluid" style="max-width: 1400px;">
     <h1>تعديل بيانات الفصل</h1>
     <form method="post">
         <input type="hidden" asp-for="CurrentClass.Id" />
-        <div class="form-group">
-            <label for="className">اسم الفصل</label>
-            <input type="text" class="form-control" asp-for="CurrentClass.Name">
-        </div>
-        <div class="form-group">
-            <label for="intercessor">شفيع الفصل</label>
-            <input type="text" class="form-control" asp-for="CurrentClass.Intercessor">
-        </div>
-        <div class="form-group">
-            <label for="serviceId">الخدمة</label>
-            <select class="form-control form-control-lg" asp-for="CurrentClass.ServiceId">
-                <option value="">اختر الخدمة</option>
-                @foreach (var service in Model.ServiceList)
-                {
-                    <option value="@service.Id">@service.Name</option>
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="classTime">وقت الخدمة</label>
-            <select class="form-control form-control-lg" asp-for="CurrentClass.TimeId">
-                @foreach (var Time in Model.TimeList)
-                {
-                    <option value="@Time.Id">@Time.Time1</option>
 
-                }
-
-            </select>
+        <div class="class-info-section">
+            <h2>معلومات الفصل</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="className">اسم الفصل</label>
+                        <input type="text" class="form-control" asp-for="CurrentClass.Name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="intercessor">شفيع الفصل</label>
+                        <input type="text" class="form-control" asp-for="CurrentClass.Intercessor">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="serviceId">الخدمة</label>
+                        <select class="form-control" asp-for="CurrentClass.ServiceId">
+                            <option value="">اختر الخدمة</option>
+                            @foreach (var service in Model.ServiceList)
+                            {
+                                <option value="@service.Id">@service.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="classTime">وقت الخدمة</label>
+                        <select class="form-control" asp-for="CurrentClass.TimeId">
+                            @foreach (var Time in Model.TimeList)
+                            {
+                                <option value="@Time.Id">@Time.Time1</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
         @if (Model.ServantList.Any())
         {
-            <h2>الخدام</h2>
-            <div class="row">
-                @for (int i = 0; i < Model.ServantList.Count(); i++)
-                {
-                    <input type="hidden" asp-for="ServantWeeksDTOs[i].ServantId" value="@Model.ServantList[i].Id" />
-                    <div class="col-sm-3">
-                        <div class="servant-item">
-                            <label>
-                                <img src="@Model.ServantList[i].PhotoPath" class="servant-photo">
-                                <span class="servant-name"> @Model.ServantList[i].Name</span>
-                            </label>
-                            <ul class="week-list">
+            <div class="attendance-table-container">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th class="section-header" colspan="@(Model.Weeks.Count() + 1)">الخدام (@Model.ServantList.Count())</th>
+                        </tr>
+                        <tr>
+                            <th>الاسم</th>
+                            @foreach (var week in Model.Weeks)
+                            {
+                                <th class="week-header-compact">@Model.GetFormattedWeekDate(week.Date, Model.CurrentClass.Time.Time1)</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.ServantList.Count(); i++)
+                        {
+                            <input type="hidden" asp-for="ServantWeeksDTOs[i].ServantId" value="@Model.ServantList[i].Id" />
+                            <tr>
+                                <td>
+                                    <div class="person-cell">
+                                        <img src="@Model.ServantList[i].PhotoPath" class="person-photo" alt="@Model.ServantList[i].Name">
+                                        <span class="person-name">@Model.ServantList[i].Name</span>
+                                    </div>
+                                </td>
                                 @foreach (var week in Model.Weeks)
                                 {
-                                    var isChecked = @Model.ServantList[i].ServantWeek.Where(x => x.WeekId == week.Id).Any();
-                                    <li>
-                                        <label>
-                                            <input class="form-check-input" type="checkbox" asp-for="@Model.ServantWeeksDTOs[i].IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true" />
-                                            @Model.GetFormattedWeekDate(week.Date,Model.CurrentClass.Time.Time1)
-                                        </label>
-                                    </li>
-
+                                    var isChecked = Model.ServantList[i].ServantWeek.Any(x => x.WeekId == week.Id);
+                                    <td>
+                                        <input class="attendance-checkbox" type="checkbox" asp-for="@Model.ServantWeeksDTOs[i].IsWeekSelected[week.Id]" checked="@isChecked" value="true" />
+                                    </td>
                                 }
-                            </ul>
-                        </div>
-                    </div>
-                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-
         }
 
         @if (Model.ServedList.Any())
         {
-            <h2>المخدومين</h2>
-            <div class="row">
-                @for (int i = 0; i < Model.ServedList.Count(); i++)
-                {
-                    <input type="hidden" asp-for="ServedWeeksDTOs[i].ServedId" value="@Model.ServedList[i].Id" />
-                    <div class="col-sm-3">
-                        <div class="servant-item">
-                            <label>
-                                <img src="@Model.ServedList[i].PhotoPath" class="servant-photo">
-                                <span class="servant-name"> @Model.ServedList[i].Name</span>
-                            </label>
-                            <ul class="week-list">
+            <div class="attendance-table-container">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th class="section-header" colspan="@(Model.Weeks.Count() + 1)">المخدومين (@Model.ServedList.Count())</th>
+                        </tr>
+                        <tr>
+                            <th>الاسم</th>
+                            @foreach (var week in Model.Weeks)
+                            {
+                                <th class="week-header-compact">@Model.GetFormattedWeekDate(week.Date, Model.CurrentClass.Time.Time1)</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.ServedList.Count(); i++)
+                        {
+                            <input type="hidden" asp-for="ServedWeeksDTOs[i].ServedId" value="@Model.ServedList[i].Id" />
+                            <tr>
+                                <td>
+                                    <div class="person-cell">
+                                        <img src="@Model.ServedList[i].PhotoPath" class="person-photo" alt="@Model.ServedList[i].Name">
+                                        <span class="person-name">@Model.ServedList[i].Name</span>
+                                    </div>
+                                </td>
                                 @foreach (var week in Model.Weeks)
                                 {
-                                    var isChecked = @Model.ServedList[i].ServedWeeks.Where(x => x.WeekId == week.Id).Any();
-                                    <li>
-                                        <label>
-                                            <input class="form-check-input" type="checkbox" asp-for="@Model.ServedWeeksDTOs[i].IsWeekSelected[week.Id]" checked="@(isChecked ? true : false)" value="true" />
-                                            @Model.GetFormattedWeekDate(week.Date,Model.CurrentClass.Time.Time1)
-                                        </label>
-                                    </li>
-
+                                    var isChecked = Model.ServedList[i].ServedWeeks.Any(x => x.WeekId == week.Id);
+                                    <td>
+                                        <input class="attendance-checkbox" type="checkbox" asp-for="@Model.ServedWeeksDTOs[i].IsWeekSelected[week.Id]" checked="@isChecked" value="true" />
+                                    </td>
                                 }
-                            </ul>
-                        </div>
-                    </div>
-                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-
         }
         <br>
         <div class="d-flex justify-content-end mb-3 mr-3">
