@@ -7,7 +7,7 @@
 @section Styles {
     <style>
         .search-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             border-radius: 1rem;
             padding: 3rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -44,14 +44,14 @@
             border-radius: 50px;
             padding: 0.75rem 2rem;
             font-weight: 600;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             border: none;
             transition: transform 0.2s;
         }
 
         .search-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
         }
 
         .search-icon {
@@ -67,7 +67,7 @@
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             border-radius: 1rem 1rem 0 0;
             padding: 1.5rem;
@@ -100,7 +100,7 @@
             height: 150px;
             object-fit: cover;
             border-radius: 50%;
-            border: 5px solid #f093fb;
+            border: 5px solid #2a5298;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
@@ -139,14 +139,14 @@
         }
 
         .btn-attendance {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             border: none;
             color: white;
         }
 
         .btn-attendance:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
         }
 
     </style>
@@ -232,7 +232,7 @@
                     success: function (data) {
                         $("#Served-name").text(data.name)
                         $("#class-name").text(`${data.className}`)
-                        $("#Served-photo").attr("src", `/photos/المخدومين/${data.photo}`);
+                        $("#Served-photo").attr("src", `${data.photoPath}`);
                         $("#Served-id").val(data.id)
                         $('#attendance-modal').modal('show');
                     },
@@ -243,7 +243,7 @@
                             title: 'غير موجود',
                             text: 'المخدوم غير موجود في النظام',
                             confirmButtonText: 'حسناً',
-                            confirmButtonColor: '#f5576c'
+                            confirmButtonColor: '#2a5298'
                         });
                     }
                 });

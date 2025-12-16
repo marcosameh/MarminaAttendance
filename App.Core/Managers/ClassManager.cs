@@ -26,13 +26,23 @@ namespace App.Core.Managers
             var query = _context.Classes.Include(x => x.Time).Include(x => x.Service).AsQueryable();
             var currentServant = await _currentUserManager.GetCurrentServantAsync();
 
-            if (currentServant != null && currentServant.ServiceId.HasValue)
+            if (currentServant != null)
             {
-                query = query.Where(c => c.ServiceId == currentServant.ServiceId);
-            }
-            else if (currentServant != null && currentServant.ClassId.HasValue)
-            {
-                query = query.Where(c => c.Id == currentServant.ClassId);
+                // If servant has both ServiceId and ClassId, show all classes in service OR their own class
+                if (currentServant.ServiceId.HasValue && currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(c => c.ServiceId == currentServant.ServiceId || c.Id == currentServant.ClassId);
+                }
+                // If servant has only ServiceId, show all classes in service
+                else if (currentServant.ServiceId.HasValue)
+                {
+                    query = query.Where(c => c.ServiceId == currentServant.ServiceId);
+                }
+                // If servant has only ClassId, show only their class
+                else if (currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(c => c.Id == currentServant.ClassId);
+                }
             }
 
             return query

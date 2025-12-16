@@ -46,15 +46,30 @@ namespace App.Core.Managers
 
             var currentServant = await _currentUserManager.GetCurrentServantAsync();
 
+            if (currentServant != null)
+            {
+                // If servant has both ServiceId and ClassId, show servants in service OR in their own class
+                if (currentServant.ServiceId.HasValue && currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s =>
+                        (s.Class != null && s.Class.ServiceId == currentServant.ServiceId) ||
+                        s.ServiceId == currentServant.ServiceId ||
+                        s.ClassId == currentServant.ClassId);
+                }
+                // If servant has only ServiceId, show servants in the service
+                else if (currentServant.ServiceId.HasValue)
+                {
+                    query = query.Where(s =>
+                        (s.Class != null && s.Class.ServiceId == currentServant.ServiceId) ||
+                        s.ServiceId == currentServant.ServiceId);
+                }
+                // If servant has only ClassId, show servants in their class
+                else if (currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s => s.ClassId == currentServant.ClassId);
+                }
+            }
 
-            if (currentServant != null && currentServant.ServiceId.HasValue)
-            {
-                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
-            }
-            else if (currentServant != null && currentServant.ClassId.HasValue)
-            {
-                query = query.Where(s => s.ClassId == currentServant.ClassId);
-            }
             return query
                 .OrderBy(x => x.Name)
                 .AsNoTracking()

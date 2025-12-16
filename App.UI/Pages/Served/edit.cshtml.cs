@@ -35,6 +35,13 @@ namespace App.UI.Pages.Serveds
             WeeksList = weekManager.GetWeeks(NumberOfWeeksAppearInMarkup);
             Served = ServedManager.GetServed(Id);
             Classes = new SelectList(classManager.GetClasses(), "Id", "Name");
+
+            // Initialize ServedWeeksDTO with all weeks
+            ServedWeeksDTO = new ServedWeeksDTO();
+            foreach (var week in WeeksList)
+            {
+                ServedWeeksDTO.IsWeekSelected[week.Id] = false;
+            }
         }
         public void OnPost()
         {

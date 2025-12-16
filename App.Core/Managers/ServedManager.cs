@@ -70,13 +70,23 @@ namespace App.Core.Managers
 
             var currentServant = await _currentUserManager.GetCurrentServantAsync();
 
-            if (currentServant != null && currentServant.ServiceId.HasValue)
+            if (currentServant != null)
             {
-                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
-            }
-            else if (currentServant != null && currentServant.ClassId.HasValue)
-            {
-                query = query.Where(s => s.ClassId == currentServant.ClassId);
+                // If servant has both ServiceId and ClassId, show served in service OR in their own class
+                if (currentServant.ServiceId.HasValue && currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId || s.ClassId == currentServant.ClassId);
+                }
+                // If servant has only ServiceId, show served in the service
+                else if (currentServant.ServiceId.HasValue)
+                {
+                    query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
+                }
+                // If servant has only ClassId, show served in their class
+                else if (currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s => s.ClassId == currentServant.ClassId);
+                }
             }
 
             return query
@@ -209,14 +219,23 @@ namespace App.Core.Managers
              .AsNoTracking()
                .AsQueryable();
 
-
-            if (currentServant != null && currentServant.ServiceId.HasValue)
+            if (currentServant != null)
             {
-                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
-            }
-            else if (currentServant != null && currentServant.ClassId.HasValue)
-            {
-                query = query.Where(s => s.ClassId == currentServant.ClassId);
+                // If servant has both ServiceId and ClassId, show served in service OR in their own class
+                if (currentServant.ServiceId.HasValue && currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId || s.ClassId == currentServant.ClassId);
+                }
+                // If servant has only ServiceId, show served in the service
+                else if (currentServant.ServiceId.HasValue)
+                {
+                    query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
+                }
+                // If servant has only ClassId, show served in their class
+                else if (currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s => s.ClassId == currentServant.ClassId);
+                }
             }
 
             var served = query.FirstOrDefault(x => x.Id == servedId);
@@ -352,13 +371,23 @@ namespace App.Core.Managers
 
             var currentServant = await _currentUserManager.GetCurrentServantAsync();
 
-            if (currentServant != null && currentServant.ServiceId.HasValue)
+            if (currentServant != null)
             {
-                query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
-            }
-            else if (currentServant != null && currentServant.ClassId.HasValue)
-            {
-                query = query.Where(s => s.ClassId == currentServant.ClassId);
+                // If servant has both ServiceId and ClassId, show served in service OR in their own class
+                if (currentServant.ServiceId.HasValue && currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId || s.ClassId == currentServant.ClassId);
+                }
+                // If servant has only ServiceId, show served in the service
+                else if (currentServant.ServiceId.HasValue)
+                {
+                    query = query.Where(s => s.Class.ServiceId == currentServant.ServiceId);
+                }
+                // If servant has only ClassId, show served in their class
+                else if (currentServant.ClassId.HasValue)
+                {
+                    query = query.Where(s => s.ClassId == currentServant.ClassId);
+                }
             }
 
             var served = await query

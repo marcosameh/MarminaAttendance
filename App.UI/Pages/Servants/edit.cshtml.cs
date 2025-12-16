@@ -50,6 +50,13 @@ namespace App.UI.Pages.Servant
             Servant = servantManager.GetServant(Id);
             Classes = new SelectList(await classManager.GetFilteredClassesQueryAsync(), "Id", "Name");
             Services = new SelectList(serviceManager.GetServicesList(), "Id", "Name");
+
+            // Initialize ServantWeeksDTO with all weeks
+            ServantWeeksDTO = new ServantWeeksDTO();
+            foreach (var week in WeeksList)
+            {
+                ServantWeeksDTO.IsWeekSelected[week.Id] = false;
+            }
         }
         public async Task OnPost()
         {
