@@ -49,7 +49,7 @@ namespace App.UI.Pages.Servant
 
             if (Servant.PhotoFile != null)
             {
-                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/المخدومين/", 285, 310);
+                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/Servant/", 285, 310);
 
             }
             var Result = _servantManager.AddServant(Servant);

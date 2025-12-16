@@ -40,7 +40,7 @@ namespace App.UI.Pages.Serveds
         {
             if (Served.PhotoFile != null)
             {
-                Served.Photo = FileManager.UploadPhoto(Served.PhotoFile, "/wwwroot/photos/Served/", 285, 310);
+                Served.Photo = FileManager.UploadPhoto(Served.PhotoFile, "wwwroot/photos/Served/", 285, 310);
 
             }
             var Result = ServedManager.UpdateServed(Served, ServedWeeksDTO);

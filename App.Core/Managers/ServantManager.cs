@@ -69,6 +69,7 @@ namespace App.Core.Managers
                     FatherOfConfession = x.FatherOfConfession,
                     Phone = x.Phone,
                     Photo = x.Photo,
+
                 });
         }
         public List<ServantVM> GetServants()

@@ -55,7 +55,7 @@ namespace App.UI.Pages.Servant
         {
             if (Servant.PhotoFile != null)
             {
-                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "/wwwroot/photos/servant/", 285, 310);
+                Servant.Photo = FileManager.UploadPhoto(Servant.PhotoFile, "wwwroot/photos/servant/", 285, 310);
 
             }
             var Result = servantManager.UpdateServant(Servant, ServantWeeksDTO);
