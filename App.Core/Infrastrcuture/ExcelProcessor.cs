@@ -34,73 +34,202 @@ namespace App.Core.Infrastrcuture
             {
                 var worksheet = package.Workbook.Worksheets.Add(string.Concat(CurrentClass.Name, " ", CurrentClass.Time.Time1));
 
-                // Add header row
-                worksheet.Cells[1, 1].Value = " ";
+                // Set Right-to-Left for Arabic
+                worksheet.View.RightToLeft = true;
 
-                // Add data rows
                 int row = 1;
+
+                // Title Row
+                worksheet.Cells[row, 1].Value = $"كشف حضور وغياب - {CurrentClass.Name} - {CurrentClass.Time.Time1}";
+                worksheet.Cells[row, 1, row, Weeks.Count() + 1].Merge = true;
+                worksheet.Cells[row, 1].Style.Font.Size = 16;
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[row, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[row, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(42, 82, 152)); // Blue color
+                worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.White);
+                row++;
+
+                // Header row with dates
+                worksheet.Cells[row, 1].Value = "الاسم";
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                worksheet.Cells[row, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[row, 1].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
                 for (int i = 0; i < Weeks.Count(); i++)
                 {
                     worksheet.Cells[row, (i + 2)].Value = _classManager.GetFormattedWeekDate(Weeks[i].Date, CurrentClass.Time.Time1);
-
+                    worksheet.Cells[row, (i + 2)].Style.Font.Bold = true;
+                    worksheet.Cells[row, (i + 2)].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Cells[row, (i + 2)].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                    worksheet.Cells[row, (i + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 }
+                row++;
 
-                row = 2;
-                worksheet.Cells[2, 1].Value = "الخدام";
-                worksheet.Cells[2, 1].Style.Font.Size = 14;
-                worksheet.Cells[2, 1].Style.Font.Color.SetColor(Color.Red);
-                row = 3;
+                // Servants Section
+                worksheet.Cells[row, 1].Value = "الخدام";
+                worksheet.Cells[row, 1, row, Weeks.Count() + 1].Merge = true;
+                worksheet.Cells[row, 1].Style.Font.Size = 14;
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[row, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[row, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(220, 53, 69)); // Red color
+                worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                row++;
+
                 for (int i = 0; i < ServantList.Count(); i++)
                 {
-
                     worksheet.Cells[row, 1].Value = ServantList[i].Name;
+                    worksheet.Cells[row, 1].Style.Font.Bold = true;
+
                     for (int j = 0; j < Weeks.Count(); j++)
                     {
-                        if (ServantList[i].ServantWeek.Where(x => x.WeekId == Weeks[j].Id).Any())
+                        bool attended = ServantList[i].ServantWeek.Any(x => x.WeekId == Weeks[j].Id);
+                        worksheet.Cells[row, (j + 2)].Value = attended ? "✓" : "✗";
+                        worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
+                        worksheet.Cells[row, (j + 2)].Style.Font.Bold = true;
+
+                        if (attended)
                         {
-                            worksheet.Cells[row, (j + 2)].Value = "+";
-                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Green);
+                            worksheet.Cells[row, (j + 2)].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            worksheet.Cells[row, (j + 2)].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(212, 237, 218));
                         }
                         else
                         {
-                            worksheet.Cells[row, (j + 2)].Value = "-";
-                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Red);
+                            worksheet.Cells[row, (j + 2)].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            worksheet.Cells[row, (j + 2)].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(248, 215, 218));
                         }
                     }
                     row++;
                 }
-                worksheet.Cells[row, 1].Value = "المخدومين";
-                worksheet.Cells[row, 1].Style.Font.Size = 14;
-                worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.Red);
+
+                // Served Section
                 row++;
+                worksheet.Cells[row, 1].Value = "المخدومين";
+                worksheet.Cells[row, 1, row, Weeks.Count() + 1].Merge = true;
+                worksheet.Cells[row, 1].Style.Font.Size = 14;
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[row, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[row, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(220, 53, 69)); // Red color
+                worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                row++;
+
+                int servedStartRow = row;
                 for (int i = 0; i < ServedList.Count(); i++)
                 {
-
                     worksheet.Cells[row, 1].Value = ServedList[i].Name;
+
                     for (int j = 0; j < Weeks.Count(); j++)
                     {
-                        if (ServedList[i].ServedWeeks.Where(x => x.WeekId == Weeks[j].Id).Any())
+                        bool attended = ServedList[i].ServedWeeks.Any(x => x.WeekId == Weeks[j].Id);
+                        worksheet.Cells[row, (j + 2)].Value = attended ? "✓" : "✗";
+                        worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
+                        worksheet.Cells[row, (j + 2)].Style.Font.Bold = true;
+
+                        if (attended)
                         {
-                            worksheet.Cells[row, (j + 2)].Value = "+";
-                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Green);
+                            worksheet.Cells[row, (j + 2)].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            worksheet.Cells[row, (j + 2)].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(212, 237, 218));
                         }
                         else
                         {
-                            worksheet.Cells[row, (j + 2)].Value = "-";
-                            worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                            worksheet.Cells[row, (j + 2)].Style.Font.Size = 14;
+                            worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Red);
+                            worksheet.Cells[row, (j + 2)].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            worksheet.Cells[row, (j + 2)].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(248, 215, 218));
                         }
                     }
                     row++;
                 }
+
+                // Statistics Section
+                row++;
+                worksheet.Cells[row, 1].Value = "الإحصائيات";
+                worksheet.Cells[row, 1, row, Weeks.Count() + 1].Merge = true;
+                worksheet.Cells[row, 1].Style.Font.Size = 14;
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                worksheet.Cells[row, 1].Style.Font.Color.SetColor(Color.White);
+                worksheet.Cells[row, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[row, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(42, 82, 152)); // Blue color
+                worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                row++;
+
+                // Total Served
+                worksheet.Cells[row, 1].Value = "إجمالي المخدومين";
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                for (int j = 0; j < Weeks.Count(); j++)
+                {
+                    worksheet.Cells[row, (j + 2)].Value = ServedList.Count();
+                    worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[row, (j + 2)].Style.Font.Bold = true;
+                }
+                row++;
+
+                // Attended Count
+                worksheet.Cells[row, 1].Value = "عدد الحاضرين";
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                for (int j = 0; j < Weeks.Count(); j++)
+                {
+                    int attendedCount = ServedList.Count(s => s.ServedWeeks.Any(x => x.WeekId == Weeks[j].Id));
+                    worksheet.Cells[row, (j + 2)].Value = attendedCount;
+                    worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[row, (j + 2)].Style.Font.Bold = true;
+                    worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Green);
+                }
+                row++;
+
+                // Absent Count
+                worksheet.Cells[row, 1].Value = "عدد الغائبين";
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                for (int j = 0; j < Weeks.Count(); j++)
+                {
+                    int attendedCount = ServedList.Count(s => s.ServedWeeks.Any(x => x.WeekId == Weeks[j].Id));
+                    int absentCount = ServedList.Count() - attendedCount;
+                    worksheet.Cells[row, (j + 2)].Value = absentCount;
+                    worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[row, (j + 2)].Style.Font.Bold = true;
+                    worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Red);
+                }
+                row++;
+
+                // Attendance Percentage
+                worksheet.Cells[row, 1].Value = "نسبة الحضور";
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                for (int j = 0; j < Weeks.Count(); j++)
+                {
+                    int attendedCount = ServedList.Count(s => s.ServedWeeks.Any(x => x.WeekId == Weeks[j].Id));
+                    double percentage = ServedList.Count() > 0 ? (double)attendedCount / ServedList.Count() * 100 : 0;
+                    worksheet.Cells[row, (j + 2)].Value = $"{percentage:F1}%";
+                    worksheet.Cells[row, (j + 2)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[row, (j + 2)].Style.Font.Bold = true;
+
+                    // Color based on percentage
+                    if (percentage >= 80)
+                        worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Green);
+                    else if (percentage >= 50)
+                        worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Orange);
+                    else
+                        worksheet.Cells[row, (j + 2)].Style.Font.Color.SetColor(Color.Red);
+                }
+
+                // Add borders to all cells
+                var allCells = worksheet.Cells[1, 1, row, Weeks.Count() + 1];
+                allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+
                 worksheet.Cells.AutoFitColumns();
                 result = package.GetAsByteArray();
             }
 
-            return ("كشف حضور وغياب"+" "+CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
+            return ("كشف حضور وغياب" + " " + CurrentClass.Name + "_" + CurrentClass.Time.Time1 + ".xlsx", result);
         }
 
         public (string, byte[]) GenerateExcelClassDetails(int ClassId)
