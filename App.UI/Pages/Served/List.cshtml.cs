@@ -38,7 +38,7 @@ namespace App.UI.Pages.Serveds
             return new JsonResult(ServedsVM);
         }
 
-        public async void OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             await FillDataAsync();
             if (Served.PhotoFile != null)
@@ -53,7 +53,7 @@ namespace App.UI.Pages.Serveds
             }
             TempData["NotificationType"] = Result.IsSuccess ? "success" : "error";
             TempData["Message"] = Result.IsSuccess ? "تم اضافة المخدوم بنجاح" : Result.Error;
-
+            return RedirectToPage();
         }
         public async Task OnGetDelete(int id)
         {
