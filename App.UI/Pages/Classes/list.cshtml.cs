@@ -57,6 +57,7 @@ namespace App.UI.Pages.Classes
 
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         public void OnGetDelete(int id)
         {
             var Result = classManager.DeleteClass(id);

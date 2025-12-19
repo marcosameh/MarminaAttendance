@@ -152,6 +152,9 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        // Check if user is SuperAdmin
+        var isSuperAdmin = @User.IsInRole("SuperAdmin").ToString().ToLower();
+
         $(document).ready(function () {
             var table = $("#ClassListDatatable").DataTable({
                 language: {
@@ -173,16 +176,19 @@
                     {
                         data: 'id',
                         render: function (data) {
+                            var deleteButton = isSuperAdmin ? `
+                                    <a onclick="confirmDelete(${data})" class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="tooltip" title="حذف الفصل">
+                                        <i class="fas fa-trash"></i>
+                                        <span class="action-btn-text d-none d-lg-inline">حذف</span>
+                                    </a>` : '';
+
                             return `
                                 <div class="d-flex gap-1 flex-wrap">
                                     <a href="/class/edit/${data}" class="btn btn-sm btn-outline-primary action-btn" data-bs-toggle="tooltip" title="تعديل بيانات الفصل">
                                         <i class="fas fa-edit"></i>
                                         <span class="action-btn-text d-none d-lg-inline">تعديل</span>
                                     </a>
-                                    <a onclick="confirmDelete(${data})" class="btn btn-sm btn-outline-danger action-btn" data-bs-toggle="tooltip" title="حذف الفصل">
-                                        <i class="fas fa-trash"></i>
-                                        <span class="action-btn-text d-none d-lg-inline">حذف</span>
-                                    </a>
+                                    ${deleteButton}
                                     <a href="?handler=downloadexcelattendance&classId=${data}" class="btn btn-sm btn-outline-success action-btn" data-bs-toggle="tooltip" title="تحميل كشف حضور وغياب">
                                         <i class="fa-solid fa-file-excel"></i>
                                         <span class="action-btn-text d-none d-xl-inline">حضور</span>
